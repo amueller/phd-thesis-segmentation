@@ -1,0 +1,228 @@
+
+% Definitions of handy macros can go here
+
+%\DeclareMathOperator*{\argmax}{arg\,max}
+%\DeclareMathOperator*{\argmin}{arg\,min}
+
+%\newcommand{\dataset}{{\cal D}}
+%\newcommand{\fracpartial}[2]{\frac{\partial #1}{\partial  #2}}
+
+%\newcommand{\x}{\checkmark}
+%\renewcommand{\o}{$\times$}
+%\newcommand{\pystruct}{{\sc PyStruct} }
+
+
+\section{Introduction}
+In recent years there has been a wealth of research in methods for learning structured prediction,
+as well as in applications such as natural language processing and computer vision.
+Unfortunately only few implementations are publicly available, and many applications build upon
+the non-free implementation of~\citet{joachims2009cutting}.
+
+\pystruct on the other hand aims at providing a simple-to-use interface, in the high-level Python language.
+This allows practitioners to efficiently test a range of models, as well as allowing researchers
+to compare to baseline methods much more easily.
+\pystruct is BSD-Licensed, allowing modification and redistribution of the code,
+as well as use in commercial applications.  By embracing paradimes established
+in the scientific python community, and reusing the interface of the
+widely-used {\sc scikit-learn} library~\citep{pedregosa2011scikit}, \pystruct
+can be used in existing projects, replacing standard classifiers.
+The online documentation and examples help new
+users understand the somewhat abstract ideas behind structured pediction.
+
+%The organization of this paper is as follows. Section~\ref{sec:api} revisits
+%the basic concepts of structured learning algorithms, and how these map to the
+%\pystruct interface. Section~\ref{sec:examples} exemplifies the use of \pystruct
+%on some standard structured prediction benchmarks and showcasts how \pystruct
+%can interact with existing libraries, foremost scikit-learn and scikit-image.
+%Section~\ref{sec:benchmarks} finally compares \pystruct with SVM$^\text{struct}$,
+%arguably the most widely used implementation of structural SVMs, and
+%SVM$^\text{python}$, a Python interface or the same.
+
+
+\section{Structured Prediction and Casting it into Software}\label{sec:api}
+
+Structured prediction can be defined as making a prediction $f(x)$ by maximizing an
+compatibility function $g$ between an input $x$ and the possible labels
+$y$~\cite{nowozin2011structured}. Most current approaches use linear functions,
+leading to:
+\begin{equation}\label{eq:main_equation}
+    f(x) = \argmax_{y \in \mathcal{Y}} \langle \theta, \Psi(x, y) \rangle 
+\end{equation}
+Here, $y$ is a \emph{structured} label in the sense that it is more complicated than a single
+output class. Examples include predicting a label for each word in a sentence, or predicting
+a label for each pixel in an image.
+Learning structured prediction means learning the parameters $\theta$ from training data
+$(x_1, y_1), \dotsc, (x_n, y_n)$.
+
+Using the above formulation learning can be broken down into three sub-problems:
+\begin{itemize}
+    \item Optimizing the objective with respect to $\theta$.
+    \item Encoding the structure of the problem in a joint features function $\Psi$.
+    \item Solving the maximization problem in Equation~\ref{eq:main_equation}.
+\end{itemize}
+
+The later two problems are usually tightly coupled, as the maximization in
+Equation~\ref{eq:main_equation} is usually only feasible by exploiting the
+structure of $\Psi$, while the first one is usually treated as independent.
+\pystruct takes an object-oriented approach to decouple the task-dependent
+implementation of 2) and 3) from the general algorithms used to solve 1).
+
+Parameter estimation is done in \texttt{learner} classes, which currently support
+cutting plane algorithms for structural SVMs (SSVMs), subgradient methods for SSVMs,
+the structured perceptron and latent variable SSVMs.
+Encoding the structure of the problem is done using \texttt{model} classes, that
+compute $\Psi$, and encode the structure of the problem.
+\pystruct implements models for many common cases, such as multi-class and
+multi-label classification, conditional random fields with constant or
+data-dependent pairwise potentials, and several latent variable models.
+The maximization for finding $y$ in Equation~\ref{eq:main_equation} is carried out
+using highly optimized implementations from external libraries. \pystruct
+includes direct support for using {\sc OpenGM}, {\sc LibDAI}~\citep{Mooij_libDAI_10} and {\sc
+AD$^3$}~\citep{martins2011augmented}. It also includes an interface to a
+general purpose linear programming solver.
+
+Table~\ref{table:comparision} lists implemented algorithms and models, and
+compares them to other public structured prediction libraries, together with
+the programming language and the project license.
+
+
+\begin{table}[t]
+\centering
+\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccccccc}
+\toprule
+Package &     Language &     License&\multicolumn{4}{c}{Algorithms}&\multicolumn{3}{c}{Models} \\
+\cmidrule(r){1-1} \cmidrule(r){2-2} \cmidrule(r){3-3} \cmidrule(r){4-7} \cmidrule{8-10}
+&             &&                     \footnotesize{CP}& \footnotesize{SG}& \footnotesize{LV}& \footnotesize{ML}& \footnotesize{Chain} & \footnotesize{Graph} & \footnotesize{LDCRF}\\
+\sc{\pystruct}&      Python &       BSD            & \x    & \x      & \x   & \o & \x     & \x     & \x \\
+SVM$^\text{\sc{struct}}$ & C++ & non-free         & \x    & \o      & \x   & \o & \o     & \o     & \o \\
+\sc{Dlib}         & C++        & boost            & \x    & \x      & \o   & \o & \x     & \x     &\o\\
+\sc{CRFsuite}     & C++        & BSD              & \o    & \o      & \o   & \x & \x     & \o     &\o\\
+
+\bottomrule
+\end{tabularx}
+\vspace{-3mm}
+    \caption{Comparison of structured prediction software packages. CP stands
+for cutting plane optimization of SSVMs~\cite{joachims2009cutting}, SG for
+online subgradient optimization of SSVMs~\cite{ratliff2007online}, LV for
+latent variable SSVMs~\cite{yu2009learning}, ML for maximum likelihood
+training, Chain for chain-structured models
+with pairwise interactionsr, Graph for arbitrary graphs with pairwise
+interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.\label{table:comparision}}
+\end{table}
+
+\section{Project Goals}\label{sec:goals}
+
+\paragraph{Completeness}\pystruct aims at providing full pipelines that can be
+    used in applications. It contains model formulation for many typical
+    applications.  This is in contrast to SVM$^\text{struct}$ that provides no
+    models at all, requiring the user to develop siginificant amounts of code, even
+    for simple tasks.
+
+\paragraph{Modularity} \pystruct separates the algorithms of parameter estimation and
+     inference from the task-dependent formulation of $\Psi$. This allows
+     practictioners, for example in computer vision or natural language
+     processing, to improve their model without changing any optimization
+     code. On the other hand, researchers working on better inference or
+     parameter learning can easily benchmark their improvements on a wide
+     array of applications.
+
+\paragraph{Efficiency}
+     While \pystruct focuses on usability, providing efficient and competative
+     implementations is important to allow fast prototyping and scaling to
+     large datasets.
+
+\paragraph{Documentation and Examples}
+     \pystruct provides full documentation of all classes and functions.  It
+     also provides examples for many important applications, such as
+     sequence tagging, multi-label classification and image segmentation.
+     Furthermore, standard benchmarks are included as examples, which allows
+     easy comparision with other approaches.
+
+\paragraph{Testing}
+     \pystruct contains a testing-suite with 80\% line-coverage. It also employs continuous integration
+     to ensure stability and seamless user experience.
+
+\paragraph{Integration}
+     To improve usability, \pystruct is interoperable with other numeric and scientific python projects,
+     such as {\sc scikit-learn}~\citep{pedregosa2011scikit},
+     {\sc mahotas}~\citep{coelho:mahotas}, {\sc gensim}~\citep{rehurek_lrec} and {\sc scikit-image}.
+     This allows users to build powerful applications with little effort. In
+     particular, most of the model-selection methods of scikit-learn can be used
+     directly with \pystruct.
+
+
+\section{Usage Example: Semantic Image Segmentation}\label{sec:examples}
+%\subsection{Multi-class classification}
+%Multi-class classification is a very simple case of structured prediction, that serves
+%well to exemplify the usage. We load the iris dataset, and compare the usage of \pystruct
+%with a call to LibLinears Crammer-Singer SVM using scikit-learn.
+%\lstinputlisting[language=Python, frame=single, basicstyle=\scriptsize,
+    %numbers=left, commentstyle=\color{blue}\normalfont,
+%columns=flexible, firstline=11]{multi_class_example.py}
+
+%\subsection{OCR sequence classification}
+%Chain structured CRFs are commonly used in natural language processif, for
+%example for part-of-speech tagging or named entity recognition.  Here we
+%demonstrate the use of a chain CRF on the OCR dataset from. The ChainCRF provides
+%a very simnple interface for this problem. Each example is presented as an
+%array of input features of shape % (length_of_sequence, number_of_features).
+%% listing, training time, accuracy, comparision with kraehenbuehl
+
+\subsection{Semantic Image Segmentation}
+Conditional random fields are an important tool for semantic image segmentation.
+We show how to train an $n$-slack support vector machines on a superpixel-based CRF
+on the popular Pascal dataset. We use unary potentials generated using TextonBoost
+from \cite{krahenbuhl2012efficient}. The superpixels are generated using SLIC.%
+\footnote{The preprocessed data can be downloaded at \dots.}
+Each sample is represented as a tuple consisting of input features and a graph representation.
+
+\lstinputlisting[language=Python, frame=single, basicstyle=\scriptsize,
+    numbers=left, commentstyle=\color{blue}\normalfont,
+columns=flexible,firstline=32, lastline=37]{pascal_crf.py}
+Lines 1-3 declare a quite complex model pairwise model on an arbitray graph.
+Here \texttt{class\_weight} reweights the hamming loss according to class
+frequencies. The parametric pairwise interactions have three features: a
+constant feature, color similarity, and relative vertical position. The first
+are declared to be symmetric with respect to the direction of an edge, the last
+is antisymmetric. The inference method used is QPBO-fustion moves.  Line 5
+creates an \texttt{learner} object that will learn the parameters for the given
+model using the n-slack cutting plane method, and line 6 performs the actual
+learning.  Using this simple setup, we achieve an accuracy of 30.3 on the
+valiation set following the setup of \citet{krahenbuhl2012efficient}, who
+report 30.2 using a more complex approach. Training the structured model takes
+approximately 30 minutes using a single i7 core (using more would be possible).
+
+%TODO not here
+%This makes it very easy to incoporate features or segments generated by computer vision libraries such
+%as scikit-image or mahotas, and to plot results using visualization tools like matplotlib. 
+% listing, training time, accuracy, comparision with kraehenbuehl
+
+\section{Experiments}\label{sec:benchmarks}
+In this section, we compare our implementation with SVM$~\text{multiclass}$ and
+SVM$~\text{python}$ with respect to run-time and optimzation accuracy.
+While SVM$~\text{python}$ allows integration with Python programs, it does not use native
+Python data structures, such as Numpy arrays. This makes interacting with existing software
+cumbersome and inefficient, which is reflected in the run-time comparision below.
+We also compare against the special-purpose implementation of the Crammer-Singer multi-class SVM in
+{\sc LibLinear}~\citep{fan2008liblinear}.
+
+We do not provide comparisions on more complex problems--such as ones including
+non-trivial inference--as the authors of SVM$^\text{struct}$ did not provide
+any code or examples for this case.
+
+MNIST, covertype?
+
+
+
+% multiclass on mnist? liblinear seems to die!!!!
+
+
+\section{Conclusion}
+This paper introduced \pystruct, a modular structured learning and prediction library.
+\pystruct is geared towards ease of use, while providing efficient implementations.
+\pystruct integrates itself into the scientific Python eco-system, making it easy to use with
+existing libraries and applications.
+Currently \pystruct focuses on max-margin and perceptron based approaches. In the future,
+we plan to integrate other paradigms, such as SampleRank, pseudo-likelihood learning,
+Conditional Neural Fields and approaches that allow for a better integration of inference
+and learning.

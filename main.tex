@@ -21,7 +21,17 @@
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\renewcommand{\eqref}[1]{Equation~(\ref{#1})}
+\algrenewcommand{\algorithmicrequire}{\textbf{Input:}}
+\algrenewcommand{\algorithmicensure}{\textbf{Output:}}
+
+
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 \newcommand{\W}{\mathcal{W}}
+
+\newcommand{\given}{\, | \,}
+\newcommand{\B}[1]{\textbf{#1}}
 
 \begin{document}
 
@@ -56,8 +66,23 @@ Friedrich-Willhelm Universitaet Bonn \par
 
 \pagenumbering{arabic}
 
-\chapter{Efficient Exact Learning of Loopy CRFs}
-\include{exact_learning/paper}
+
+\chapter{Information Theoretic Clustering for Object Class Discovey}
+\include{itm/paper}
+
+\chapter{Weakly Supervised Object segmentation via Multiple Instance Learning}
+\include{partial_supervision/paper}
+\include{mil/paper}
+
+\chapter{Concepts and Implementation of Conditional Random Field-based Semantic Segmentation}
+
+\include{pystruct/paper}
 
 \chapter{Efficient Exact Learning of Loopy CRFs}
+
+\include{exact_learning/paper}
+
+\chapter{Hierarchical Latent Variable Models for Semantic Segmentation}
+
+\bibliography{main}
 \end{document}
