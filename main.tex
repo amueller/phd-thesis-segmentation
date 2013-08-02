@@ -1,0 +1,56 @@
+\documentclass[12pt,toc=bibnumbered, a4paper,twoside]{scrreprt}
+
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{calc}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{multicol}
+\usepackage{pslatex}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{algorithm}
+\usepackage{mdwlist}
+\usepackage{url}
+\usepackage[noend]{algpseudocode}
+\usepackage[small]{caption}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\W}{\mathcal{W}}
+
+\begin{document}
+
+%\title{Learning a Loopy Model For Semantic Segmentation Exactly}
+
+
+\begin{titlepage}
+\begin{center}
+\vspace*{1in}
+\textbf{{\LARGE PhD Thesis}}
+\par
+\vspace{1.5in} {\large Andreas Mueller}
+ \par \vfill A Thesis submitted for the degree of Doctor of Philosophy
+\par \vspace{0.5in}
+Department IV, Institute for Computer Science
+\par \vspace{0.5in}
+Friedrich-Willhelm Universitaet Bonn \par
+\vspace{0.5in} September 2013 \end{center}
+
+\end{titlepage}
+
+\pagenumbering{Roman}
+\tableofcontents
+\listoffigures
+\listoftables
+ \chapter*{Acknowledgements}
+ \begin{abstract} abstract
+\end{abstract}
+\pagenumbering{arabic}
+
+\include{exact_learning/paper}
+
+\end{document}
