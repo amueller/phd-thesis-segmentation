@@ -3,6 +3,7 @@
 \usepackage{epsfig}
 \usepackage{subfigure}
 \usepackage{calc}
+\usepackage{refstyle}
 \usepackage{amssymb}
 \usepackage{amstext}
 \usepackage{amsmath}
@@ -12,20 +13,37 @@
 \usepackage{natbib}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{graphicx}
 \usepackage{algorithm}
 \usepackage{mdwlist}
 \usepackage{url}
 \usepackage[noend]{algpseudocode}
 \usepackage[small]{caption}
 \usepackage{setspace}
+\usepackage{color}
+\usepackage{listings}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
-\newcommand{\figref}[1]{Figure~\ref{#1}}
-\renewcommand{\eqref}[1]{Equation~(\ref{#1})}
+
+\newcommand{\x}{\checkmark}
+\renewcommand{\o}{$\times$}
+\newcommand{\pystruct}{{\sc PyStruct} }
+
 \algrenewcommand{\algorithmicrequire}{\textbf{Input:}}
 \algrenewcommand{\algorithmicensure}{\textbf{Output:}}
 
+\newtheorem{corollary}{Corollary}
+\newtheorem{corollarya}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{theorema}{Theorem}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\newcolumntype{C}{>{\centered\arraybackslash}X}
+
+\newcommand{\fix}{\marginpar{FIX}} \newcommand{\new}{\marginpar{NEW}}
+\newcommand\etal{~et\,al.~}
 
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 \newcommand{\W}{\mathcal{W}}
@@ -41,14 +59,15 @@
 \begin{titlepage}
 \begin{center}
 \vspace*{1in}
-\textbf{{\LARGE PhD Thesis}}
+\textbf{{\LARGE Dissertation}}
 \par
-\vspace{1.5in} {\large Andreas Mueller}
+\vspace{1.5in} {\large Andreas M\"uller}
  \par \vfill A Thesis submitted for the degree of Doctor of Philosophy
 \par \vspace{0.5in}
-Department IV, Institute for Computer Science
+Institute for Computer Science \par
+Department IV, Autonomous Intelligent Systems
 \par \vspace{0.5in}
-Friedrich-Willhelm Universitaet Bonn \par
+Friedrich-Willhelm Universit\"at Bonn \par
 \vspace{0.5in} September 2013 \end{center}
 
 \end{titlepage}
@@ -66,6 +85,7 @@ Friedrich-Willhelm Universitaet Bonn \par
 
 \pagenumbering{arabic}
 
+\chapter{introduction}
 
 \chapter{Information Theoretic Clustering for Object Class Discovey}
 \include{itm/paper}
@@ -84,5 +104,8 @@ Friedrich-Willhelm Universitaet Bonn \par
 
 \chapter{Hierarchical Latent Variable Models for Semantic Segmentation}
 
+\cite{li2010object}
+
+\chapter{Conclusion}
 \bibliography{main}
 \end{document}
