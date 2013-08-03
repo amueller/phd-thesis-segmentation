@@ -146,7 +146,7 @@ the curse of dimensionality that comes with using non-parametric density estimat
 Let $\mathbf{x}_y$ be the set of $x_i$ with label $y$. 
 Given a non-parametric density estimator $H_\text{est}$
 we have $H_{est}(\mathbf{x}_y) \approx H(X \given Y {=} y)$, leading to the clustering problem
-\begin{align}\label{general_objective}
+\begin{align}\label{eq:general_objective}
      \max_{\mathbf{y}}\quad - \sum_{y=1}^k p(Y{=}y) H_\text{est}(\mathbf{x}_y),
 \end{align}
 where the probability $p(Y{=}y)$ is given by the empirical frequency of $y$, 
@@ -161,7 +161,7 @@ and obtains an estimate of the data entropy from the logarithm of the length of
 the spanning tree.
 %
 More precisely, the entropy estimate of a dataset $\mathbf{x} = (x_1, \dotsc, x_n)$ is given by
-\begin{align}\label{hmst}
+\begin{align}\label{eq:hmst}
     H_{mst}(\mathbf{x}) = d \log(L) - (d-1) \log(n) + \log(\beta_d).
 \end{align}
 where $L$ is the length of a minimum spanning tree $T(\mathbf{x})$ of $\mathbf{x}$ and $\beta_d$ is an
@@ -170,10 +170,10 @@ The estimator $H_{mst}$ is consistent in the sense that $H_{mst}(\mathbf{x}) \ri
 for $n \rightarrow \infty$~\citep{hero1999asymptotic}.
 Using \eqref{hmst} as a non-parametric entropy estimate in \eqref{general_objective} yields
 the problem to maximize $\hat{I}(\mathbf{x}, \mathbf{y})$ with
-\begin{align}\label{objective}
+\begin{align}\label{eq:objective}
      \hat{I}(\mathbf{x}, \mathbf{y}) := & -\sum_{y=0}^k p(y) \Bigl[ d \log(L_y) - (d-1) \log{n_y} \Bigr] + C,\\
     = & - \sum_{y=0}^k p(y) \Bigl[ d \log(\bar{L}_y  ) + \log{n_y} \Bigr] + C'\\
-    = & - d \sum_{y=0}^k p(y) \log(\bar{L}_y  ) - \sum_{y=0}^k p(y) \log{p(y) + C''} \label{objective_simplified}
+    = & - d \sum_{y=0}^k p(y) \log(\bar{L}_y  ) - \sum_{y=0}^k p(y) \log{p(y) + C''} \label{eq:objective_simplified}
 \end{align}
 where $n_y$ is the cardinality of $\mathbf{x}_y$, $L_y$ is the length of the
 minimum spanning tree $T(\mathbf{x}_y)$ and $C$, $C'$ and $C''$ are constants independent of
@@ -259,7 +259,7 @@ dataset. \emph{Left}: Euclidean minimum spanning tree of the data.
 Another edge from the forest was removed, resulting in the desired number of
 three components. Note that the edge that are removed are not the longest edges
 but form a trade-off between edge length and cluster size.}
-\label{illustration}
+\label{fig:illustration}
 \end{figure}
 
 For the above reasons, we propose a simple procedure to approximately solve
@@ -272,7 +272,7 @@ same cluster if and only if they are in the same connected component of $G$.
 Define
 \setlength{\abovedisplayskip}{1mm}
 \setlength{\belowdisplayskip}{1mm}
-\begin{align}\label{graphobjective}
+\begin{align}\label{eq:graphobjective}
 \hat{I}(G) := - \sum_{y=0}^k p(y) \Bigl[ d \log(L_{G,y}) - (d-1) \log{n_y} \Bigr],
 \end{align}
 where $y$ enumerates the connected components $G_0, \dotsc, G_k$ of $G$, $n_y =
@@ -354,7 +354,7 @@ tune parameters, ITM can adjust to different cluster shapes.  MeanNN is able to
 recover non-convex clusters (third row) but often produces similar results to
 $k$-Means (second and last row). Single link clustering is very sensitive
 to noise, as it does not take cluster size into account.}
-\label{qualitative}
+\label{fig:qualitative}
 \end{figure}
 
 \section{Experiments}

@@ -131,15 +131,15 @@ amounts to specifying $\psi$.
 
 For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
 the loss-based soft-margin objective
-\begin{equation}\label{mainequation}
+\begin{equation}\label{eq:mainequation}
 \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  r_i(\theta)
 \end{equation}
 with regularization parameter $C$, where $r_i$ is a hinge-loss-like upper
 bound on the empirical $\Delta$-risk:
 \[r_i(x^i, y^i, y) = \left [\max_{y \in \mathcal{Y}} \Delta(y^i, y) + \left<\theta, \psi(x^i, y) - \psi(x^i, y^i) \right > \right]_+ \]
 
-We solve the following reformulation of Equation~\ref{mainequation}, known as one-slack QP formulation:
-\begin{align}\label{oneslack}
+We solve the following reformulation of Equation~\eqref{mainequation}, known as one-slack QP formulation:
+\begin{align}\label{eq:oneslack}
     \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
     \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
         &\left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i,
@@ -201,7 +201,7 @@ Section~\ref{bounds}.
 
 \subsection{Bounding the Objective}\label{bounds}
 Even using approximate inference procedures, several statements
-about the original exact objective (Equation~\ref{mainequation}) can be
+about the original exact objective (Equation~\eqref{mainequation}) can be
 obtained.
 
 Let $o_{\W}(\theta)$ denote objective \eqref{oneslack} with
@@ -297,7 +297,7 @@ using cached constraints.
 
 To determine whether to produce inference results from the cache or to run the inference algorithm,
 we solve the QP once with a constraint from the cache. If the resulting $o^C$ verifies
-\begin{equation}\label{cache_test}
+\begin{equation}\label{eq:cache_test}
     o^C - o^Q < \frac{1}{2} (o^Q - o_{\W})
 \end{equation}
 we continue using the caching oracle. Otherwise we run the inference algorithm again.
