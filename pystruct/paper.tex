@@ -29,7 +29,7 @@ users understand the somewhat abstract ideas behind structured pediction.
 
 Structured prediction can be defined as making a prediction $f(x)$ by maximizing an
 compatibility function $g$ between an input $x$ and the possible labels
-$y$~\cite{nowozin2011structured}. Most current approaches use linear functions,
+$y$~\citep{nowozin2011structured}. Most current approaches use linear functions,
 leading to:
 \begin{equation}\label{eq:main_equation}
     f(x) = \argmax_{y \in \mathcal{Y}} \langle \theta, \Psi(x, y) \rangle 
@@ -87,9 +87,9 @@ SVM$^\text{\sc{struct}}$ & C++ & non-free         & \x    & \o      & \x   & \o 
 \bottomrule
 \end{tabularx}
     \caption{Comparison of structured prediction software packages. CP stands
-for cutting plane optimization of SSVMs~\cite{joachims2009cutting}, SG for
-online subgradient optimization of SSVMs~\cite{ratliff2007online}, LV for
-latent variable SSVMs~\cite{yu2009learning}, ML for maximum likelihood
+for cutting plane optimization of SSVMs~\citep{joachims2009cutting}, SG for
+online subgradient optimization of SSVMs~\citep{ratliff2007online}, LV for
+latent variable SSVMs~\citep{yu2009learning}, ML for maximum likelihood
 training, Chain for chain-structured models
 with pairwise interactionsr, Graph for arbitrary graphs with pairwise
 interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.\label{table:comparision}}
