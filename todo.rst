@@ -24,3 +24,14 @@ Viel mehr generell ueber structured prediction
 
 exact learning
 =================
+referenzen auf algorithm davor
+multi-label
+snakes?
+
+TO WRITE: comparison of learning algs for large-scale
+========================================================
+Dataset? Applications?
+Segmentation? Chains ocr / colln?
+
+TO WRITE: latent variable stuff?
+=================================

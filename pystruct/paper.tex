@@ -37,7 +37,7 @@ projects, replacing standard classifiers.  The online documentation and
 examples help new users understand the somewhat abstract ideas behind
 structured prediction.
 
-%The organization of this paper is as follows. Section~\ref{sec:api} revisits
+%The organization of this chapter is as follows. Section~\ref{sec:api} revisits
 %the basic concepts of structured learning algorithms, and how these map to the
 %\pystruct interface. Section~\ref{sec:examples} exemplifies the use of \pystruct
 %on some standard structured prediction benchmarks and showcasts how \pystruct
@@ -223,7 +223,7 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
 \vfill
 \pagebreak
 
-\section{Project Goals}\label{sec:goals}
+\subsection{Project Goals}\label{sec:goals}
 
 \paragraph{Completeness}\pystruct aims at providing full pipelines that can be
     used in applications. It contains model formulation for many typical
@@ -264,7 +264,7 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
      directly with \pystruct.
 
 
-\section{Usage Example: Semantic Image Segmentation}\label{sec:examples}
+\subsection{Usage Example: Semantic Image Segmentation}\label{sec:examples}
 %TODO Multi-label, chain?
 
 %\subsection{Multi-class classification}
@@ -316,7 +316,7 @@ validation set following the protocol of \citet{krahenbuhl2012efficient}, who
 report 30.2 using a more complex approach. Training the structured model takes
 approximately 30 minutes using a single i7 core.
 
-\section{Experiments}\label{sec:benchmarks}
+\subsection{Experiments}\label{sec:benchmarks}
 While \pystruct focuses on usability and covers a wide range of applications, it is also
 important that the implemented learning algorithms run in acceptable time.
 In this section, we compare our implementation of the one-slack cutting plance
@@ -347,7 +347,7 @@ a high-level interface in a dynamic programming language.
 
 \section{Summary}
 %TODO summarize structured prediction
-This paper introduced \pystruct, a modular structured learning and prediction library in Python.
+This chapter introduced \pystruct, a modular structured learning and prediction library in Python.
 \pystruct is geared towards ease of use, while providing efficient implementations.
 \pystruct integrates itself into the scientific Python eco-system, making it easy to use with
 existing libraries and applications.

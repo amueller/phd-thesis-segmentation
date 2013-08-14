@@ -468,8 +468,8 @@ Thanks to using these high-quality implementations, running the whole pipeline
 for the pairwise model takes less than an hour on a 12 core CPU\@. Solving the
 QP is done in a single thread, while inference is parallelized over all cores.
  
-\section{Discussion}
-In this work we demonstrated that it is possible to learn state-of-the-art CRF models
+\section{Summary}
+In this chapter we demonstrated that it is possible to learn state-of-the-art CRF models
 exactly using structural support vector machines, despite the model containing many loops.
 The key to efficient learning is the combination of different inference mechanisms and
 a novel caching scheme for the one-slack cutting plane method, in combination
