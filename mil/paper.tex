@@ -1,4 +1,5 @@
-\section{Theoretical settings}\seclabel{intro}
+\section{Theoretical Analysis of Instance Level Prediction}\seclabel{intro}
+%TODO clean up
 Multiple instance learning is a supervised learning scenario first proposed by \citet{dietterich1997solving}.
 In multiple instance learning, examples are multi sets of instances, called bags, and each bag is assigned a class label.
 It is assumed that each instance has a true label, defined by an underlying concept. The label of a bag is positive, if and only if one of
@@ -43,7 +44,7 @@ To the authors knowledge, this is the first result of this kind.
 
 Detailed proofs of all propositions can be found in the appendix.
 
-\section{Related Work}
+\subsection{Previous Analysis}
 The theoretical analysis of multiple instance learning started with \citet{auer1997approximating} and later \citet{blum1998note}.
 These works assume that instances are drawn i.i.d.\ from a single distribution over instances. Blum and Kalai showed that in this
 setting, if the underlying concept is PAC-learnable in polynomial time, then the multiple instance learning problem is PAC-learnable
@@ -70,7 +71,7 @@ This result is used to evaluate the sample complexity of learning from bags usin
 In this work, we generalize some results from \citet{sabato2010reducing} to the setting where the distribution
 of instance labels is unknown and to cases where instances inside a bag may be dependent.
 
-\section{Preliminaries}
+\subsection{Preliminaries}
 Throughout this work, $\mathcal{X}$ denotes the space of all instances. Bags are multi sets of instance $X=\{x_1,\dotsc, x_r\}$.
 As usual in supervised learning tasks, we assume our training examples ($X_i,Y_i)$ to be i.i.d.\ from an unknown distribution.
 We denote the label of an instance $x_i$ by $y_i$ and the label of the bag $X_i$ as $Y_i = \max\{y_j | x_j \in  X_i\}$.
@@ -85,7 +86,7 @@ During all of this work, we assume that the true instance labels are never obser
 We use the following notation: $p(h_I(x)=0):= h_0$, the negative rate of the classifier,
 $p(h_I(x) \neq y) := e_I$, the instance error, and $p(h_B(X) \neq Y) := e_B$, the bag error.
 
-\section{Necessary Assumptions}\seclabel{assumptions}
+\subsection{Necessary Assumptions}\seclabel{assumptions}
 If we allow instances inside bags and their labels to have arbitrary dependencies, we are trying to find
 $y_1,\dotsc,y_r$ maximizing $p(y_1,\dotsc, y_r | x_1, \dotsc, x_r)$. This is a structured 
 prediction problem for which there is no hope solving it, given only bag labels.
@@ -103,7 +104,7 @@ about the label of $x_2$.
 Therefore, we need to make additional assumptions about the distribution of instances inside bags to enable
 predicting instance labels.
 
-\section{Independent Case}\seclabel{iid}
+\subsection{Independent Case}\seclabel{iid}
 The simplest case in which learning instance prediction is possible is the case when instances are globally i.i.d.,
 i.\,e.\ when instances inside a bag are independent of each other. This is a very strong assumption that might be
 violated in practical applications. On the other hand, strong results can be proved in this setting.
@@ -152,7 +153,7 @@ e_I = h_0 + p(Y=0)^\frac{1}{r} - 2 \left (\frac{1}{2} ( h_0^r + p(Y=0) - e_B) \r
 If bag labels are given, $p(Y=0)$ and $ e_B$ can simply be estimated from validation data.
 This means, in the i.i.d.\ case, instance-level error can simply be calculated from bag label and classifier statistics.
 
-\section{Restricted Dependent Case}
+\subsection{Restricted Dependent Case}
 As remarked in \Secref{assumptions}, it is not possible to bound the instance classification error
 when allowing arbitrary dependencies between instances. On the other hand, the i.i.d.\ assumption of \Secref{iid}
 might be too strong in a practical setting.

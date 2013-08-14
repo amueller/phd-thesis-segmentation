@@ -242,9 +242,7 @@ no instance labels to be known.
 
 \begin{table}
     \centering
-    \caption{Bag level performance of various MIL algorithms on the standard Musk
-    datasets. All but MIK provide instance-level labeling. }
-    \begin{tabularx}{0.9\linewidth}{@{\extracolsep{\fill}}lccccccc}
+    \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lccccccc}
     \toprule
         & SVM-SVR & EMDD & mi-SVM & MI-SVM & MICA & MIK & MIK-instance \\
     \cmidrule(rl){2-8}
@@ -252,6 +250,8 @@ no instance labels to be known.
     Musk2 & 85.4 &84.8 &  83.6 &  84.3     & 90.5 & 89.3& 85.2 \\
     \bottomrule
     \end{tabularx}
+    \caption{Bag level performance of various MIL algorithms on the standard Musk
+    datasets. All but MIK provide instance-level labeling. }
     \tablabel{musk-acc}
 \end{table}
 We compared the performance of MIK, MIK-instance and state-of-the-art MI
@@ -275,9 +275,7 @@ very small bags while Musk2 contains significantly larger bags, more similar to 
 image/segment setup.
 \begin{table}
     \centering
-    \caption{MIL algorithms and the empirical witness rates of the
-    classifiers.}
-    \begin{tabularx}{.8\linewidth}{@{\extracolsep{\fill}}lcccc}
+    \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccc}
     \toprule
     & \multicolumn2c{Musk1}  & \multicolumn2c{Musk2}  \\
                 &accuracy & witness-rate & accuracy & witness-rate  \\
@@ -289,6 +287,8 @@ image/segment setup.
     \bottomrule
     \end{tabularx}
     \tablabel{musk-witness}
+    \caption{MIL algorithms and the empirical witness rates of the
+    classifiers.}
 \end{table}
 
 \subsection{Partially Supervised Image Segmentation on Graz 02}
@@ -339,8 +339,7 @@ in \secref{combiningsegments}.
 
 \begin{table}
     \centering
-    \caption{Pixel-level accuracy on the Graz-02 dataset.}
-    \begin{tabularx}{0.8\textwidth}{lRRR}
+    \begin{tabularx}{\textwidth}{p{208pt}RRR}
     \toprule
                 & car & bike & person \\
     \cmidrule(l){2-2}
@@ -350,6 +349,7 @@ in \secref{combiningsegments}.
         Best strongly supervised approaches~\citep{fulkerson2009class,schulz2011}&   0.72&  0.72&  0.66 \\
     \bottomrule
     \end{tabularx}
+    \caption{Pixel-level accuracy on the Graz-02 dataset.}
     \tablabel{graz}
 \end{table}
 Per-class pixel accuracies are reported in \tabref{graz}; some qualitative results are shown in \figref{results}. The overall

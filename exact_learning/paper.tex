@@ -248,7 +248,7 @@ branch-and-bound.
 
 \begin{table}
     \begin{center}
-    \begin{tabular}{lcc}
+    \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcc}
         \toprule
                     & Average & Global \\
         \cmidrule{1-3}
@@ -260,7 +260,7 @@ branch-and-bound.
     \citet{gonfaus2010harmony} & 77&  75\\
     \citet{lucchi2013learning} & 78.9& 83.7\\
     \bottomrule
-    \end{tabular}
+    \end{tabularx}
     \end{center}
     \caption{Accuracies on the MSRC-21 Dataset.  We compare a baseline model,
     our exact and approximately learned models and state-of-the-art
@@ -344,7 +344,7 @@ validation split.
 
 \begin{table}
     \begin{center}
-    \begin{tabular}{lc}
+    \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lc}
         \toprule
                     & Jaccard \\
         \cmidrule{1-2}
@@ -356,7 +356,7 @@ validation split.
     \citet{krahenbuhl2012efficient} & 30.2\\
     \citet{krahenbuhlparameter} & 30.8\\
     \bottomrule
-    \end{tabular}
+    \end{tabularx}
     \end{center}
     \caption{Accuracies on the Pascal VOC Dataset. We compare our approach
     against approaches using the same unary potentials.\label{pascalacc}}
@@ -376,7 +376,7 @@ evaluate on the Pascal VOC 2010 ``test'' set.
 
 \begin{table}
     \begin{center}
-    \begin{tabular}{lcc}
+    \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcc}
     \toprule
                     & Move-making & Exact \\
     \cmidrule{1-3}
@@ -384,7 +384,7 @@ evaluate on the Pascal VOC 2010 ``test'' set.
     Estimated Objective $o^I$ &  67.62& 67.66\\
     True Primal Objective $o^E$& 69.92& 67.66\\
     \bottomrule
-    \end{tabular}
+    \end{tabularx}
     \end{center}
     \caption{Objective function values on the MSRC-21 Dataset}
     \label{msrc_objective}
@@ -431,7 +431,7 @@ objective.
 
 \begin{table}
     \begin{center}
-    \begin{tabular}{lcc}
+    \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcc}
     \toprule
                     & Move-making & Exact \\
     \cmidrule{1-3}
@@ -439,7 +439,7 @@ objective.
     Estimated Objective $o^I$ & 92.07 &92.24\\
     True Primal Objective $o^E$&92.35& 92.24  \\
     \bottomrule
-    \end{tabular}
+    \end{tabularx}
     \end{center}
     \caption{Objective function values on the Pascal Dataset.}
     \label{pascal_objective}

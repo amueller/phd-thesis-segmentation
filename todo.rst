@@ -3,6 +3,9 @@ future / present tense?!?!?
 include more images
 check all figures and tables
 most important parts: intros and conclusions!
+consistently caption either above or below!
+make all tables span full width
+Give detailed results for MSRC and Pascal
 
 Itm
 =====
@@ -14,6 +17,7 @@ weak supervision
 ==================
 fuse with MIL!
 MIL: reviewer comments
+MIL: cleanup intro
 
 pystruct / intro to structured prediction
 ============================================

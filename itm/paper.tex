@@ -216,8 +216,6 @@ $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
 
 
 \begin{algorithm}[t]
-\caption{Information Theoretic MST-based Clustering}
-
 \begin{algorithmic}\label{overall}
     \Require Points $\mathbf{x}$, desired number of clusters $k$.
     \Ensure Clustering $\mathbf{y}$ of $\mathbf{x}$
@@ -250,6 +248,8 @@ $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
         
     \EndFunction
 \end{algorithmic}
+\caption{Information Theoretic MST-based Clustering}
+
 \end{algorithm}
 
 \subsection{Finding Euclidean Minimum Spanning Tree Clusterings}
@@ -403,7 +403,6 @@ a hard limit on the minimum number of samples per cluster of five for
 the quantitative analysis.
 
 \begin{table}[t]
-\caption{Comparing properties of related algorithms.}\label{nowotab}
 \centering
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lccc}
 \toprule
@@ -417,6 +416,7 @@ Single Link &   -- &    Yes    &    $O(n\log n)$\\
 ITM & $\displaystyle \sum_{y=0}^k d p(y) \log(\bar{L}_y  ) + p(y) \log{p(y)}$ & Yes & $O(\alpha(n) n \log n + nk)$\\
 \bottomrule
 \end{tabularx}
+\caption{Comparing properties of related algorithms.}\label{nowotab}
 \end{table}
 
 %As our objective is motivated by limit properties of the entropy estimate of \eqref{hmst},
@@ -474,9 +474,6 @@ different implementations we used, this should not be interpreted as a
 general statement about the speed of the individual methods.
 
 \begin{table}[t]
-\caption{Scores (ARI/NMI) of $k$-Means, MeanNN, single link agglomerative clustering and
-ITM on several benchmark datasets (higher is better). The best score for
-each dataset is printed in bold.}\label{results}
 \centering
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lrrrcccc}
 \toprule
@@ -494,6 +491,9 @@ vowel       &   990 &   10 &  11 &     0.17\,/\,0.37 &    0.19\,/\,\B{0.40}  &0.
 waveform    &  5000 &   21 &   2 & \B{0.37}\,/\,0.35 &    0.30\,/\,\B{0.38}  &0.00\,/\,0.00             &    0.23\,/\,0.22\\
 \bottomrule
 \end{tabularx}
+\caption{Scores (ARI/NMI) of $k$-Means, MeanNN, single link agglomerative clustering and
+ITM on several benchmark datasets (higher is better). The best score for
+each dataset is printed in bold.}\label{results}
 \end{table}
 
 % TODO more experiments: mnist / usps
