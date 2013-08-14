@@ -1,5 +1,9 @@
+Before going to segmentation, we look at clustering because:
+1 we see how far we can go without supervision
+2 we need it as building block for bow
+3 we need it as initialization for latent variable models
+%TODO elaborate
 
-\section{Introduction}
 Clustering data is one of the fundamental problems in machine learning.  In
 clustering, the goal is to divide data points into homogeneous subsets, called
 clusters.
@@ -270,8 +274,8 @@ Euclidean distances between points.  The connected components of $G$ induce a
 clustering $\mathbf{y}(G)$ of $\mathbf{x}$, by assigning $x_i$ and $x_j$ the
 same cluster if and only if they are in the same connected component of $G$.
 Define
-\setlength{\abovedisplayskip}{1mm}
-\setlength{\belowdisplayskip}{1mm}
+%\setlength{\abovedisplayskip}{1mm}
+%\setlength{\belowdisplayskip}{1mm}
 \begin{align}\label{eq:graphobjective}
 \hat{I}(G) := - \sum_{y=0}^k p(y) \Bigl[ d \log(L_{G,y}) - (d-1) \log{n_y} \Bigr],
 \end{align}
@@ -373,7 +377,6 @@ used the $k$-Means implementation available in the scikit-learn
 library~\citep{pedregosa2011scikit}.  We use the dual tree Boruvka algorithm
 implemented in the mlpack machine learning library~\citep{mlpack2011}. The source
 code is available online\footnote{\url{https://github.com/amueller/information-theoretic-mst}}.
-\enlargethispage{5mm}
 
 \subsection{Experimental Setup}
 For both $k$-Means and MeanNN, we restart the algorithm ten times using
@@ -479,6 +482,11 @@ waveform    &  5000 &   21 &   2 & \B{0.37}\,/\,0.35 &    0.30\,/\,\B{0.38}  &0.
 \bottomrule
 \end{tabularx}
 \end{table}
+
+% TODO more experiments: mnist / usps
+% TODO intrinsic dimensionality
+% todo segmentation unsupervised
+% TODO bag of word experiment?
 
 \section{Conclusions}
 In this work we proposed the use of a minimum spanning tree based,

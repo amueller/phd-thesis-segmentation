@@ -21,17 +21,22 @@
 \usepackage[small]{caption}
 \usepackage{setspace}
 \usepackage{color}
-\usepackage{listings}
+\usepackage{minted}
 \usepackage[urw-garamond]{mathdesign}
 \usepackage{garamondx}
-%\usepackage{layout}
+\usepackage{xspace}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 \newcommand{\x}{\checkmark}
 \renewcommand{\o}{$\times$}
-\newcommand{\pystruct}{{\sc PyStruct} }
+
+\definecolor{rulecolor}{rgb}{0.80,0.80,0.80}
+\newminted{python}{frame=single,rulecolor=\color{rulecolor}, linenos, xleftmargin=7mm}
+
+\newcommand{\pystruct}{\textsc{PyStruct}\xspace}
+\newcommand{\svmstruct}{SVM$^\text{struct}$\xspace}
 
 \algrenewcommand{\algorithmicrequire}{\textbf{Input:}}
 \algrenewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -55,7 +60,6 @@
 \newcommand{\B}[1]{\textbf{#1}}
 
 \begin{document}
-%\layout
 
 
 \begin{titlepage}
