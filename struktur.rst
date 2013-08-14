@@ -8,6 +8,7 @@ Clustering
 -----------
 We introduce some shiny new clustering algorithm. It is awesome.
 What do we use it for?
+Balanced clusters -> good for tesselating the space (as in bag of words, or latent variables)
 
 MIL
 -----
@@ -45,3 +46,13 @@ latent variables
 Drei moeglichkeiten fuer clustering:
 BOW, initalisierung der latenten, unsupervised object segmentation.
 Problem bei unsupervised: klassen unterschiedlich gross (MSRC), passt nicht gut zum clustern.
+
+
+Zusaetzliches material:
+========================
+Max-Margin Latent dynamic CRF 
+N-Slack vs One-Slack vs Subgradient vs Frank-Wolfe
+
+Edge-Features vs no edge features?
+
+clustering: intrinsic dimensionality
