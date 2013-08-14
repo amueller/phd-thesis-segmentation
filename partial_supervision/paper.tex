@@ -1,18 +1,8 @@
-The task of multi-class image segmentation is to create a pixel-wise labeling of an input image
-into regions belonging to one of several semantic classes.
-Most algorithms for this setting work with strong supervision: a pixel-wise labeling
-of training images. Methods that are used in this setting include random forests~\citep{schroff2008object} and support vector machines (SVM). Usually
-the output of such algorithms is further processed by a conditional random field (CRF~\citep{ladicky2009associative,gonfaus2010harmony,jiang2009efficient}).
-While these methods reach high accuracy, it is very time consuming to create
-pixel-level ground truth for real-world applications.
-This problem can be addressed in several ways:
-the LabelMe effort~\citep{russell2008labelme} tries to use the ``wisdom of crowds'' to obtain human labelings.
-Another possibility is to use only weak supervision, which is the approach we follow here.
+Most algorithms for semantic image segmentation and object-class segmentation work with strong supervision: a pixel-wise labeling
+of training images. In this chapter, we will investigate a method that works with annotation
+that is much easier to obtain: whole image labels.
 
-In the weakly supervised setting, the ground
- truth for a given image is a list of semantic classes that occur in this image, instead of a pixel-level
-labeling as in the strongly supervised setting.
-Image-level labels are much easier to obtain, e.~g.\  through online image libraries such as flickr and facebook.
+% TODO contrast with Alex
 
 The task of multi-class segmentation is often split up in a segmentation
 and a recognition part. Random forest methods often classify each pixel
@@ -62,16 +52,20 @@ method. This approach does not exactly correspond to instance-level ground truth
 since the instances are segments, not pixels -- but relates to it closely.
 
 
-In this work, we explore the 
+This chapter explores the 
 application of multi-instance learning algorithms to the task of partially supervised image segmentation.
 Multi-instance learning is a natural formulation for image classification and has been
 successfully applied in this task~\citep{zhou2007multi}. We propose to go a step further and apply
 multi-instance learning to the task of object-class segmentation in natural
-images. To our knowledge, all previous
-methods in the field use strong supervision, meaning manual pixel-wise annotation of
-training images. This approach does not
-scale to larger datasets, especially if one expects consistency and quality
-in the segmentations.
+images.
+% FIXME relate to alex here
+To our knowledge, all previous methods in the field use strong
+supervision, meaning manual pixel-wise annotation of training images. This
+approach does not scale to larger datasets, especially if one expects
+consistency and quality in the segmentations.
+
+After our empirical evaluation on image segmentation, we will extend the existing theoretical framework
+on instance classification based on multi-instance prediction.
 
 \section{Related Work}
 \subsection{Proposal Object Segments}\label{related_segments}
@@ -90,7 +84,7 @@ A similar approach was investigated by \citet{endres2010category}.
 Multi-instance learning was formally introduced in \citet{dietterich1997solving}.
 Since then, many algorithms were proposed to solve the multi-instance learning problem
 using many different approaches \citep{andrews2003support,gaertner2002multi,zhou2009multi,li2009convex,zhang2002dd,mangasarian2008multiple,leistner2010miforests,chen2006miles}.
-We will discuss only those that are relevant to this work.
+We will discuss only those that are relevant to the present treatment.
 
 \citet{gaertner2002multi} introduced the concept of a multi-instance
 kernel on bags, defined in terms of a kernel on instances. 
@@ -159,8 +153,8 @@ is not necessary possible to identify non-object regions easily.
 
 \section{Multi-Instance Kernels for Image Segmentation}
 \subsection{Constraint Parametric Min Cuts (CPMC)}
-To generate proposal segments, we use the CPCM framework from \citet{carreira2010constrained}. We construct initial
-segments using graph cuts, on the image graph. The energy function for these cuts uses pixel
+To generate proposal segments, we use the Constraint Parametric Min Cut (CPCM) method from \citet{carreira2010constrained}. In CPMC, initial
+segments are constructed graph cuts on the pixel grid. The energy function for these cuts uses pixel
 color and the response of the global probability of boundary (gPb) detector~\citep{maire2008using}. As much as ten thousand initial segments are generated from foreground
 and background seeds. A fast rejection based on segment size and ratio cut~\citep{wang2003image} reduced these to about 2000 overlapping
 segments per image. Then, the segments are ranked according to a measure of object-likeness that is based on region and Gestalt properties.
@@ -364,21 +358,4 @@ While the performance of our multiple-instance based approach is far
 from current methods that use pixel-level annotations, whose pixel-level accuracy is around $70\%$~\citep{fulkerson2009class,schulz2011} on pixel-level,
 it can serve as a baseline for research on weakly supervised methods for image segmentation.
 
-\section{Conclusions}
-We proposed an algorithm for object-class segmentation using only weak supervision based on
-multiple-instance learning. In our approach each image is represented as a bag of object-like
-proposal segments.
 
-We described a way to extent bag level predictions made by the multi-instance
-kernel method to instance level while remaining competitive with the state-of-the-art
-in bag label prediction.
-
-Finally we evaluated the proposed object-class segmentation method on the challenging
-Graz02 dataset. While not reaching the performance of methods using strong supervision,
-our result can work as a baseline for further research into weakly supervised object class
-segmentation.
-
-In future work, we plan to scale our approach to much larger image datasets. As much
-more images with weak annotations are available than with pixel level segmentation,
-we hope that we can improve upon the state-of-the-art in object-class segmentation
-by making use of larger bodies of training images.

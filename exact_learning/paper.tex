@@ -1,29 +1,23 @@
 
 
 \section{Introduction}
-Many classical computer vision applications such as stereo, optical flow, semantic
-segmentation and visual grouping can be naturally formulated as image labeling tasks.
+% Remove duplication with pystruct intro
+As discussed previously, many computer vision algorithms empoy conditional random
+field models on pixel or superpixel graphs. These graphs by nature contain loops,
+making exact prediction and loss-augmented prediction intractable.
+As loss-augmented prediction is a centreal step in the learning algorithms
+discussed in Chapter~\ref{ch:structured_pystruct}
+in the inference then lead to approximate learning.
 
-Arguably the most popular way to approach such labeling problems is via graphical
-models, such as Markov random fields (MRFs) and conditional random fields (CRFs).
-MRFs and CRFs provide a principled way of integrating local evidence and
-modeling spacial dependencies, which are strong in most image-based tasks.
+In this chapter, we investigate the impact of these approximations in
+the one-slack learning algorithms in the context of semantic 
+image segmentation. We show that despite inference being deemed intractable in
+loopy superpixel models, we are able to learn a structured support vector machine
+for this application exactly.
+learning a model of pairwise
+We will evaluate our approach on the popular MSRC-21 and Pascal VOC datasets.
 
-While in earlier approaches, model parameters were set by hand or using
-cross-validation, more recently parameters are often learned using a max-margin
-approach.
-
-Most models employ linear energy functions of unary and pairwise interactions,
-trained using structural support vector machines (SSVMs). While linear energy
-functions lead to learning problems that are convex in the parameters, complex
-constraints complicate their optimization. Additionally, inference (or more precisely
-loss-augmented prediction) is a crucial part in learning, and can often not be
-performed exactly, due to loops in the neighborhood graphs.  % TODO clean up!
-Approximations in the inference then lead to approximate learning.
-
-We look at semantic image segmentation, learning a model of pairwise
-interactions on the popular MSRC-21 dataset.
-The contribution of this work is threefold:
+The contribution of this chapter is threefold:
 \begin{itemize}
     \item We analyze the simultaneous use of multiple approximate inference
         methods for learning SSVMs using the cutting plane method, relating
@@ -115,77 +109,6 @@ not relate their results back to the original SSVM objective they approximate.
 \end{algorithm*}
 
 \section{Efficient Cutting Plane Training of SSVMs}\label{learning}
-
-\subsection{The Cutting Plane Method}\label{cutting_plane}
-
-When learning for structured prediction in the max-margin framework of
-\citet{tsochantaridis2006large}, predictions are made as
-\[ \argmax_{y \in \mathcal{Y}} f(x, y, \theta),\]
-where $x \in \mathcal{X}$ is the input, $y \in \mathcal{Y}$ the prediction, and $\theta$ are the parameters to be learned.
-We will assume $y$ to be multivariate, $y=(y_1, \dots, y_k)$ with possibly varying $k$.
-
-The function $f$ measures compatibility of $x$ and $y$ and is a linear function of the parameters $\theta$:
-\[f(x, y, \theta) = \langle \theta, \psi(x, y) \rangle.\]
-Here $\psi(x, y)$ is a joint feature vector of $x$ and $y$. Specifying a particular SSVM model
-amounts to specifying $\psi$.
-
-For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
-the loss-based soft-margin objective
-\begin{equation}\label{eq:mainequation}
-\min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  r_i(\theta)
-\end{equation}
-with regularization parameter $C$, where $r_i$ is a hinge-loss-like upper
-bound on the empirical $\Delta$-risk:
-\[r_i(x^i, y^i, y) = \left [\max_{y \in \mathcal{Y}} \Delta(y^i, y) + \left<\theta, \psi(x^i, y) - \psi(x^i, y^i) \right > \right]_+ \]
-
-We solve the following reformulation of Equation~\eqref{mainequation}, known as one-slack QP formulation:
-\begin{align}\label{eq:oneslack}
-    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
-    \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
-        &\left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i,
-            \hat{y}^i)] \right \rangle \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
-            - \xi
-\end{align}
-using the cutting plane method described in
-Algorithm~\ref{alg_cutting_plane}~\citep{joachims2009cutting}.
-
-The cutting plane method alternates between solving Equation~\eqref{oneslack}
-with a working set $\W$ of constraints, and expanding the working set using the
-current $\theta$ by finding $\mathbf{y}$ corresponding to the most violated constraint,
-using a separation oracle $I$.
-We investigate the construction of $\W$ and the influence of $I$
-on learning.
-
-%TODO unstructured!!
-
-Intuitively, the one-slack formulation corresponds to joining all training
-samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
-interactions between variables corresponding to different data points.
-Consequently, only a single constraint is added in each iteration of
-Algorithm~\ref{alg_cutting_plane}, leading to very small $\W$. We further use
-pruning of unused constraints, as suggested by \citet{joachims2009cutting},
-resulting in the size of $\W$ being in the order of hundreds for all experiments.
-
-We also use another enhancement of the cutting plane algorithm introduced by
-\citet{joachims2009cutting}, the caching oracle. For each training example $(x^i, y^i)$,
-we maintain a set $C^i$ of the last $r$ results of loss-augmented inference
-(line~\ref{get_cutting_plane} in Algorithm~\ref{alg_cutting_plane}).
-For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we find
-\[ 
-    \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n \Delta(y^i, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i, \hat{y})] \right \rangle
-\]
-by enumeration of $C^i$ and continue until line~\ref{convergence_check}.
-Only if $\xi' - \xi < \epsilon$, i.e.\ the produced constraint is not violated, we
-return to line~\ref{get_cutting_plane} and actually invoke the separation
-oracle $I$.
-
-In computer vision applications, or more generally in graph labeling problems,
-$\psi$ is often given as a factor graph over $y$, typically using only unary and pairwise functions:
-\[ \langle \theta, \psi(x, y) \rangle = \sum_{i=0}^k \langle \theta_u,  \psi_u(x, y_k) \rangle + \sum_{(i, j) \in E} \langle \theta_p, \psi_p(x, y_k, y_l) \rangle, \]
-where $E$ a set of pairwise relations. In this form, parameters $\theta_u$ and $\theta_p$ for unary and
-pairwise terms are shared across all entries and pairs.
-The decomposition of $\psi$ into only unary and pairwise interactions allows
-for efficient inference schemes, based on message passing or graph cuts.
 
 There are two groups of inference procedures, as identified in
 \citet{finley2008training}: under-generating and over-generating approaches.

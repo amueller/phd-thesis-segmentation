@@ -1,23 +1,36 @@
-Before going to segmentation, we look at clustering because:
-1 we see how far we can go without supervision
-2 we need it as building block for bow
-3 we need it as initialization for latent variable models
-%TODO elaborate
+Before we start our investigation of semantic segmentation and object class segmentation,
+we will look into a general purpose clustering algorithm.
 
-Clustering data is one of the fundamental problems in machine learning.  In
-clustering, the goal is to divide data points into homogeneous subsets, called
+In clustering, the goal is to divide data points into homogeneous subsets, called
 clusters.
 Many different formulations of the clustering problem are given in the literature.
+%
+In the context of this work, clustering plays an important role in many respects:
+\begin{itemize}
+    \item Clustering, as a purely unsupervised methods is on one end of the spectrum of algorithms we investigate.
+        When using per-image or per-pixel supervision as in the later chapters, we can use clustering to calibrate our
+        expecation of what semisupervised and supervised algorithms have at least to achieve.
+    \item As many other computer vision algorithms, our segmentation methods
+        with critically depend on bag-of-feature representations of segments or
+        images. These are build using a vocabulary of visual words, that is
+        usually created via clustering.
+    \item When discussing latent variable models in chapter~\ref{ch:latent}, we need to initialize our
+        model to overcome the inherant symmetries. Clustering methods are a
+        straight forward solution to this problem.
+\end{itemize}
+
+So not only is clustering one of the fundamental problems in machine learning, it is also
+an imortant building block for the methods in this work.
+%
 Most algorithms are based on ad-hoc criteria such as intra-cluster similarity
 and inter-cluster dissimilarity.
-%
 An alternative approach is to formalize clustering using an information
 theoretic framework, where one considers inputs as well as cluster assignments
 as random variables.  The goal is then to find an assignment of data points to
 clusters that maximizes the mutual information between the assignments and the
 observations.
 
-In this work, we rely on a non-parametric estimator of the data entropy to find 
+In the following, we rely on a non-parametric estimator of the data entropy to find 
 clusterings of maximum mutual information.
 %
 The use of non-parametric estimates allows a data-driven approach, without 
@@ -34,7 +47,7 @@ Because the estimator and the optimization are both parameter-free,
 the only free parameter of the algorithm is the number of clusters, 
 which makes it very easy to use in practice.
 %
-The contributions of this work are:
+The contributions of this chapter are:
 \begin{itemize}
     \item Proposing the use of a MST-based entropy estimator in information theoretic clustering.
     \item Give a fast algorithm for a relaxed version of the resulting problem.
@@ -56,8 +69,8 @@ $k$-Means often works well in practice, one of its main drawbacks is the
 restriction in cluster shape. 
 %
 They are given by the Voronoi tessellation of the cluster means and therefore always convex.
-%Not only are clusters as found by $k$-Means convex,
-%they are given by the Voronoi tessellation of the cluster means.
+Another draw-back is the non-determinism of the procedure, caused by the
+dependence on random initialization.
 
 Another widely used method is spectral clustering~\citep{shi2000normalized,ng2002spectral}, 
 which solves a graph partitioning problem on a similarity
@@ -274,8 +287,6 @@ Euclidean distances between points.  The connected components of $G$ induce a
 clustering $\mathbf{y}(G)$ of $\mathbf{x}$, by assigning $x_i$ and $x_j$ the
 same cluster if and only if they are in the same connected component of $G$.
 Define
-%\setlength{\abovedisplayskip}{1mm}
-%\setlength{\belowdisplayskip}{1mm}
 \begin{align}\label{eq:graphobjective}
 \hat{I}(G) := - \sum_{y=0}^k p(y) \Bigl[ d \log(L_{G,y}) - (d-1) \log{n_y} \Bigr],
 \end{align}
@@ -291,7 +302,9 @@ We try to find a graph $G$ with $k$ components, such that $\hat{I}(G)$ is maxima
 ourself to optimizing over the set $\mathcal{F}$ of forests over $\mathbf{x}$ with $k$ components,
 as adding edges inside connected components will only decrease the objective.
 Thus we can formulate the clustering problem equivalently as
-$\displaystyle \max_{G \in \mathcal{F}} \hat{I}(G)$.
+\begin{equation}
+    \max_{G \in \mathcal{F}} \hat{I}(G).
+\end{equation}
 
 
 Optimization over forests remains hard, and we further restrict ourself to
@@ -488,8 +501,8 @@ waveform    &  5000 &   21 &   2 & \B{0.37}\,/\,0.35 &    0.30\,/\,\B{0.38}  &0.
 % todo segmentation unsupervised
 % TODO bag of word experiment?
 
-\section{Conclusions}
-In this work we proposed the use of a minimum spanning tree based,
+\section{Summary}
+In this summary we proposed the use of a minimum spanning tree based,
 non-parametric entropy estimator in information theoretic clustering, ITM\@.
 Thereby we extended the work of \citet{faivishevsky2010nonparametric} to a more
 flexible and efficient entropy estimate.  We proposed an approximate optimization
@@ -506,17 +519,17 @@ In contrast to other algorithms that can handle non-convex clusters, ITM has no
 tuning parameters, as the objective presents a natural trade-off between
 balancing cluster sizes and enforcing intra-cluster similarity.
 
-A limitation of the proposed algorithm is that it is based on the assumption 
-of an absolute continuous data distribution. This assumption eliminates the 
-possibility of using categorical variables and data that lies on a submanifold 
-of the input space. 
+%A limitation of the proposed algorithm is that it is based on the assumption 
+%of an absolute continuous data distribution. This assumption eliminates the 
+%possibility of using categorical variables and data that lies on a submanifold 
+%of the input space. 
 %
-In future work we plan to investigate a way to overcome this limitation, 
-for example by estimating the intrinsic dimensionality of the 
-data~\citep{pettis1979intrinsic}.
+%In future work we plan to investigate a way to overcome this limitation, 
+%for example by estimating the intrinsic dimensionality of the 
+%data~\citep{pettis1979intrinsic}.
 %
-We will also investigate optimizations of the objective 
-\eqref{graphobjective} that go beyond the proposed method. 
-Move-making algorithms seem a promising way to refine solutions 
-found by Algorithm~1. Branch and bound techniques could provide 
-an alternative approach. 
+%We will also investigate optimizations of the objective 
+%\eqref{graphobjective} that go beyond the proposed method. 
+%Move-making algorithms seem a promising way to refine solutions 
+%found by Algorithm~1. Branch and bound techniques could provide 
+%an alternative approach. 

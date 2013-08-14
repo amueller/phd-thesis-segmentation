@@ -1,7 +1,28 @@
+Many classical computer vision applications such as stereo, optical flow, semantic
+segmentation and visual grouping can be naturally formulated as image labeling tasks.
+
+Arguably the most popular way to approach such labeling problems is via graphical
+models, such as Markov random fields (MRFs) and conditional random fields (CRFs).
+MRFs and CRFs provide a principled way of integrating local evidence and
+modeling spacial dependencies, which are strong in most image-based tasks.
+
+While in earlier approaches, model parameters were set by hand or using
+cross-validation, more recently parameters are often learned using a max-margin
+approach.
+
+Most models employ linear energy functions of unary and pairwise interactions,
+trained using structural support vector machines (SSVMs). While linear energy
+functions lead to learning problems that are convex in the parameters, complex
+constraints complicate their optimization. 
+
 In recent years there has been a wealth of research in methods for learning structured prediction,
 as well as in their application in areas such as natural language processing and computer vision.
 Unfortunately only few implementations are publicly available---many applications are based on
 the non-free implementation of~\citet{joachims2009cutting}.
+
+In this chapter, we will first introduce the concepts and algorithms used in structured prediction,
+in particular in maximum margin methods. We will then accompany this by a description of our
+open source implementation of these algorithms, \pystruct.
 
 \pystruct aims at providing a high-quality implementation with an easy-to-use
 interface, in the high-level Python language.  This allows practitioners to
@@ -25,8 +46,7 @@ structured prediction.
 %arguably the most widely used implementation of structural SVMs, and
 %SVM$^\text{python}$, a Python interface or the same.
 
-
-\section{Structured Prediction and Casting it into Software}\label{sec:api}
+\section{Basic Concepts in Structured Prediction}
 
 Structured prediction can be defined as making a prediction $f(x)$ by maximizing a
 compati\-bility function between an input $x$ and the possible labels
@@ -41,6 +61,106 @@ output class, for example a label for each word in a sentence or a label for
 each pixel in an image.
 Learning structured prediction means learning the parameters $\theta$ from training data.
 
+% TODO relate to computer vision here
+When learning for structured prediction in the max-margin framework of
+\cite{tsochantaridis2006large}, predictions are made as
+\[ \argmax_y f(x, y, \theta)\]
+where x is the input and $\theta$ are the parameters to be learned.
+Here, $f$ is a compatibility function of $x$ and $y$, that is linear in the parameters
+\[f(x, y, \theta) = \langle \theta, \Psi(x, y) \rangle\]
+where $\Psi(x, y)$ is a joint feature vector of $x$ and $y$. Specifying a specific CRF model
+amounts to specifying $\Psi$.
+
+For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
+the loss base soft-margin objective
+\begin{equation}\label{mainequation}
+    \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  r_i(\theta)
+\end{equation}
+with regularization parameter $C$, where $r_i$ is an hinge-loss like upper
+bound on $\Delta$ empirical risk:
+\[r_i(x_i, y_i, y) = [\max_{y \in \mathcal{Y}} \Delta(y_i, y) + \left<\theta, \psi(x_i, y) - \psi(x_i, y_i) \right >]_+ \]
+\citep{ratliff2007online} derive convergence rates for a stochastic version of the subgradient of  Equation~\ref{mainequation}:
+\begin{equation}\label{subgradient}
+    g := \psi(x_i, y) - \psi(x_i, y_i) + \theta / C
+\end{equation}
+leading to a simple iterative optimization.
+
+\section{Learning Algorithms for Linear Max-Margin Structured Prediction}
+% TODO algorithms here
+\subsection{The Cutting Plane Method}\label{cutting_plane}
+
+When learning for structured prediction in the max-margin framework of
+\citet{tsochantaridis2006large}, predictions are made as
+\[ \argmax_{y \in \mathcal{Y}} f(x, y, \theta),\]
+where $x \in \mathcal{X}$ is the input, $y \in \mathcal{Y}$ the prediction, and $\theta$ are the parameters to be learned.
+We will assume $y$ to be multivariate, $y=(y_1, \dots, y_k)$ with possibly varying $k$.
+
+The function $f$ measures compatibility of $x$ and $y$ and is a linear function of the parameters $\theta$:
+\[f(x, y, \theta) = \langle \theta, \psi(x, y) \rangle.\]
+Here $\psi(x, y)$ is a joint feature vector of $x$ and $y$. Specifying a particular SSVM model
+amounts to specifying $\psi$.
+
+For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
+the loss-based soft-margin objective
+\begin{equation}\label{eq:mainequation}
+\min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  r_i(\theta)
+\end{equation}
+with regularization parameter $C$, where $r_i$ is a hinge-loss-like upper
+bound on the empirical $\Delta$-risk:
+\[r_i(x^i, y^i, y) = \left [\max_{y \in \mathcal{Y}} \Delta(y^i, y) + \left<\theta, \psi(x^i, y) - \psi(x^i, y^i) \right > \right]_+ \]
+
+We solve the following reformulation of Equation~\eqref{mainequation}, known as one-slack QP formulation:
+\begin{align}\label{eq:oneslack}
+    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
+    \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
+        &\left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i,
+            \hat{y}^i)] \right \rangle \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
+            - \xi
+\end{align}
+using the cutting plane method described in
+Algorithm~\ref{alg_cutting_plane}~\citep{joachims2009cutting}.
+
+The cutting plane method alternates between solving Equation~\eqref{oneslack}
+with a working set $\W$ of constraints, and expanding the working set using the
+current $\theta$ by finding $\mathbf{y}$ corresponding to the most violated constraint,
+using a separation oracle $I$.
+We investigate the construction of $\W$ and the influence of $I$
+on learning.
+
+%TODO unstructured!!
+
+Intuitively, the one-slack formulation corresponds to joining all training
+samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
+interactions between variables corresponding to different data points.
+Consequently, only a single constraint is added in each iteration of
+Algorithm~\ref{alg_cutting_plane}, leading to very small $\W$. We further use
+pruning of unused constraints, as suggested by \citet{joachims2009cutting},
+resulting in the size of $\W$ being in the order of hundreds for all experiments.
+
+We also use another enhancement of the cutting plane algorithm introduced by
+\citet{joachims2009cutting}, the caching oracle. For each training example $(x^i, y^i)$,
+we maintain a set $C^i$ of the last $r$ results of loss-augmented inference
+(line~\ref{get_cutting_plane} in Algorithm~\ref{alg_cutting_plane}).
+For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we find
+\[ 
+    \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n \Delta(y^i, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i, \hat{y})] \right \rangle
+\]
+by enumeration of $C^i$ and continue until line~\ref{convergence_check}.
+Only if $\xi' - \xi < \epsilon$, i.e.\ the produced constraint is not violated, we
+return to line~\ref{get_cutting_plane} and actually invoke the separation
+oracle $I$.
+
+In computer vision applications, or more generally in graph labeling problems,
+$\psi$ is often given as a factor graph over $y$, typically using only unary and pairwise functions:
+\[ \langle \theta, \psi(x, y) \rangle = \sum_{i=0}^k \langle \theta_u,  \psi_u(x, y_k) \rangle + \sum_{(i, j) \in E} \langle \theta_p, \psi_p(x, y_k, y_l) \rangle, \]
+where $E$ a set of pairwise relations. In this form, parameters $\theta_u$ and $\theta_p$ for unary and
+pairwise terms are shared across all entries and pairs.
+The decomposition of $\psi$ into only unary and pairwise interactions allows
+for efficient inference schemes, based on message passing or graph cuts.
+
+
+\section{Casting Structured Prediction into Software}\label{sec:api}
+
 Using the above formulation, learning can be broken down into three sub-problems:
 \begin{enumerate*}
     \item Optimizing the objective with respect to $\theta$.
@@ -53,10 +173,12 @@ structure of $\Psi$, while the first one is usually treated as independent.
 \pystruct takes an object-oriented approach to decouple the task-dependent
 implementation of 2. and 3. from the general algorithms used to solve 1.
 
-Estimating $\theta$ is done in \texttt{learner} classes, which currently support
-cutting plane algorithms for structural support vector machines~(SSVMs), subgradient methods for SSVMs,
-the structured perceptron and latent variable SSVMs. The cutting plane implementation uses the {\sc cvxopt} package \citep{dahl2006cvxopt}
-for quadratic optimization.
+Estimating $\theta$ is done in \texttt{learner} classes, which currently
+support cutting plane algorithms for structural support vector
+machines~(SSVMs), subgradient methods for SSVMs, the structured perceptron and
+latent variable SSVMs. The cutting plane implementation uses the {\sc cvxopt}
+package \citep{dahl2006cvxopt} for quadratic optimization.
+
 Encoding the structure of the problem is done using \texttt{model} classes, which
 compute $\Psi$ and encode the structure of the problem.
 \pystruct implements models for many common cases, such as multi-class and
@@ -143,6 +265,8 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
 
 
 \section{Usage Example: Semantic Image Segmentation}\label{sec:examples}
+%TODO Multi-label, chain?
+
 %\subsection{Multi-class classification}
 %Multi-class classification is a very simple case of structured prediction, that serves
 %well to exemplify the usage. We load the iris dataset and compare the usage of \pystruct
@@ -221,7 +345,8 @@ a high-level interface in a dynamic programming language.
 \end{figure}
 
 
-\section{Conclusion}
+\section{Summary}
+%TODO summarize structured prediction
 This paper introduced \pystruct, a modular structured learning and prediction library in Python.
 \pystruct is geared towards ease of use, while providing efficient implementations.
 \pystruct integrates itself into the scientific Python eco-system, making it easy to use with

@@ -1,4 +1,4 @@
-\section{Introduction}\seclabel{intro}
+\section{Theoretical settings}\seclabel{intro}
 Multiple instance learning is a supervised learning scenario first proposed by \citet{dietterich1997solving}.
 In multiple instance learning, examples are multi sets of instances, called bags, and each bag is assigned a class label.
 It is assumed that each instance has a true label, defined by an underlying concept. The label of a bag is positive, if and only if one of
@@ -16,6 +16,7 @@ are necessary to learn instance-level classifiers from bag labels only.
 We provide bounds on the instance label prediction error based on the
 bag label prediction error. The bounds can be used to judge a learner when no
 instance labeling exists for training or testing.
+
 %If one is interested in classifying instances, such a bound is very important.
 There are two applications that we target:
 \begin{description}
@@ -287,114 +288,38 @@ non-trivial. This is surprising since we made only very general assumptions on t
 	\figlabel{gehler_soft}
 \end{figure}
 
-\section{Conclusion}
-We provided several bounds on instance prediction error in a multiple instance learning setting.
-For the case that instances inside a bag are independent, we proved a strong upper bound on the error.
-We showed that when bag labels are present, it is even possible to directly estimate the true instance error.
+\section{Summary}
+We proposed an algorithm for object-class segmentation using only weak supervision based on
+multiple-instance learning. In our approach each image is represented as a bag of object-like
+proposal segments.
 
-We introduced a restricted dependent setting for multiple instance learning, in which instances inside a bag
-are only independent given an unobserved variable. We showed that without any further assumptions
-on the distribution of this variable, it is possible to learn instance label prediction from bag labels
-in this setting. We also provided upper and lower bounds on the instance error, given known bag labels
-or an estimage of the bag error.
-Empirical evaluation on a synthetic dataset with known dependen structure and known instance labels
-showed that the bound are non-trivial and yield insight into the behavior of instance label errors.
-We hope that this work establishes a basis for further research on instance label prediction
-in multiple instance learning.
+We described a way to extent bag level predictions made by the multi-instance
+kernel method to instance level while remaining competitive with the state-of-the-art
+in bag label prediction.
 
-\section{Appendix}
-\begin{lemma}\label{binarylemma}
-Given two (dependent) binary random variables $x,y$:
-\begin{equation}
-p(x \neq y) = p(x=0) + p(y=0) - 2 p(x=0, y=0)
-\end{equation}
+We evaluated the proposed object-class segmentation method on the challenging
+Graz02 dataset. While not reaching the performance of methods using strong supervision,
+our result can work as a baseline for further research into weakly supervised object class
+segmentation.
 
-\begin{proof}
-\begin{align}
-p(x \neq y) & = p(x=0, y=1) + p(x=1, y=0) \\
-                &= p(x=0) - p(x=0, y=0)\\
-                &  + p(y=0) - p(x=0, y=0) \\
-                &= p(x=0) + p(y=0) -2 p(x=0, y=0)
-\end{align}
-\end{proof}
-\end{lemma}
+%In future work, we plan to scale our approach to much larger image datasets. As much
+%more images with weak annotations are available than with pixel level segmentation,
+%we hope that we can improve upon the state-of-the-art in object-class segmentation
+%by making use of larger bodies of training images.
+On the theoretical side, we provided several bounds on instance prediction
+error in a multiple instance learning setting.  For the case that instances
+inside a bag are independent, we proved a strong upper bound on the error.  We
+showed that when bag labels are present, it is even possible to directly
+estimate the true instance error.
 
-\begin{theorema}
-Let all instances be independent. With bags $X$, instances $x$, true labels $y,Y$, $h_I$ any classifier
-on instances and $h_B$ the resulting bag classifier, we have
-\begin{align*}
-   e_I = h_0 + p(y=0) - 2 \left (\frac{1}{2} ( h_0^r + p(y=0)^r - e_B) \right)^\frac{1}{r}
-\end{align*}
-\begin{proof}
-    
-\begin{align*}
-e_B & = p(h_B(X) = 0) + p(Y=0) -2 p(h_B(X)=0, Y=0) \\\
-&\text{using the lemma}\\
-& = h_0^r + p(y=0)^r -2 p(h_I(x)=0, y=0)^r\\\
-&\text{by independence}\\
-& = h_0^r + p(y=0)^r -2 \left ( \frac{1}{2} (h_0 + p(y=0) - e_I) \right ) ^r \\
-&\text{using Lemma~\ref{binarylemma} on }p(h_I(x)=0, y=0.
-\end{align*}
-Solving for $p(h_I(x)\neq y)$:
-\begin{align*}
-    & \left ( \frac{1}{2} (h_0 + p(y=0) - e_I )\right ) ^r = \frac{1}{2} \left ( h_0^r + p(y=0)^r - e_B \right )\\
-    & \Rightarrow \frac{1}{2} (h_0 + p(y=0) - e_I)   = \left ( \frac{1}{2} \left ( h_0^r + p(y=0)^r - e_B \right ) \right )^\frac{1}{r}\\
-    & \Rightarrow e_I   = h_0 + p(y=0) - 2 \left ( \frac{1}{2} \left ( h_0^r + p(y=0)^r - e_B \right ) \right )^\frac{1}{r}
-\end{align*}
-\end{proof}
-\end{theorema}
-
-\begin{corollarya}
-If all instances are independent and bag classification is perfect, meaning $e_B=0$, then instance classification is also perfect ($e_I =0$).
-
-\begin{proof}
-Consider Theorem~\ref{basicthm}. If $e_B=0$ we have
-\begin{align*}
-p(h_I(x) \neq y) = h_0 + p(y=0) - 2 \left (\frac{1}{2} ( h_0^r + p(y=0)^r)) \right)^\frac{1}{r}
-\end{align*}
-By the convexity of the power function the right hand side of the equation is always greater or equal zero.
-Since $e_I \geq 0$, both sides are equal zero.
-\end{proof}
-\end{corollarya}
-
-\begin{theorema}
-    If $h_0^r  \geq e_B$ and all instances are independent, we have
-\begin{align}
-    p(h_I(x)\neq y) \leq h_0 - \left ( h_0^r - e_B) \right ) ^ \frac{1}{r}
-\end{align}
-\begin{proof}
-    Assume $h_0^r  \geq e_B$.
-    From Theorem~\ref{basicthm} we have
-\begin{align*}
-   e_I &= h_0 + p(y=0) - 2 \left (\frac{1}{2} ( h_0^r + p(y=0)^r - e_B) \right)^\frac{1}{r}\\
-   &\leq h_0 + p(y=0) - \left [( h_0^r + p(y=0)^r - e_B) \right]^\frac{1}{r}\\
-   &- \left ( p(y=0)^r \right )^\frac{1}{r}\\
-   &= h_0 - \left (( h_0^r + p(y=0)^r - e_B) \right)^\frac{1}{r}\\
-\end{align*}
-\end{proof}
-\end{theorema}
-
-\begin{theorema}
-Let all instances be independent. Given $p(Y)$, the instance error $e_I$ can be calculated by
-\begin{align}
-    %\eqlabel{iid}
-e_I = h_0 + p(Y=0)^\frac{1}{r} - 2 \left (\frac{1}{2} ( h_0^r + p(Y=0) - e_B) \right)^\frac{1}{r}.
-\end{align}
-\begin{proof}
-    This follows from Theorem~\ref{basicthm} by using $p(Y=0)=p(y=0)^r$.
-\end{proof}
-\end{theorema}
-
-
-\begin{theorema}
-If the instance labels are independent inside a bag given a hidden cause, the instance
-error $e_I$ has the following lower bound:
-\begin{multline*}
-e_I \geq h_0 + p(y=0) - \\
-2 \left (\frac{1}{2} (p(h_B(X)=0) + p(Y=0) - e_B) \right)^\frac{1}{r}
-\end{multline*}
-\begin{proof}
-    This follows from taking the expected value with respect to $Z$ of \eqref{conditioned} and using Jensen's
-    inequality.
-\end{proof}
-\end{theorema}
+We introduced a restricted dependent setting for multiple instance learning, in
+which instances inside a bag are only independent given an unobserved variable.
+We showed that without any further assumptions on the distribution of this
+variable, it is possible to learn instance label prediction from bag labels in
+this setting. We also provided upper and lower bounds on the instance error,
+given known bag labels or an estimage of the bag error.
+Empirical evaluation on a synthetic dataset with known dependen structure and
+known instance labels showed that the bound are non-trivial and yield insight
+into the behavior of instance label errors.  We hope that this work establishes
+a basis for further research on instance label prediction in multiple instance
+learning.
