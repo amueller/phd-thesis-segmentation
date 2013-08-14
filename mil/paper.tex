@@ -154,7 +154,7 @@ This means, in the i.i.d.\ case, instance-level error can simply be calculated f
 \section{Restricted Dependent Case}
 As remarked in \Secref{assumptions}, it is not possible to bound the instance classification error
 when allowing arbitrary dependencies between instances. On the other hand, the i.i.d.\ assumption of \Secref{iid}
-might be to strong in a practical setting.
+might be too strong in a practical setting.
 Therefore, we propose an assumption that is both very general and allows learning of instance classification:
 We assume that each bag has a ``hidden cause'' $Z$, conditioned on which all instances are independent.
 More formally, we assume
@@ -199,37 +199,6 @@ Using Theorem~\ref{iidbound} and taking expected values with respect to $Z$, we 
     & \leq h_0 - \mathbb{E}_Z \left [\left ( p(h_I(x)=0 | Z)^r - p(h_B(X)\neq Y|Z) \right ) ^ \frac{1}{r} \right ].
 \end{align}
 
-By bounding the right hand side we obtain:
-\begin{theorem}\label{bound}
-    Assume all instances within a bag are independent given an unobserved bag variable. If $h_0^r \geq e_B$ the instance error $e_I$ can
-    be bound by
-\begin{align}
-    e_I \leq h_0 -  \left ( h_0^r - e_B) \right ).
-\end{align}
-\end{theorem}
-While this bound might not be very tight -- for example if the variables are i.i.d.\ and $r$ is big, it is clear
-that it is very loose compared to Theorem~\ref{iidbound} -- it is to the authors knowledge the first theorem that shows that instance-level
-predictions can not be arbitrarily bad, even in a complicated dependent setting.
-
-If we turn to the setting where bag labels are known, the bound of Theorem~\ref{bound} can be extended outside $( h_0^r > e_B)$
-using the same statement for $p(y=0)$ instead of $h_0$. If there are places where both $h_0^r < e_B$ and
-$p(y=0)^r < e_B$, we can use another bound, finally yielding:
-
-\begin{theorem}\label{globalbound}
-    If all instances within a bag are independent given an unobserved bag variable and the distribution of
-    bag labeld $P(Y)$ is known, the instance error $e_I$ can
-    be bound by
-\begin{align}
-    p(h_I(x)\neq y) \leq \text{min}\{ b_h, b_Y, b_g \} 
-\end{align}
-with
-\begin{align*}
-b_g &= h_0 + p(Y=0)^\frac{1}{r} - h_0^r - p(Y=0) + e_B,  \\
-b_h &= h_0 - h_0^r + e_B \text{\ if } h_0^r > e_B \text{, else }\infty, \\
-b_y &= p(Y=0)^\frac{1}{r} - p(Y=0) + e_B \\
-&\text{\ if } p(Y=0) > e_B \text{, else }\infty. \\
-\end{align*}
-\end{theorem}
 
 \begin{figure}[tbp]
 	\begin{center}
@@ -416,52 +385,6 @@ e_I = h_0 + p(Y=0)^\frac{1}{r} - 2 \left (\frac{1}{2} ( h_0^r + p(Y=0) - e_B) \r
 \end{proof}
 \end{theorema}
 
-\begin{theorema}
-    Assume all instances within a bag are independent given an unobserved bag variable. If $h_0^r \geq e_B$ the instance error $e_I$ can
-    be bound by
-\begin{align}
-    e_I \leq h_0 -  \left ( h_0^r - e_B) \right ).
-\end{align}
-\begin{proof}
-    Using the proof of Theorem~\ref{iidbound}, we can obtain
-\begin{multline}
-    p(h_I(x)\neq y| Z) \leq p(h_I(x)=0|Z) \\
-    - \left ( p(h_B(x)=0|Z) - p(h_B(X)\neq Y| Z) \right ) ^ \frac{1}{r}
-\end{multline}
-Taking expected values with respect to $Z$ on both sides yields
-\begin{align}
-    e_I \leq h_0 - \mathbb{E}_Z \left ( p(h_I(x)=0|Z)^r - p(h_B(X)\neq Y| Z) \right ) ^ \frac{1}{r}
-\end{align}
-Since $0 \leq p(h_I(x)=0|Z)^r - p(h_B(X)\neq Y| Z) \leq 1$, the $r$-th root of this term can
-be lower bounded by the identity function, resulting in
-\begin{multline}
-    e_I \leq h_0 - \mathbb{E}_Z \left[  p(h_I(x)=0|Z)^r \right] - e_B 
-\end{multline}
-The theorem follows with Jensen's inequality.
-\end{proof}
-\end{theorema}
-
-\begin{theorema}
-    If all instances within a bag are independent given an unobserved bag variable and the distribution of
-    bag labeld $P(Y)$ is known, the instance error $e_I$ can
-    be bound by
-\begin{align}
-    p(h_I(x)\neq y) \leq \text{min}\{ b_h, b_Y, b_g \} 
-\end{align}
-with
-\begin{align}
-b_g &= h_0 + p(Y=0)^\frac{1}{r} - h_0^r - p(Y=0) + e_B  \\
-b_h &= h_0 - h_0^r + e_B \text{\ if } h_0^r > e_B \text{, else }\infty \\
-b_y &= p(Y=0)^\frac{1}{r} - p(Y=0) + e_B \\
-&\text{\ if } p(Y=0) > e_B \text{, else }\infty \\
-\end{align}
-\begin{proof}
-    The bounds given by $b_h$ follows from Theorem~\ref{bound}, and $b_y$ as described in the text.
-    If both  $h_0^r < e_B$ and $p(y=0)^r < e_B$, then $0 \leq ( h_0^r + p(y=0)^r - e_B) \leq 1$ and
-    we can lower bound the $r$-th root as in the proof of Theorem~\ref{bound}. This yields the bound given
-    by $b_g$.
-\end{proof}
-\end{theorema}
 
 \begin{theorema}
 If the instance labels are independent inside a bag given a hidden cause, the instance
@@ -475,4 +398,3 @@ e_I \geq h_0 + p(y=0) - \\
     inequality.
 \end{proof}
 \end{theorema}
-
