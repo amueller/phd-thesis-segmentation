@@ -11,7 +11,7 @@ the label of individual instances, a much harder problem.
 This can be viewed as learning an instance-level classifier using a form of weak supervision.
 
 Learning to predict instance labels has been attempted in some recent work~\citep{liconvex2010,zhang2002dd}
-but there has been very little theoretical study when and to which extend this is possible.
+but there has been very little theoretical study when and to which extent this is possible.
 In this work, we explore which assumptions about the distributions of instances and labels
 are necessary to learn instance-level classifiers from bag labels only.
 We provide bounds on the instance label prediction error based on the
@@ -22,7 +22,7 @@ instance labeling exists for training or testing.
 There are two applications that we target:
 \begin{description}
 \item[Setting 1:] Bag labels for a validation set are known and instance predictions need to be judged.
-\item[Setting 2:] Bag labels for a test set can be bound using standard learning theoretic bounds and instance
+\item[Setting 2:] Bag labels for a test set can be bounded using standard learning theoretic bounds and instance
 predictions need to be judged.
 \end{description}
 The first case is very common in practical settings, where
@@ -47,8 +47,8 @@ Detailed proofs of all propositions can be found in the appendix.
 \subsection{Previous Analysis}
 The theoretical analysis of multiple instance learning started with \citet{auer1997approximating} and later \citet{blum1998note}.
 These works assume that instances are drawn i.i.d.\ from a single distribution over instances. Blum and Kalai showed that in this
-setting, if the underlying concept is PAC-learnable in polynomial time, then the multiple instance learning problem is PAC-learnable
-in polynomial time. Auer et\,al.\ showed that if there is an algorithm to PAC-learn multiple instance learning with axis-parallel
+setting, if the underlying concept is PAC-learnable in polynomial time, if and only if the multiple instance learning problem is PAC-learnable
+in polynomial time with one-sided noise. Auer et\,al.\ showed that if there is an algorithm to PAC-learn multiple instance learning with axis-parallel
 rectangles that is polynomial in size of the bag and dimension of the instance features, then it is possible to polynomially
 PAC-learn DNF-formulars, a problem that is solvable only if $\text{RP}=\text{NP}$.
 Recently, \citet{sabato2009homogeneous,DBLP:journals/corr/abs-1107-2021} proved bounds on the VC dimension and
@@ -66,22 +66,22 @@ to reduce labeling complexity~\citep{sabato2010reducing}.
 In the setting of reducing label complexity, the learner creates
 the bags itself. The instances can therefore be assumed to be globally i.i.d.\ and
 the distribution of labels inside the bags is known a priori.
-Under these assumptions, the instance label prediction error is bound using the bag label error.
+Under these assumptions, the instance label prediction error is bounded using the bag label error.
 This result is used to evaluate the sample complexity of learning from bags using empirical risk minimization.
 In this work, we generalize some results from \citet{sabato2010reducing} to the setting where the distribution
 of instance labels is unknown and to cases where instances inside a bag may be dependent.
 
 \subsection{Preliminaries}
-Throughout this work, $\mathcal{X}$ denotes the space of all instances. Bags are multi sets of instance $X=\{x_1,\dotsc, x_r\}$.
+Throughout this work, $\mathcal{X}$ denotes the space of all instances. Bags are multi sets of instances $X=\{x_1,\dotsc, x_r\}$.
 As usual in supervised learning tasks, we assume our training examples ($X_i,Y_i)$ to be i.i.d.\ from an unknown distribution.
 We denote the label of an instance $x_i$ by $y_i$ and the label of the bag $X_i$ as $Y_i = \max\{y_j | x_j \in  X_i\}$.
 We assume the bag size $r\in \mathbb{N}$ to be constant over all bags in a given problem. This restriction simplifies the treatment
-significantly while our results can in great parts be carried over to settings with varying bag sizes.
+significantly while our results can in most cases be carried over to settings with varying bag sizes.
 We consider arbitrary classifiers $h_I\colon \mathcal{X} \rightarrow \{0, 1\}$ with associated bag classifier
 $h_B(X) = \max \{h(x_1),\dotsc,h(x_r)\}$.
 The goal is to learn a classifier $h$ which minimizes expected instance misclassification, given training bags and bag labels
 $X_i$ and $Y_i$.
-We do not consider specific hypotheses classes but instead try to bound the expected error of $h$ using the expected error of $h_B$.
+We do not consider specific hypothesis classes but instead try to bound the expected error of $h$ using the expected error of $h_B$.
 During all of this work, we assume that the true instance labels are never observed.
 We use the following notation: $p(h_I(x)=0):= h_0$, the negative rate of the classifier,
 $p(h_I(x) \neq y) := e_I$, the instance error, and $p(h_B(X) \neq Y) := e_B$, the bag error.
@@ -123,7 +123,7 @@ In particular:
 \begin{corollary}\label{perfect}
 If all instances are independent and bag classification is perfect, meaning $e_B=0$, then instance classification is also perfect ($e_I =0$).
 \end{corollary}
-This is an very interesting result in that if we do not assume independence, this corollary is wrong,
+This is a very interesting result in that if we do not assume independence, this corollary is wrong,
 as shown by the example in \Secref{assumptions}.
 
 In practice, $p(y=0)$ is unknown, as we assume a setting where no instance labels are available.
@@ -181,9 +181,9 @@ sampled on this manifold, as in \citet{ICML2011Babenko_74}.
 
 Conditioned on the hidden cause $Z$ for a given bag, the proof of Theorem~\ref{basicthm} still holds, yielding
 \begin{align}\eqlabel{conditioned}
-&p(h_I(x) \neq y | Z) =p(h_I(x)=0|Z) + p(y=0|Z)\\
-&\textstyle- 2  [\frac{1}{2} ( p(h_I(x)=0|Z)^r + p(y=0|Z)^r\\
-& - p(h_B(X) \neq Y|Z)) ]^\frac{1}{r}
+p(h_I(x) \neq y | Z) =&p(h_I(x)=0|Z) + p(y=0|Z)\\
+&\textstyle- 2  [\frac{1}{2} ( p(h_I(x)=0|Z)^r + p(y=0|Z)^r
+ - p(h_B(X) \neq Y|Z)) ]^\frac{1}{r}
 \end{align}
 Similarly, the idea of Corollary~\ref{perfect} yields:
 
@@ -196,16 +196,16 @@ assumptions significantly, learning instance label prediction is still possible.
 As we assume no knowledge of the distribution of the hidden bag variable $Z$ or even about its domain, it is significantly harder
 to bound the instance error than in the i.i.d.\ case.
 Using Theorem~\ref{iidbound} and taking expected values with respect to $Z$, we obtain
-\begin{align}
-    & p(h_I(x)\neq y) \\\
-    & \leq h_0 - \mathbb{E}_Z \left [\left ( p(h_I(x)=0 | Z)^r - p(h_B(X)\neq Y|Z) \right ) ^ \frac{1}{r} \right ].
-\end{align}
+\begin{equation}
+    p(h_I(x)\neq y)
+    \leq h_0 - \mathbb{E}_Z \left [\left ( p(h_I(x)=0 | Z)^r - p(h_B(X)\neq Y|Z) \right ) ^ \frac{1}{r} \right ].
+\end{equation}
 
 
 \begin{figure}[tbp]
 	\begin{center}
-		\includegraphics[height=40mm]{images/gehler_decision_boundary.png}\hspace{5px}
-		\includegraphics[height=40mm]{images/gehler_instances.png}
+		\includegraphics[width=.40 \linewidth]{images/gehler_decision_boundary.png}\hspace{5px}
+		\includegraphics[width=.40 \linewidth]{images/gehler_instances.png}
 	\end{center}
 	\caption{Visualization of the dataset from \citet{gehler2007deterministic}. Left: Regions in $\mathbb{R}^2$
     corresponding to negative and positive instances. Right: Training points for 40\% positive rate. Red denotes negative
@@ -219,10 +219,10 @@ This is possible using Theorem~\ref{basicthm}:
 \begin{theorem}\label{lowerbound}
 If the instance labels are independent inside a bag given a hidden cause, the instance
 error $e_I$ has the following lower bound:
-\begin{multline*}
-e_I \geq h_0 + p(y=0)\\ 
+\begin{equation}
+e_I \geq h_0 + p(y=0)
 - 2 \left (\frac{1}{2} (p(h_B(X)=0) + p(Y=0) - e_B) \right)^\frac{1}{r}.
-\end{multline*}
+\end{equation}
 \end{theorem}
 
 
@@ -237,7 +237,7 @@ of positive instances in a positive bag.
 
 To evaluate our bounds in the i.i.d.\ setting, we have to modify the dataset slightly. We fix bag size at ten instances and generate instances
 with a fraction of positive instances of half the witness rate. Then we randomly assign these instances to bags.
-This way, the distribution over instances stays the same as in Gehler-org while instances inside bags become independent.
+Using this procedure the distribution over instances stays the same as in Gehler-org while instances inside bags become independent.
 We refer to this dataset as Gehler-iid.
 As a multiple instance learning algorithm, we choose SVM-SVR from \citet{liconvex2010}, as a state-of-the-art method that
 provides instance predictions. Support vector regression is learned to estimate likelihood ratios of label instances.
@@ -274,8 +274,8 @@ true instance error $e_I$ for different settings of the positive instance rate.
 Inspecting the lower bound, which uses the same computation as the estimate in the i.i.d.\ case, we see that due to the limited
 dataset size, the estimated lower bound actually lies above the actual error in some cases. On the other hand, for low positive
 rates, the lower bound follows the true error quite closely.
-The upper bound behaves quite different, being quite loose for low instance rates and thighter for high instance rates.
-While the bounds on the true error might not always be very thight, it should be observed that they are clearly
+The upper bound behaves quite different, being quite loose for low instance rates and tighter for high instance rates.
+While the bounds on the true error might not always be very tight, it should be observed that they are clearly
 non-trivial. This is surprising since we made only very general assumptions on the distribution of instances.
 
 \begin{figure}[tbp]
