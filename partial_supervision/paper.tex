@@ -215,7 +215,7 @@ in \citet{li2010object} but perform a simple majority vote instead.
 We merge segments into pixel-level class labels by setting
 the label $y_x$ of a pixel $x$ according to
 \begin{equation}
-    y_x = \text{argmax}_{y \in Y} \#\{S_i | p \in S_i \land y_{S_i}=y \},
+    y_x = \argmax_{y \in Y} \#\{S_i | p \in S_i \land y_{S_i}=y \},
 \end{equation}
 where $Y= \{$car, bike, person$ \}$, $S_i$ enumerates all segments within an
 image and $y_{S_i}$ is the label of segment $S_i$. In words: each pixel is
@@ -224,7 +224,7 @@ This simple heuristic yields good results in practice.
 
 \begin{figure}[tbp]
 	\begin{center}
-        \includegraphics[height=35mm]{images/scheme-crop.pdf}
+        \includegraphics[width=\linewidth]{images/scheme-crop.pdf}
 	\end{center}
         \caption{Overview of our method. See text for details.}
 	\figlabel{results}
@@ -320,15 +320,15 @@ in \secref{combiningsegments}.
 
 \begin{figure}[tbp]
 	\begin{center}
-        \includegraphics[width=28mm]{images/car1_img.png}\hspace*{0.7ex}
-        \includegraphics[width=28mm]{images/car1_gt.png}\hspace*{0.7ex}
-        \includegraphics[width=28mm]{images/car1_pos.png}\hspace*{0.7ex}
-        \includegraphics[width=28mm]{images/car1_neg.png}\hspace*{0.7ex}\\
+        \includegraphics[width=35mm]{images/car1_img.png}\hspace*{0.7ex}
+        \includegraphics[width=35mm]{images/car1_gt.png}\hspace*{0.7ex}
+        \includegraphics[width=35mm]{images/car1_pos.png}\hspace*{0.7ex}
+        \includegraphics[width=35mm]{images/car1_neg.png}\hspace*{0.7ex}\\
         \vspace{1mm}
-        \includegraphics[width=28mm]{images/person1_img.png}\hspace*{0.7ex}
-        \includegraphics[width=28mm]{images/person1_gt.png}\hspace*{0.7ex}
-        \includegraphics[width=28mm]{images/person1_pos.png}\hspace*{0.7ex}
-        \includegraphics[width=28mm]{images/person1_neg.png}\hspace*{0.7ex}
+        \includegraphics[width=35mm]{images/person1_img.png}\hspace*{0.7ex}
+        \includegraphics[width=35mm]{images/person1_gt.png}\hspace*{0.7ex}
+        \includegraphics[width=35mm]{images/person1_pos.png}\hspace*{0.7ex}
+        \includegraphics[width=35mm]{images/person1_neg.png}\hspace*{0.7ex}
 	\end{center}
         \caption{Qualitative results on on the Graz-02 dataset. Top: Results on
         category ``car''. Bottom: Results on category ``person''. From left to

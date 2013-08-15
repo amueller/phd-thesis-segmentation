@@ -6,6 +6,7 @@ most important parts: intros and conclusions!
 consistently caption either above or below!
 make all tables span full width
 Give detailed results for MSRC and Pascal
+Visualize Weights wherever possible!
 
 Itm
 =====
@@ -18,6 +19,7 @@ weak supervision
 fuse with MIL!
 MIL: reviewer comments
 MIL: cleanup intro
+MIL: get rid of shorthands
 
 pystruct / intro to structured prediction
 ============================================
