@@ -86,10 +86,9 @@ e_I = h_0 + p(Y=0)^\frac{1}{r} - 2 \left (\frac{1}{2} ( h_0^r + p(Y=0) - e_B) \r
 \begin{theorema}
 If the instance labels are independent inside a bag given a hidden cause, the instance
 error $e_I$ has the following lower bound:
-\begin{multline*}
-e_I \geq h_0 + p(y=0) - \\
-2 \left (\frac{1}{2} (p(h_B(X)=0) + p(Y=0) - e_B) \right)^\frac{1}{r}
-\end{multline*}
+\begin{equation}
+e_I \geq h_0 + p(y=0) - 2 \left (\frac{1}{2} (p(h_B(X)=0) + p(Y=0) - e_B) \right)^\frac{1}{r}
+\end{equation}
 \begin{proof}
     This follows from taking the expected value with respect to $Z$ of \eqref{conditioned} and using Jensen's
     inequality.
