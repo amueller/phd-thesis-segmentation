@@ -11,8 +11,9 @@ Visualize Weights wherever possible!
 Itm
 =====
 * clustering: bag of word experiments? Segmentation experiments? mnist experiments?
-* remove MLPack implementation and runtime claims from ITM?
+* remove MLPack runtime claims from ITM?
 * redo summary
+* ALGORITHM FIX!!
 
 weak supervision
 ==================
