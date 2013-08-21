@@ -18,7 +18,8 @@ multi-class...
 
 MIL: reviewer comments
 MIL: cleanup intro
-MIL: get rid of shorthands
+MIL: get rid of shorthands DONE
+MIL: fix plots!!! we don't have an upper bound in the conditioned setting..
 
 pystruct / intro to structured prediction
 ============================================
