@@ -1,0 +1,101 @@
+Dataset Iris Plants Database samples: 147, features: 4, clusters: 3
+  ITM             ARI: 0.882, AMI: 0.866, NMI: 0.868 objective: 1.237 time:0.08
+  ITM ID          ARI: 0.882, AMI: 0.866, NMI: 0.868 objective: 1.237 time:0.11
+  Ward            ARI: 0.737, AMI: 0.762, NMI: 0.774 objective: 1.195 time:0.01
+  KMeans          ARI: 0.737, AMI: 0.753, NMI: 0.762 objective: 1.197 time:0.02
+  GT objective: 1.178
+
+
+  Dataset mldata.org dataset: vehicle samples: 846, features: 18, clusters: 4
+  ITM             ARI: 0.102, AMI: 0.135, NMI: 0.139 objective: 8.428 time:0.43
+  ITM ID          ARI: 0.104, AMI: 0.138, NMI: 0.141 objective: 8.424 time:0.47
+  Ward            ARI: 0.098, AMI: 0.122, NMI: 0.128 objective: 8.308 time:0.36
+  KMeans          ARI: 0.076, AMI: 0.097, NMI: 0.101 objective: 8.107 time:0.15
+  GT objective: 6.924
+
+
+  Dataset mldata.org dataset: vowel samples: 990, features: 10, clusters: 11
+  ITM             ARI: 0.196, AMI: 0.377, NMI: 0.394 objective: 8.540 time:0.68
+  ITM ID          ARI: 0.193, AMI: 0.377, NMI: 0.393 objective: 8.534 time:0.71
+  Ward            ARI: 0.155, AMI: 0.346, NMI: 0.367 objective: 8.309 time:0.50
+  KMeans          ARI: 0.174, AMI: 0.368, NMI: 0.385 objective: 7.820 time:0.19
+  GT objective: 7.994
+
+
+  Dataset  Optical Recognition of Handwritten Digits Data Set samples: 1797, features: 64, clusters: 10
+  ITM             ARI: 0.845, AMI: 0.889, NMI: 0.892 objective: -186.155 time:1.60
+  ITM ID          ARI: 0.730, AMI: 0.821, NMI: 0.828 objective: -186.239 time:2.30
+  Ward            ARI: 0.794, AMI: 0.856, NMI: 0.868 objective: -186.240 time:3.46
+  KMeans          ARI: 0.665, AMI: 0.736, NMI: 0.743 objective: -187.407 time:0.54
+  GT objective: -186.250
+
+
+  Dataset Modified Olivetti faces dataset. samples: 400, features: 4096, clusters: 40
+    ITM             ARI: 0.065, AMI: 0.277, NMI: 0.574 objective: -6553.684 time:1.20
+    ITM ID          ARI: 0.543, AMI: 0.697, NMI: 0.828 objective: -6669.528 time:2.89
+    Ward            ARI: 0.491, AMI: 0.670, NMI: 0.813 objective: -6702.610 time:0.45
+    KMeans          ARI: 0.411, AMI: 0.580, NMI: 0.755 objective: -6845.396 time:11.45
+    GT objective: -6788.554
+
+
+    Dataset mldata.org dataset: usps samples: 9298, features: 256, clusters: 10
+    ITM             ARI: 0.438, AMI: 0.576, NMI: 0.647 objective: -294.308 time:56.60
+    ITM ID          ARI: 0.635, AMI: 0.742, NMI: 0.750 objective: -295.371 time:120.16
+    Ward            ARI: 0.584, AMI: 0.713, NMI: 0.722 objective: -294.082 time:947.06
+    KMeans          ARI: 0.537, AMI: 0.612, NMI: 0.614 objective: -302.513 time:45.57
+    GT objective: -295.482
+
+
+    Dataset mldata.org dataset: waveform-ida samples: 5000, features: 21, clusters: 2
+    ITM             ARI: 0.230, AMI: 0.220, NMI: 0.230 objective: -28.292 time:24.31
+    ITM ID          ARI: 0.230, AMI: 0.220, NMI: 0.230 objective: -28.292 time:28.40
+    Ward            ARI: 0.402, AMI: 0.384, NMI: 0.402 objective: -28.357 time:124.72
+    KMeans          ARI: 0.366, AMI: 0.336, NMI: 0.352 objective: -28.373 time:4.82
+    GT objective: -28.610
+
+
+Dataset mldata.org dataset: mnist-original samples: 70000, features: 784, clusters: 10
+======================================================================
+Fitting neighbors data structure.
+Datastructure used: ball_tree
+Bulding minimum spanning tree.
+Trying to build mst with 4 neighbors.
+Cutting spanning tree.
+/usr/lib/python2.7/dist-packages/scipy/sparse/compressed.py:486: SparseEfficiencyWarning: changing the sparsity structure of a csr_matrix is expensive. lil_matrix is more efficient.
+  SparseEfficiencyWarning)
+Finding for split 1.
+Finding for split 2.
+Finding for split 3.
+Finding for split 4.
+Finding for split 5.
+Finding for split 6.
+Finding for split 7.
+Finding for split 8.
+Finding for split 9.
+ITM             ARI: 0.508, AMI: 0.659, NMI: 0.722 objective: -5460.510 time:5196.00
+Fitting neighbors data structure.
+Datastructure used: kd_tree
+Bulding minimum spanning tree.
+Trying to build mst with 4 neighbors.
+
+Estimating dimensionality.
+Estimated dimensionality: 14
+Cutting spanning tree.
+Finding for split 1.
+Finding for split 2.
+Finding for split 3.
+Finding for split 4.
+Finding for split 5.
+Finding for split 6.
+Finding for split 7.
+Finding for split 8.
+Finding for split 9.
+ITM ID          ARI: 0.765, AMI: 0.805, NMI: 0.808 objective: -5461.072 time:21197.02
+GT objective: -5453.744
+
+Dataset mldata.org dataset: mnist-original samples: 70000, features: 784, clusters: 10
+======================================================================
+^[KMeans          ARI: 0.365, AMI: 0.496, NMI: 0.500 objective: -5473.568 time:1196.85
+GT objective: -5453.744
+
+
