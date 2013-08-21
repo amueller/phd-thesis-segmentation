@@ -56,6 +56,7 @@
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 \newcommand{\W}{\mathcal{W}}
 
+
 \newcommand{\given}{\, | \,}
 \newcommand{\B}[1]{\textbf{#1}}
 
@@ -65,13 +66,12 @@
 \begin{titlepage}
 \begin{center}
 \vspace*{1in}
-\textbf{{\LARGE Dissertation}}
+\textbf{{\LARGE On Learning Structured Prediction For Semantic Segmentation}}
 \par
-\vspace{1.5in} {\large Andreas M\"uller}
- \par \vfill A Thesis submitted for the degree of Doctor of Philosophy
+\vspace{1.5in} {\large Andreas Christian M\"uller}
 \par \vspace{0.5in}
-Institute for Computer Science \par
-Department IV, Autonomous Intelligent Systems
+Abteilung VI, Autonomie Intelligente Systeme \par
+Institut f\"ur Informatik
 \par \vspace{0.5in}
 Friedrich-Willhelm Universit\"at Bonn \par
 \vspace{0.5in} September 2013 \end{center}
@@ -84,25 +84,26 @@ Friedrich-Willhelm Universit\"at Bonn \par
 
 %\listoffigures
 %\listoftables
+\chapter*{Zusammenfassung}
 \chapter*{Abstract}
 
 \chapter*{Acknowledgements}
 First, I would like to thank my advisor Sven Behnke, who allowed me
 to pursue my PhD in his department and who provided funding for my studies.
-Juergen fuer review?
+I would also like to thank J\"urgen Gall for agreeing to be my second reader.
 
-During my work on this dissertation, my ideas where shape by many of my fellow
-students and researchers. First and foremost I am indept to Hannes Schulz,
-whose feedback proved invaluable during my studies.
-I would like to thank Christoph Lampert, for hosting me as visiting Researcher
-at the IST Austria. His guidance and advice.
+During my work on this dissertation, my ideas were shaped by many of my fellow
+students and researchers. First and foremost I am in debt to Hannes Schulz,
+whose feedback proved to be invaluable during my studies.
+I would like to thank Christoph Lampert, for hosting me as a visiting researcher
+at the IST Austria. His guidance and advice helped me in directing my further
+research. My thanks are also extended to Sebastian Nowozin for his collaboration,
+many helpful discussions, and advise.
 
-Carsten Rother, Sebastian Nowozin
+I would also like to thank Carsten Rother for allowing me to work with him
+at Microsoft Research Cambridge and hosting me there.
 
-Cristian Sminchisescu?
-Phillip, Victoriia, Aurelien, Theo
-
-I have been lucky to be a part of the scikit-learn community, whos developers
+I have been lucky to be a part of the scikit-learn community, whose developers
 have been a constant source of encouragement and feedback to me. My understanding
 of machine learning as well as software engineering has been greatly affected
 by the constant exchange with Olivier Grisel, Lars Buitinck, Gael Varoquax,
@@ -110,22 +111,23 @@ Vlad Niculae, Mathieu Blondel, Gilles Louppe, Arnaud Joly and others.
 
 I also thank my parents and my sister for their continuing support.
 
-Last but not least I am greatful to Anna M\"uller for her support, encouragement and company
-Thank you for giving me the strength needed for this endeavour.
+Last but not least I am greatful to Anna M\"uller for her support,
+encouragement and company. Thank you for giving me the strength needed for this
+endeavour.
 
 \pagenumbering{arabic}
 
 \chapter{Overview}
-\include{intro.tex}
+\include{intro}
 
-\chapter{Information Theoretic Clustering for Object Class Discovey}
+\chapter{Information Theoretic Clustering}
 \include{itm/paper}
 
 \chapter{Weakly Supervised Object segmentation via Multiple Instance Learning}
 \include{partial_supervision/paper}
 \include{mil/paper}
 
-\chapter{Concepts and Implementation of Conditional Random Field-based Semantic Segmentation}\label{structured_pystruct}
+\chapter{Concepts and Implementation of Conditional Random Field-based Semantic Segmentation}\label{ch:structured_pystruct}
 
 \include{pystruct/paper}
 
@@ -133,7 +135,7 @@ Thank you for giving me the strength needed for this endeavour.
 
 \include{exact_learning/paper}
 
-\chapter{Hierarchical Latent Variable Models for Semantic Segmentation}
+\chapter{Hierarchical Latent Variable Models for Semantic Segmentation}\label{ch:latent}
 
 \chapter{Conclusion}
 

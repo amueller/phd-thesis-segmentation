@@ -133,12 +133,12 @@ line~\ref{restricted} of Algorithm~\ref{alg_cutting_plane} and  let
 \[
     o^I(\theta) = C\xi' + \frac{||\theta||}{2}^2
 \]
-when using inference algorithm $I$, i.e. $o^I(\theta)$ is the approximation of the primal
+when using inference algorithm $I$, that is $o^I(\theta)$ is the approximation of the primal
 objective given by $I$. To simplify exposure, we will drop the dependency on $\theta$.
 
 Depending on the properties of the inference procedure $I$ used, it is easy to see:
 \begin{enumerate}
-    \item If all constraints $\hat{y}$ in  $\W$ are feasible, i.e.\ generated
+    \item If all constraints $\hat{y}$ in  $\W$ are feasible, that is generated
         by an under-generating or exact inference mechanism, then $o_{\W}$ is
         an lower bound on the true optimum $o(\theta^*)$.
 
@@ -151,7 +151,7 @@ These two observations can be used in a number of ways.
 over-generating approach minimizes an upper bound on the empirical risk.
 
 We can also use these observations to judge the suboptimality of a given parameter $\theta$,
-i.e.\ see how far the current objective is from the true optimum.
+that is see how far the current objective is from the true optimum.
 Learning with any under-generating approach, we can use 1. to maintain a lower bound
 on the objective. At any point during learning, in particular if no more constraints
 can be found, we can then use 2., to also find an upper bound.
@@ -212,7 +212,8 @@ procedure.
 %\[
     %o^I(\theta) = C\xi' + \frac{||\theta||}{2}^2
     %\]
-%when using inference algorithm $I$, i.e. $o^I(\theta)$ is the approximation of the primal
+%when using inference algorithm $I$, that is $o^I(\theta)$ is the approximation of the primal
+
 %objective given by $I$. To simplify exposure, we will drop the dependency on $\theta$.
 In the following, we will use the notation of Section~\ref{bounds} and indicate
 the choices of oracle $I$ with $Q$ for a chosen inference algorithm and $C$ for

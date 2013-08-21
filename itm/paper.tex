@@ -1,6 +1,6 @@
 Before we start our investigation of semantic segmentation and object class segmentation,
 we will look into a general purpose clustering algorithm.
-
+%
 In clustering, the goal is to divide data points into homogeneous subsets, called
 clusters.
 Many different formulations of the clustering problem are given in the literature.
@@ -9,7 +9,7 @@ In the context of this work, clustering plays an important role in many respects
 \begin{itemize}
     \item Clustering, as a purely unsupervised methods is on one end of the spectrum of algorithms we investigate.
         When using per-image or per-pixel supervision as in the later chapters, we can use clustering to calibrate our
-        expecation of what semisupervised and supervised algorithms have at least to achieve.
+        expecation of what semisupervised and supervised algorithms should be able to achieve.
     \item As many other computer vision algorithms, our segmentation methods
         with critically depend on bag-of-feature representations of segments or
         images. These are build using a vocabulary of visual words, that is
@@ -20,7 +20,7 @@ In the context of this work, clustering plays an important role in many respects
 \end{itemize}
 
 So not only is clustering one of the fundamental problems in machine learning, it is also
-an imortant building block for the methods in this work.
+an important building block for the methods in this work.
 %
 Most algorithms are based on ad-hoc criteria such as intra-cluster similarity
 and inter-cluster dissimilarity.
@@ -36,7 +36,7 @@ clusterings of maximum mutual information.
 The use of non-parametric estimates allows a data-driven approach, without 
 making strong assumptions on the form of the data distribution.
 %
-As a consequence, we obtain a very flexible model that, e.g{.}, allows 
+As a consequence, we obtain a very flexible model that, for example, allows 
 non-convex clusters.
 %
 The resulting objective is easy to evaluate, but difficult to optimize
@@ -50,8 +50,9 @@ which makes it very easy to use in practice.
 The contributions of this chapter are:
 \begin{itemize}
     \item Proposing the use of a MST-based entropy estimator in information theoretic clustering.
-    \item Give a fast algorithm for a relaxed version of the resulting problem.
-    \item Show the practicality on a number of synthetic and real datasets.
+    \item Giving a fast algorithm for a relaxed version of the resulting problem.
+    \item Showing the practicality on a number of synthetic and real datasets.
+    \item Extending the clustering to data on submanifolds by estimating implicit dimensionality.
 \end{itemize}
 
 %CHL: Maybe use this somewhere else, here it sounds redundant.
@@ -63,14 +64,15 @@ The contributions of this chapter are:
 
 
 \section{Related Work}
-The most commonly used clustering algorithm is the $k$-Means algorithm, also
-known as Lloyd's algorithm \citep{macqueen1967some,lloyd1982least}. While
+The most commonly used clustering algorithm is the $k$-Means algorithm, originally
+investigated by \citet{macqueen1967some} and most commonly implemented using
+Lloyd's algorithm \citep{macqueen1967some,lloyd1982least}. While
 $k$-Means often works well in practice, one of its main drawbacks is the
 restriction in cluster shape. 
 %
-They are given by the Voronoi tessellation of the cluster means and therefore always convex.
-Another draw-back is the non-determinism of the procedure, caused by the
-dependence on random initialization.
+Clusters are given by the Voronoi tessellation of the cluster means and
+therefore are always convex.  Another draw-back is the non-determinism of the
+procedure, caused by the dependence on random initialization.
 
 Another widely used method is spectral clustering~\citep{shi2000normalized,ng2002spectral}, 
 which solves a graph partitioning problem on a similarity
@@ -137,9 +139,9 @@ We can rewrite this objective as
 \end{align}
 where
 \begin{itemize}
-\item $D_\text{KL} = \int_\mathcal{X} p(X) \ln(\frac{p(X)}{q(X)})dX$ is the Kullback-Leibler divergence,
-\item $H(X) = \int_\mathcal{X} p(X) \ln(p(X))dX$ is the differential entropy, and
-\item $H(X \given Y{=}y) = \int_\mathcal{X} p(X \given Y {=}y) \ln(p(X \given Y {=} y))dX$ is the conditional differential entropy.
+\item $\displaystyle D_\text{KL}\, = \int_\mathcal{X} p(X) \ln\left(\frac{p(X)}{q(X)}\right)\,dX$ is the Kullback-Leibler divergence,
+\item $\displaystyle H(X)\, = \int_\mathcal{X} p(X) \ln(p(X))\,dX$ is the differential entropy, and
+\item $\displaystyle H(X \given Y{=}y)\, = \int_\mathcal{X} p(X \given Y {=}y) \ln(p(X \given Y {=} y))\,dX$ is the conditional differential entropy.
     \end{itemize}
 Expressing the mutual information in terms of the entropy is convenient, since
 the objective then decomposes over the values of $Y$. 
@@ -149,7 +151,7 @@ does not influence the search over $\mathbf{y}$.
 
 Because we are given only a finite sample from $p(X)$, there is no way to
 exactly compute $I(X, Y)$, and this is still true if we fix a set of cluster
-indicators $y_i$ 
+indicators $y_i$.
 %
 Possible ways to overcome this are:
 \begin{enumerate}
@@ -166,8 +168,10 @@ we have $H_{est}(\mathbf{x}_y) \approx H(X \given Y {=} y)$, leading to the clus
 \begin{align}\label{eq:general_objective}
      \max_{\mathbf{y}}\quad - \sum_{y=1}^k p(Y{=}y) H_\text{est}(\mathbf{x}_y),
 \end{align}
-where the probability $p(Y{=}y)$ is given by the empirical frequency of $y$, 
-\mbox{$p(Y\,{=}\,y)= \frac{n_y}{n}$} for $n_y = \frac{|\{i \mid y_i = y \}|}{n}$.
+where the probability $p(Y{=}y)$ is given by the empirical frequency of $y$: 
+\[
+    p(Y\,{=}\,y)= \frac{n_y}{n} \text{,\quad with\quad} n_y = |\{i \mid y_i = y \}|.
+\]
 
 \subsection{Minimum Spanning Tree Based Entropy Estimation}
 From now on, we assume that $\mathcal{X}=\mathbb{R}^d$ and $p(X)$ is
@@ -179,13 +183,13 @@ the spanning tree.
 %
 More precisely, the entropy estimate of a dataset $\mathbf{x} = (x_1, \dotsc, x_n)$ is given by
 \begin{align}\label{eq:hmst}
-    H_{mst}(\mathbf{x}) = d \log(L) - (d-1) \log(n) + \log(\beta_d).
+    H_{mst}(\mathbf{x}) = d \log(L) - (d-1) \log(n) + \log(\beta_d)
 \end{align}
 where $L$ is the length of a minimum spanning tree $T(\mathbf{x})$ of $\mathbf{x}$ and $\beta_d$ is an
 unknown, but data-independent constant.
 The estimator $H_{mst}$ is consistent in the sense that $H_{mst}(\mathbf{x}) \rightarrow H(X)$
 for $n \rightarrow \infty$~\citep{hero1999asymptotic}.
-Using \eqref{hmst} as a non-parametric entropy estimate in \eqref{general_objective} yields
+Using \Eqref{hmst} as a non-parametric entropy estimate in \Eqref{general_objective} yields
 the problem to maximize $\hat{I}(\mathbf{x}, \mathbf{y})$ with
 \begin{align}\label{eq:objective}
      \hat{I}(\mathbf{x}, \mathbf{y}) := & -\sum_{y=0}^k p(y) \Bigl[ d \log(L_y) - (d-1) \log{n_y} \Bigr] + C,\\
@@ -197,14 +201,14 @@ minimum spanning tree $T(\mathbf{x}_y)$ and $C$, $C'$ and $C''$ are constants in
 $\mathbf{y}$.  We defined $\bar{L}_y := \frac{L_y}{n_y}$, the mean edge length
 per node in $T(\mathbf{x}_y)$.
 
-\eqref{objective_simplified} has a natural interpretation: The first term
+\Eqref{objective_simplified} has a natural interpretation: The first term
 penalizes long spanning trees, weighted by the size of the cluster. The second
 term favors a high entropy of $p(y)$, leading to balanced clusters. Note that
 there is a natural trade-off between enforcing intra-cluster similarity,
 expressed through $L$ and the balancing of cluster sizes. This trade-off is
 similar to formulating an objective in terms of a loss and a regularizer. In
 contrast to the ``loss+regularizer'' setup, where the trade-off needs to be
-specified by the user, the trade-off in \eqref{objective_simplified}, given by
+specified by the user, the trade-off in \Eqref{objective_simplified}, given by
 the factor $d$, is a direct consequence of the entropy estimator.
 
 The reliance on the dimensionality of the ambient space $\mathbb{R}^d$ can be
@@ -213,7 +217,6 @@ the data.
 This requirement is made explicit in our assumptions of an absolute continuous
 data density: If the support of $p(X)$ was a lower-dimensional sub-manifold of
 $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
-
 
 \begin{algorithm}[t]
 \begin{algorithmic}\label{overall}
@@ -236,8 +239,8 @@ $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
             \State $w_x \leftarrow \displaystyle \sum_{c \in \text{children}(x)} w_c + d(x, c)$
             \State $n_x \leftarrow \displaystyle 1 + \sum_{c \in \text{children}(x)} n_c$
         \EndFor
-        \For{node $x$ starting from root}
-        \State $w'_x \leftarrow w'_{\text{par}(x)} + w_{\text{par}(x)} - w_x + d(x, \text{par}(x))$
+        \For{node $x$}
+        \State $w'_x \leftarrow w_{\text{root}} - w_x$
         \EndFor
         \For{$e \in E(G), e=(c, p)$, $p$ parent of $c$}
             \State $v_c \leftarrow w'_p + w_p - w_c - d(p,c)$
@@ -253,7 +256,7 @@ $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
 \end{algorithm}
 
 \subsection{Finding Euclidean Minimum Spanning Tree Clusterings}
-The objective given by \eqref{objective} is a non-linear combinatorial
+The objective given by \Eqref{objective} is a non-linear combinatorial
 optimization problem. It has two properties that make it hard to optimize:
 \begin{enumerate}
     \item The objective depends in a non-linear way on $L_y$.
@@ -266,13 +269,13 @@ optimization problem. It has two properties that make it hard to optimize:
 
 \begin{figure}
 \centering
-\includegraphics[width=.30\textwidth]{illustration_left}
-\includegraphics[width=.30\textwidth]{illustration_center}
-\includegraphics[width=.30\textwidth]{illustration_right}
+\includegraphics[width=.32\textwidth]{illustration_left}
+\includegraphics[width=.32\textwidth]{illustration_center}
+\includegraphics[width=.32\textwidth]{illustration_right}
 \caption{Illustration of the optimization algorithm for $k=3$ on synthetic
 dataset. \emph{Left}: Euclidean minimum spanning tree of the data.
 \emph{Center}: The edge that yields the best two-cluster partition in terms of
-\eqref{objective} was removed, yielding two connected components. \emph{Right}:
+\Eqref{objective} was removed, yielding two connected components. \emph{Right}:
 Another edge from the forest was removed, resulting in the desired number of
 three components. Note that the edge that are removed are not the longest edges
 but form a trade-off between edge length and cluster size.}
@@ -280,7 +283,7 @@ but form a trade-off between edge length and cluster size.}
 \end{figure}
 
 For the above reasons, we propose a simple procedure to approximately solve
-\eqref{objective}.
+\Eqref{objective}.
 %filler removed Let us first fix some notation.
 Consider a graph $G$ with nodes $\mathbf{x}$ and edge weights given by the
 Euclidean distances between points.  The connected components of $G$ induce a
@@ -294,7 +297,7 @@ where $y$ enumerates the connected components $G_0, \dotsc, G_k$ of $G$, $n_y =
 |V(G_y)|$ is the number of nodes in $G_y$ and $L_{G,y} = \sum_{e \in E(G_y)}
 w(e)$ is the sum of the weights of all edges in the connected component $G_y$.
 %
-Then $\hat{I}(G) \geq \hat{I}(\mathbf{x}, \mathbf{y}(G))$, by the definition of
+Then $\hat{I}(G) \geq \hat{I}(\mathbf{y}(G))$, by the definition of
 the minimum spanning tree, and equality holds if and only if $G_y$ is the
 minimum spanning tree of its nodes for all $y$.
 %
@@ -308,9 +311,9 @@ Thus we can formulate the clustering problem equivalently as
 
 
 Optimization over forests remains hard, and we further restrict ourself to
-solutions from $\mathcal{G} := \{ F \in \mathcal{F} \mid F \text{\ subgraph of\
+solutions of the form $\mathcal{G} := \{ F \in \mathcal{F} \mid F \text{\ subgraph of\
 } T(\mathbf{x}) \}$ for a given minimum spanning tree $T(\mathbf{x})$, leading to
-the problem $\max_{G \in \mathcal{G}} \hat{I}(G)$.  This restriction allows for
+the problem $\displaystyle \max_{G \in \mathcal{G}} \hat{I}(G)$.  This restriction allows for
 a very fast, combinatorial optimization procedure.
 
 
@@ -326,17 +329,17 @@ by computing $T(\mathbf{x})$.
 %
 We extend this algorithm to the case of more than two clusters in a greedy way:
 Starting with the full spanning tree of $\mathbf{x}$, we remove the edge
-yielding the lowest value of \eqref{graphobjective} until the number of
+yielding the lowest value of \Eqref{graphobjective} until the number of
 components equals the number of desired clusters. The overall procedure is
 summarized in Algorithm~1, an illustration can be found in
-\figref{illustration}. We refer to Algorithm~1 as \emph{Information
+\Figref{illustration}. We refer to Algorithm~1 as \emph{Information
 Theoretic MST-based (ITM) clustering}.
 
 We use Prim's algorithm combined with a ball tree data structure for distance
 queries to compute the minimum spanning tree of the data.
-While this procedure has no strong guarantees, we found this faster
+While this procedure has no strong runtime guarantees, we found this faster
 in practice than specialized algorithms for euclidean minimum spanning trees, 
-which achive a better theoretical runtim of $O(n \log(n) \alpha(n))$~\citep{dtb2010}. Here
+which achieve a better theoretical runtime of $O(n \log(n) \alpha(n))$ \citep{dtb2010}. Here
 $\alpha$ is the inverse of the Ackerman function. The dynamic programming solution of
 Algorithm~1 has a run time of $O(n)$ per removed edge, leading to an overall
 run time of $O(n \log(n) \alpha(n)+ nk)$. The $O(nk)$ comes from a worst case
@@ -348,7 +351,7 @@ this case, the $O(nk)$ factor would improve to $O(n\log(k))$.
 \subsection{Estimating Intrinsic Dimensionality}
 While assuming totally continuous densities is very natural from a theoretical
 point of view, it can be a hindrance in practical applications.  Often, the
-data is assumed to lie on a lower-dimensional manifold, embedded in a
+data is assumed to lie on a submanifold, embedded in a
 higher-dimensional space. In this case, the density is not totally continuous,
 and the dimensionality of the data can not be taken as the dimensionality of
 the embedding space.
@@ -358,10 +361,10 @@ than features. In this case, the data clearly lies even on a linear subspace
 of the input space, and the dimensionality of the input space does not
 accurately reflect the intrinsic dimensionality of the data.
 We use the estimate analyzed in \citet{massoud2007manifold}.
-In their method, for each datapoint $x$, a local estimate $\hat{d}(x)$ of the
+In their method, for each data point $x$, a local estimate $\hat{d}(x)$ of the
 dimensionality at $x$ is computed as
 \begin{equation}
-    \hat{d}(x) = \frac{\ln 2}{\ln(r_k(x) / r_{\lfloor k /2 \rfloor}(x)}.
+    \hat{d}(x) = \frac{\ln 2}{\ln\left(r_k(x) / r_{\lfloor k /2 \rfloor}(x)\right)}.
 \end{equation}
 Here $k$ is a fixed integer and $r_k(x)$ is the distance of $x$ from its $k$th neighbor.
 We follow \citet{massoud2007manifold} and set $k =\lceil 2 \ln n\rceil$.
@@ -369,9 +372,10 @@ The final estimate $\hat{d}$ is then computed by averaging the estimates over al
 \begin{equation}
     \hat{d} = \frac{1}{n}\sum_{x \in X} \min\left(\hat{d}(x),\ d\right).
 \end{equation}
-We found this estimate to work robustly and give sensible results in all setting.
-As we already used a ball-tree data structure to build the minimum spanning trees,
-estimating the dimensionality resulted in neglectible computational overhead.
+We found this estimate to work robustly and give sensible results for all
+datasets we investigated.  As we already used a ball-tree data structure to
+build the minimum spanning trees, estimating the dimensionality resulted only in
+little computational overhead.
 
 \begin{figure}[t]
 \centering
@@ -437,7 +441,7 @@ the quantitative analysis.
 Algorithm &     Objective &     Deterministic&      Complexity \\
 \cmidrule{1-4}
 $k$-Means &     $\displaystyle \sum_y \sum_{i, y_i = y} \| x_i - \mu_y \|^2$ & No  & $O(nk)$ per iteration%
-\footnote{The worst-time complexity of the Lloyd-Algorithm is exponential~\cite{arthur2006slow}, though online algorithm are observed to converge in linear time~\cite{bottou1995convergence}.}
+%\footnote{The worst-time complexity of the Lloyd-Algorithm is exponential~\cite{arthur2006slow}, though online algorithm are observed to converge in linear time~\cite{bottou1995convergence}.}
 \\
 MeanNN &    $\displaystyle \sum_y \log\left(\frac{1}{|\mathbf{x}_y|}\sum_{i,j, y_i=y_j=y} \| x_i - x_j \|^2 \right)$ & No & $O(n^2)$ per iteration\\
 Single Link &   -- &    Yes    &    $O(n\log n)$\\
@@ -447,13 +451,13 @@ ITM & $\displaystyle \sum_{y=0}^k d p(y) \log(\bar{L}_y  ) + p(y) \log{p(y)}$ & 
 \caption{Comparing properties of related algorithms.}\label{nowotab}
 \end{table}
 
-%As our objective is motivated by limit properties of the entropy estimate of \eqref{hmst},
+%As our objective is motivated by limit properties of the entropy estimate of \Eqref{hmst},
 %we expect the objective to work best in a setting with many samples. To avoid tautological
 %solutions, we set a hard lower limit to the number of points in each cluster.
 %This limit was set to $10$ for all experiments, independent of the number of samples and clusters.
 
 \subsection{Qualitative Results}
-\figref{qualitative} shows qualitative results on three synthetic datasets.
+\Figref{qualitative} shows qualitative results on three synthetic datasets.
 For well separated, convex clusters, all four algorithms produce the same
 clustering (see top row).  If the structure of the data is more complex, the
 advantage of the proposed method is apparent.  Note that there was no need to
@@ -483,9 +487,9 @@ Table~\ref{results} summarizes the results. The two entropy-based methods
 (MeanNN, ITM) have a clear advantage of the other methods, with ITM finding 
 better clusterings than MeanNN in the majority of cases.
 We see that ITM does well when the intrinsic dimensionality of the data matches
-the feature dimension, but degrated otherwise (see ``faces'' and ``usps'').
+the feature dimension, but degraded otherwise (see ``faces'' and ``usps'').
 Estimating the intrinsic dimensionality of the data overcomes this weakness,
-and improves resuls in most cases. For all but one dataset, eigher ITM or ITM with
+and improves results in most cases. For all but one dataset, either ITM or ITM with
 estimated intrinsic dimensionality gives the best results of all considered
 algorithms.
 %
@@ -515,10 +519,11 @@ usps        &  9298 &  256 &  10 &     0.52 &      0.54            &0.00        
 vehicle     &   846 &   18 &   4 &     0.10 &      0.09            &0.00          &\B{0.10}       &0.10\\
 vowel       &   990 &   10 &  11 &     0.17 &      0.19            &0.00          &\B{0.20}       &0.19\\
 waveform    &  5000 &   21 &   2 & \B{0.37} &      0.30            &0.00          &   0.23        &0.23\\
+mnist       & 70000 &  784 &  10 &     0.37 &      xxx             &0.00          &   0.50        &0.77\\
 \bottomrule
 \end{tabularx}
 \caption{Adjusted Rand Index of $k$-Means, MeanNN, single link agglomerative clustering and
-ITM on several benchmark datasets (higher is better). The best score for
+ITM on several datasets (higher is better). The best score for
 each dataset is printed in bold.}\label{results}
 \end{table}
 
@@ -528,7 +533,7 @@ each dataset is printed in bold.}\label{results}
 % report times on experiments?
 
 \section{Summary}
-In this summary we proposed the use of a minimum spanning tree based,
+In this chapter we proposed the use of a minimum spanning tree based,
 non-parametric entropy estimator in information theoretic clustering, ITM\@.
 Thereby we extended the work of \citet{faivishevsky2010nonparametric} to a more
 flexible and efficient entropy estimate.  We proposed an approximate optimization
@@ -554,7 +559,7 @@ be overcome in practice by estimating the intrinsic dimensionality of the data.
 %data~\citep{pettis1979intrinsic}.
 %
 %We will also investigate optimizations of the objective 
-%\eqref{graphobjective} that go beyond the proposed method. 
+%\Eqref{graphobjective} that go beyond the proposed method. 
 %Move-making algorithms seem a promising way to refine solutions 
 %found by Algorithm~1. Branch and bound techniques could provide 
 %an alternative approach. 

@@ -146,7 +146,7 @@ For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we find
     \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n \Delta(y^i, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i, \hat{y})] \right \rangle
 \]
 by enumeration of $C^i$ and continue until line~\ref{convergence_check}.
-Only if $\xi' - \xi < \epsilon$, i.e.\ the produced constraint is not violated, we
+Only if $\xi' - \xi < \epsilon$, that is the produced constraint is not violated, we
 return to line~\ref{get_cutting_plane} and actually invoke the separation
 oracle $I$.
 

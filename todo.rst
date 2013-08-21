@@ -1,23 +1,21 @@
-move appendix from mil to the end
 future / present tense?!?!?
 include more images
-check all figures and tables
 most important parts: intros and conclusions!
-consistently caption either above or below!
-make all tables span full width
 Give detailed results for MSRC and Pascal
 Visualize Weights wherever possible!
+bibliography consistency! (first names?)
 
 Itm
 =====
-* clustering: bag of word experiments? Segmentation experiments? mnist experiments?
-* remove MLPack runtime claims from ITM?
-* redo summary
-* ALGORITHM FIX!!
+* clustering: bag of word experiments? Segmentation experiments? mnist experiments?  ONLY MNIST
+* remove MLPack runtime claims from ITM? DONE
+* redo summary DONE
+* ALGORITHM FIX!! DONE
 
 weak supervision
 ==================
-fuse with MIL!
+multi-class...
+
 MIL: reviewer comments
 MIL: cleanup intro
 MIL: get rid of shorthands

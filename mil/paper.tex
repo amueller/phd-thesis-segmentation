@@ -91,7 +91,7 @@ If we allow instances inside bags and their labels to have arbitrary dependencie
 $y_1,\dotsc,y_r$ maximizing $p(y_1,\dotsc, y_r | x_1, \dotsc, x_r)$. This is a structured 
 prediction problem for which there is no hope solving it, given only bag labels.
 Therefore, as usual in multiple instance learning, we assume there is an underlying concept for instances,
-i.\,e.\ the label of each instance depends only on this instance.
+that is the label of each instance depends only on this instance.
 In other words, we assume $p(y_1,\dotsc, y_r | x_1, \dotsc, x_r)=p(y_1|x_1) \cdot p(y_r|x_r)$.
 
 If we allow arbitrary dependencies between the instances $x_i$ in a given bag, there is a simple example 
@@ -106,7 +106,7 @@ predicting instance labels.
 
 \subsection{Independent Case}\seclabel{iid}
 The simplest case in which learning instance prediction is possible is the case when instances are globally i.i.d.,
-i.\,e.\ when instances inside a bag are independent of each other. This is a very strong assumption that might be
+that is when instances inside a bag are independent of each other. This is a very strong assumption that might be
 violated in practical applications. On the other hand, strong results can be proved in this setting.
 
 \begin{theorem}\label{basicthm}
@@ -204,7 +204,7 @@ Using Theorem~\ref{iidbound} and taking expected values with respect to $Z$, we 
 
 \begin{figure}[tbp]
 	\begin{center}
-		\includegraphics[width=.40 \linewidth]{images/gehler_decision_boundary.png}\hspace{5px}
+		\includegraphics[width=.40 \linewidth]{images/gehler_decision_boundary.png}\hspace{35px}
 		\includegraphics[width=.40 \linewidth]{images/gehler_instances.png}
 	\end{center}
 	\caption{Visualization of the dataset from \citet{gehler2007deterministic}. Left: Regions in $\mathbb{R}^2$
