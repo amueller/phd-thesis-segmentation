@@ -16,7 +16,9 @@ weak supervision
 ==================
 multi-class...
 
-MIL: reviewer comments
+MIL: why so bad? much worse than constant?
+
+MIL: reviewer comments DONE (except bad errors)
 MIL: cleanup intro
 MIL: get rid of shorthands DONE
 MIL: fix plots!!! we don't have an upper bound in the conditioned setting..

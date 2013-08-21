@@ -88,7 +88,8 @@ inside a bag may be dependent.
 Throughout this chapter, $\mathcal{X}$ denotes the space of all instances. Bags
 are multi sets of instances $X=\{x_1,\dotsc, x_r\}$.  As usual in supervised
 learning tasks, we assume our training examples ($X_i,Y_i)$ to be i.i.d.\ from
-an unknown distribution.  We denote the label of an instance $x_i$ by $y_i$ and
+an unknown distribution. We will specify the assumptions on the distributions
+of instances within bags below. We denote the label of an instance $x_i$ by $y_i$ and
 the label of the bag $X_i$ as $Y_i = \max\{y_j | x_j \in  X_i\}$.  We assume
 the bag size $r\in \mathbb{N}$ to be constant over all bags in a given problem.
 This restriction simplifies the treatment significantly while our results can
@@ -303,7 +304,7 @@ and the bound of Theorem~\ref{iidbound} for datasets with different values of th
 The $x$-axis shows different thresholds on estimated likelihood ratios, resulting in varying $\hzero$.
 It is apparent that the estimate of Theorem~\ref{equality} reflects the true error closely, with only little noise from the restricted
 sample size. Note that the upper bound of Theorem~\ref{iidbound} is not defined everywhere. While it is quite tight when
-$h_I^r \gg \bagerror$, it is not when $h_I^r \approx \bagerror$.
+$\hzero^r \gg \bagerror$, it is not when $\hzero^r \approx \bagerror$.
 
 
 We also performed experiments using a dependent version of Gehler-org
