@@ -519,12 +519,13 @@ usps        &  9298 &  256 &  10 &     0.52 &      0.54            &0.00        
 vehicle     &   846 &   18 &   4 &     0.10 &      0.09            &0.00          &\B{0.10}       &0.10\\
 vowel       &   990 &   10 &  11 &     0.17 &      0.19            &0.00          &\B{0.20}       &0.19\\
 waveform    &  5000 &   21 &   2 & \B{0.37} &      0.30            &0.00          &   0.23        &0.23\\
-mnist       & 70000 &  784 &  10 &     0.37 &      xxx             &0.00          &   0.50        &0.77\\
+mnist       & 70000 &  784 &  10 &     0.37 &      N/A$^\dagger$         &0.00          &   0.50        &0.77\\
 \bottomrule
 \end{tabularx}
 \caption{Adjusted Rand Index of $k$-Means, MeanNN, single link agglomerative clustering and
 ITM on several datasets (higher is better). The best score for
-each dataset is printed in bold.}\label{results}
+each dataset is printed in bold.\\$^\dagger$\footnotesize We were unable to make MeanNN scale to 70000 data points, as storing the
+whole pairwise distance matrix seems critical.\label{results}}
 \end{table}
 
 % TODO more experiments: mnist
