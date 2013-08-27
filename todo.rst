@@ -11,6 +11,8 @@ Itm
 * remove MLPack runtime claims from ITM? DONE
 * redo summary DONE
 * ALGORITHM FIX!! DONE
+* beschreibe benutzung der dim estimation DONE
+* optional: table dimension estimates
 
 weak supervision
 ==================

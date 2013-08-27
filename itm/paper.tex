@@ -372,10 +372,13 @@ The final estimate $\hat{d}$ is then computed by averaging the estimates over al
 \begin{equation}
     \hat{d} = \frac{1}{n}\sum_{x \in X} \min\left(\hat{d}(x),\ d\right).
 \end{equation}
+We compute the density estimate once, prior to clustering, and then plug the
+estimate $\hat{d}$ into \eqref{graphobjective} in place of $d$.
 We found this estimate to work robustly and give sensible results for all
-datasets we investigated.  As we already used a ball-tree data structure to
-build the minimum spanning trees, estimating the dimensionality resulted only in
-little computational overhead.
+datasets we investigated. As we already used a ball-tree data structure to
+build the minimum spanning trees, we can reuse this structure to compute $r_k$.
+Consequently, estimating the dimensionality resulted only in little
+computational overhead.
 
 \begin{figure}[t]
 \centering
@@ -522,10 +525,12 @@ waveform    &  5000 &   21 &   2 & \B{0.37} &      0.30            &0.00        
 mnist       & 70000 &  784 &  10 &     0.37 &      N/A$^\dagger$         &0.00          &   0.50        &0.77\\
 \bottomrule
 \end{tabularx}
-\caption{Adjusted Rand Index of $k$-Means, MeanNN, single link agglomerative clustering and
-ITM on several datasets (higher is better). The best score for
-each dataset is printed in bold.\\$^\dagger$\footnotesize We were unable to make MeanNN scale to 70000 data points, as storing the
-whole pairwise distance matrix seems critical.\label{results}}
+\caption{Adjusted Rand Index of $k$-Means, MeanNN, single link agglomerative
+    clustering and ITM on several datasets (higher is better). ITM ID refers to
+    ITM using the estimated intrinsic dimensionality. The best score for each
+    dataset is printed in bold.\\$^\dagger$\footnotesize We were unable to make
+    MeanNN scale to 70000 data points, as storing the whole pairwise distance
+    matrix seems critical.\label{results}}
 \end{table}
 
 % TODO more experiments: mnist
