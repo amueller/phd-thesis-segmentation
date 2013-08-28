@@ -31,8 +31,10 @@ Structured prediction can be defined as making a prediction $f(x)$ by maximizing
 compatibility function $g$ between an input $x$ and possible labels
 $y$~\citep{nowozin2011structured}:
 \begin{equation}
-    f(x) = \argmax_{y in \mathcal{Y}} g(x, y)
+    f(x) = \argmax_{y \in \mathcal{Y}} g(x, y)
 \end{equation}
+The computation of $y$ in the above equation is often referred to as inference
+or prediction.
 While using arbitrary functions is possible, and was expored
 in some recent works % TODO cite dtf, conditional neural fields
 most current approaches use linear functions, leading to:
@@ -46,17 +48,19 @@ for each word in a sentence or a label for each pixel in an image.
 Learning structured prediction means learning the parameters $\theta$ from training data.
 The particular model that is used is completely encoded in $\Phi(x, y)$, which manifests
 the relation between input $x$ and output $y$. As $\mathcal{Y}$ is typically very large,
-it is crucial to exploit the particular form of $\Phi(x, y)$ to solve the maximization problem
-in \Eqref{main_equation}.
+it is crucial to exploit the particular form of $\Phi(x, y)$ to solve the inference problem
+of \Eqref{main_equation}.
 
-While $y$ could be a complicated like a parsing tree or the geometric configuration of a molecule,
-many setting, such as the image segmentation setting we are interested, can be reduced to the case
-where $y$ is a vector of discrete labels $\mathcal{Y} = \{0, \dotsc, k\}^n$. %TODO n varies.
+While $y$ could be a complicated like a parsing tree or the geometric
+configuration of a molecule, many setting, such as the image segmentation
+setting we are interested, can be reduced to the case where $y$ is a vector of
+discrete labels $\mathcal{Y} = \{1, \dotsc, k\}^n$.
 In the following, we will only discuss this multivatiate case. In general, $n$ is often different
 for different inputs $x$, such as image with different number of (super) pixels.
 We will ignore this in our notation to simplify the presentation.
 
 \subsection{Factor Graphs and the Relation to Graphical Models}
+% one factor graph per instance?
 In the case when $y$ is multivariate, a very general and widely used method to
 specify the structure of a model, and therefore $\Phi$, is using \emph{factor
 graphs}. A factor graph is a bipartite graph $(\mathcal{V}, \mathcal{F},
@@ -66,11 +70,12 @@ $\mathcal{F}$ and edges $\mathcal{E}$ connecting variables to factors. The
 \begin{equation}
     N_F = \{ v \in \mathcal{V} \,|\, (v,F) \in \mathcal{E} \}
 \end{equation}
-The variable nodes of the factor graph correspond to the entries of the variables $y$,
-that is $\mathcal{V} = \{0, \dotsc, n\}$, and each factor node is associated with a \emph{factor} or \emph{potential function}
-$\psi_F$.
-A factor graph represents a function\footnote{Traditionally factor graphs represent \emph{products} of factors.
-To simplify presentation, we work directly in the log-domain of the product representation.}
+The variable nodes of the factor graph correspond to the entries of the
+variables $y$, that is $\mathcal{V} = \{1, \dotsc, n\}$, and each factor node
+is associated with a \emph{factor} or \emph{potential function} $\psi_F$.
+A factor graph represents a function\footnote{Traditionally factor graphs
+ represent \emph{products} of factors.  To simplify presentation, we work
+directly in the log-domain of the product representation.}
 \begin{equation}\eqlabel{log_factor_graph}
     g(x, y) = \sum_{F \in \mathcal{F}} \psi_F(x, y_{N_F})
 \end{equation}
@@ -79,9 +84,9 @@ Here, $y_{N_F}$ denotes the entries of $y$ indexed by $N_F$.
 The benefit of using the factor graph representation is that it decomposes the
 function over the variables of interest $y_i$ and makes. This allows us to
 apply efficient optimization procedures for the maximization in
-\Eqref{mainequation} by exploiting the graph structure of the factor graph.
+\Eqref{main_equation} by exploiting the graph structure of the factor graph.
 
-To obtain a linear function as in \Eqref{mainequation} from
+To obtain a linear function as in \Eqref{main_equation} from
 \Eqref{log_factor_graph}, we can simply let each $\psi$ be of the form
 \begin{equation}\eqlabel{general_psi}
     \psi_F(x, y_{N_F}) = \theta_F^T \Phi_F(x, y_{N_F}).
@@ -92,20 +97,29 @@ The by far most common form is
 \end{equation}
 where $\phi_F(x)$ is a vector representation of the input $x$, and there are
 different parameter vectors $\theta_{F, y_{N_F}}$ for each possible assignment
-of $y_{N_F}$.
+of $y_{N_F} \in \mathcal{Y}_{N_F}$.
 
 Both, \Eqref{general_psi} and \Eqref{linear_psi} are instantiations of the general
 linear form \Eqref{main_equation}. To see this, for \Eqref{general_psi} we simply
 concatenate the individual components for all $f \in \mathcal{F}$:
 \begin{align}
     \theta &= \bigoplus_{F \in \mathcal{F}} \theta_F\\
-    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \Phi_F(x, y)
+    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \Phi_F(x, y_{N_F})
 \end{align}
-%TODO linear psi explicitly
+Writing down $\Phi$ and $\theta$ for the form \Eqref{linear_psi} is a little less compact:
+\begin{align}
+    \theta &= \bigoplus_{F \in \mathcal{F}}\ \bigoplus_{y_{N_F} \in \mathcal{Y}_{N_F}} \theta_{F, y_{N_F}}\\
+    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \left (\phi_F(x) \otimes e_{y_{N_F}} \right )
+\end{align}
+where $e_{y_{N_F}} \in \mathbb{R}^{|\mathcal{Y}_{N_F}|}$ is the indicator for a
+given variable setting $y_{N_F}$.
+In words, $\Phi_F$ is build simply by creating a vector of
+$|\mathcal{Y}_{N_F}|$ times the size of $\phi_F$, which is zero everywhere,
+except for the place corresponding to $y_{N_F}$. %TODO unclear!
 
 The benefit of using the factor graph representation is that it allows us to
 apply efficient optimization procedures for the maximization in
-\Eqref{mainequation} by exploiting the graph structure of the factor graph.
+\Eqref{main_equation} by exploiting the graph structure of the factor graph.
 
 This approach to structured prediction is closely related to a probabilistic
 approach using \emph{graphical models}.  Probabilistical graphical models are a
@@ -133,41 +147,141 @@ During learning, the presence of the factor $Z$ in \Eqref{graphicalmodel}
 introduces additional complications. As we only address the problem of making
 predictions, not modeling probabilities, there are no clear benefits from the
 probabilistic approach.  Consequently, we will work with the more direct
-structured prediction approach of \Eqref{mainequation} and
+structured prediction approach of \Eqref{main_equation} and
 \Eqref{log_factor_graph} instead.
 
 % TODO relate to computer vision here ??? Pairwise models?
+% talk about inference?
 
-\subsection{The Maximum Margin Approach to Structured Learning}
-% margin BLABLA here?
-For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
-the loss base soft-margin objective
-\begin{equation}\label{mainequation}
-    \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  r_i(\theta)
-\end{equation}
-with regularization parameter $C$, where $r_i$ is an hinge-loss like upper
-bound on $\Delta$ empirical risk:
-\[r_i(x_i, y_i, y) = [\max_{y \in \mathcal{Y}} \Delta(y_i, y) + \left<\theta, \phi(x_i, y) - \phi(x_i, y_i) \right >]_+ \]
-\citep{ratliff2007online} derive convergence rates for a stochastic version of the subgradient of  Equation~\ref{mainequation}:
-\begin{equation}\label{subgradient}
-    g := \phi(x_i, y) - \phi(x_i, y_i) + \theta / C
-\end{equation}
-leading to a simple iterative optimization.
 
 \section{Learning Algorithms for Linear Max-Margin Structured Prediction}
-% TODO algorithms here
-\subsection{The Cutting Plane Method}\label{cutting_plane}
+Maximum Margin learning is now one of the most popular methods to learn
+structural models in computervision and in other fields.
+There are several reasons for the popularity of linear maximum margin approaches:
+\begin{description}
+    \item[Loss-sensitivity] In contrast to probabilistic approaches, maximum margin learning approaches can directly
+        minimize a user-specified loss.
+    \item[Feasibility] If the loss decomposes over the factor graph that
+        specifies $g$, then learning is feasible as soon as the maximization
+        over $y$ in \Eqref{main_equation} can be caried out.
+    \item[Generalization] The maximum margin principle yields generalization
+        bounds using the effective complexity~\citep{taskar2003max}.
+    \item[Strong Convexity] The resulting optimization problem is strongly
+        convex, leading to efficient optimization and unique solutions.
+\end{description}
 
-For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
-the loss-based soft-margin objective
-\begin{equation}\label{eq:mainequation}
-\min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  r_i(\theta)
+For learning, a dataset $(x^{(1)}, y^{(1)}),\dotsc,(x^{(k)}, y^{(k)})$, together with a loss
+\begin{equation}
+    \Delta \colon \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}.
 \end{equation}
-with regularization parameter $C$, where $r_i$ is a hinge-loss-like upper
-bound on the empirical $\Delta$-risk:
-\[r_i(x^i, y^i, y) = \left [\max_{y \in \mathcal{Y}} \Delta(y^i, y) + \left<\theta, \phi(x^i, y) - \phi(x^i, y^i) \right > \right]_+ \]
+The parameters $\theta$ are learned by minimizing the loss based soft-margin
+objective
+\begin{equation}\eqlabel{learning_equation}
+    \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  \ell(x^{(i)}, y^{(i)}, \theta)
+\end{equation}
+with regularization parameter $C$. Here $r_i$ is an hinge-loss like upper bound
+on $\Delta$ empirical risk:
+\begin{equation}\eqlabel{loss_augmentation}
+    \ell(x^{(i)}, y^{(i)}, \theta)= [\max_{y \in \mathcal{Y}} \Delta(y^{(i)}, y) + \theta^T \phi(x^{(i)}, y) - \theta^T \phi(x^{(i)}, y^{(i)}]_+
+\end{equation}
 
-We solve the following reformulation of Equation~\Eqref{mainequation}, known as one-slack QP formulation:
+This is an instance of regularized empirical risk minimization, with a
+piecewise linear, convex upper bound on the loss. 
+Finding the $y$ that corresponds to a maximum in \Eqref{loss_augmentation} is
+a central part of all maximum-margin based learning algorithms, and is referred to
+as loss-augmented prediction. For complex models, such as the ones used for
+image segmentation, this optimization often dominates the learning process in
+terms of computational complexity.
+Therefore, it is often desireable to find learning algorithms that converge with
+as little optimizations of the loss-augmented prediction problem as possible.
+
+There are several popular algorithms to solve \Eqref{learning_equation}. We
+will briefly review three standard algorithms: the one-slack and n-slack
+cutting plane algorithms, a stochastic primal subgradient algorithm, and
+recently proposed stochastic dual coordinate descent method.
+
+\subsection{Stochastic Subgradient Descent}\seclabel{subgradient}
+Arguably the most straight-foward way to approach \Eqref{learning_equation} is using subgradient descent.
+In light of the complexity of solving the loss-augmented prediction problem in \Eqref{loss_augmentation},
+is is natural to work in a stochastic setting (see \citet{ratliff2007online}).
+%\citep{ratliff2007online} derive convergence rates for a stochastic version of the subgradient of  Equation~\ref{mainequation}:
+%\begin{equation}\label{subgradient}
+    %g := \phi(x_i, y) - \phi(x_i, y_i) + \theta / C
+%\end{equation}
+%leading to a simple iterative optimization.
+
+\subsection{The N-Slack Cutting Plane Method}\seclabel{n_slack}
+The n-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
+into a quadratic objective with a combinatorial number of constraints:
+\begin{align}\label{eq:oneslack}
+    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i\\
+    \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
+        &\theta^T \sum_{i=1}^n [\phi(x^i, y^i) - \phi(x^i,
+            \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
+            - \xi
+\end{align}
+As is not feasible to deal with all constraints, only a working set $\W$ of active constraints
+is maintained, using the cutting plane method. The algorithm starts with an empty working set,
+and in each iteration adds the most violated constraint to $\W$. Then, the quadratic program is solved
+again, with the new set of constraints.
+The algorithm terminates when no constraint can be found that is more violated then $\epsilon$,
+which guarantees a suboptimality of at most $\epsilon$.
+
+The complete algorithm is described in Algorithm~\ref{alg_n_slack}.
+
+%\begin{algorithm*}[t]
+    %\caption{N-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
+    %%FIXME
+
+    %\begin{algorithmic}[1]
+        %\require training samples $\{ (x^{(1)}, y^{(1)}), \dots, (x^{(n)}, y^{(n)})\}$, regularization parameter $c$, stopping tolerance $\epsilon$.
+        %\ensure parameters $\theta$, slack $\xi$
+        %\state $\w \leftarrow \emptyset$
+        %\repeat
+        %\state $(\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + c \xi$\label{restricted}\\
+        %\begin{equation*}
+            %\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \in \w:
+            %\left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^i, \hat{y}^{(i)})] \right \rangle \geq \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)})
+                %- \xi
+            %\end{equation*}
+            %\for {i=1, \dots, n}
+            %\state
+            %$\hat{y}^{(i)} \leftarrow i(x^{(i)}, y^{(i)}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{y}} \sum_{i=1}^n \delta(y^{(i)}, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^{(i)}, \hat{y})] \right \rangle$ \label{get_cutting_plane}
+            %\endfor
+            %\state $\w \leftarrow \w \cup \{ (\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \} $
+            %\state $ \displaystyle \xi' \leftarrow  \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^{(i)}, \hat{y}^{(i)})] \right \rangle$
+            %\until $\xi' - \xi < \epsilon$ \label{convergence_check}
+        %\end{algorithmic}
+    %\end{algorithm*}
+
+
+\subsection{The 1-Slack Cutting Plane Method}\seclabel{one_slack}
+
+\begin{algorithm*}[t]
+    \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack}}
+    \begin{algorithmic}[1]
+        \require training samples $\{ (x^{(1)}, y^{(1)}), \dots, (x^{(n)}, y^{(n)})\}$, regularization parameter $c$, stopping tolerance $\epsilon$.
+        \ensure parameters $\theta$, slack $\xi$
+        \state $\w \leftarrow \emptyset$
+        \repeat
+            \state $(\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + c \xi$\label{restricted}\\
+            \begin{equation*}
+                \text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \in \w:
+                \left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^i, \hat{y}^{(i)})] \right \rangle \geq \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)})
+                - \xi
+            \end{equation*}
+            \for {i=1, \dots, n}
+                \state
+                $\hat{y}^{(i)} \leftarrow i(x^{(i)}, y^{(i)}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{y}} \sum_{i=1}^n \delta(y^{(i)}, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^{(i)}, \hat{y})] \right \rangle$ \label{get_cutting_plane}
+            \endfor
+            \state $\w \leftarrow \w \cup \{ (\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \} $
+            \state $ \displaystyle \xi' \leftarrow  \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^{(i)}, \hat{y}^{(i)})] \right \rangle$
+        \until $\xi' - \xi < \epsilon$ \label{convergence_check}
+    \end{algorithmic}
+\end{algorithm*}
+
+The one-slack cutting plane method~\citep{joachims2009cutting} solves the
+following reformulation of Equation~\Eqref{learning_equation}:
 \begin{align}\label{eq:oneslack}
     \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
     \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
@@ -175,38 +289,46 @@ We solve the following reformulation of Equation~\Eqref{mainequation}, known as 
             \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
             - \xi
 \end{align}
-using the cutting plane method described in
-Algorithm~\ref{alg_cutting_plane}~\citep{joachims2009cutting}.
-
-The cutting plane method alternates between solving Equation~\Eqref{oneslack}
-with a working set $\W$ of constraints, and expanding the working set using the
-current $\theta$ by finding $\mathbf{y}$ corresponding to the most violated constraint,
-using a separation oracle $I$.
-We investigate the construction of $\W$ and the influence of $I$
-on learning.
-
-%TODO unstructured!!
-
-Intuitively, the one-slack formulation corresponds to joining all training
+Informally, the one-slack formulation corresponds to joining all training
 samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
-interactions between variables corresponding to different data points.
-Consequently, only a single constraint is added in each iteration of
-Algorithm~\ref{alg_cutting_plane}, leading to very small $\W$. We further use
-pruning of unused constraints, as suggested by \citet{joachims2009cutting},
-resulting in the size of $\W$ being in the order of hundreds for all experiments.
+interactions between variables corresponding to different data points, and
+then applying the n-slack algorithm.
+The complete algorithm is described in Algorithm~\ref{alg_one_slack}.
 
-We also use another enhancement of the cutting plane algorithm introduced by
-\citet{joachims2009cutting}, the caching oracle. For each training example $(x^i, y^i)$,
-we maintain a set $C^i$ of the last $r$ results of loss-augmented inference
-(line~\ref{get_cutting_plane} in Algorithm~\ref{alg_cutting_plane}).
-For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we find
-\[ 
-    \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n \Delta(y^i, \hat{y}) - \theta^T \sum_{i=1}^n [\phi(x^i, y^i) - \phi(x^i, \hat{y})]
-\]
-by enumeration of $C^i$ and continue until line~\ref{convergence_check}.
-Only if $\xi' - \xi < \epsilon$, that is the produced constraint is not violated, we
-return to line~\ref{get_cutting_plane} and actually invoke the separation
-oracle $I$.
+By construction only a single constraint is added in each iteration of
+Algorithm~\ref{alg_one_slack}, leading to very small working sets $\W$.
+This has the advantage of making the solution of the QP faster, as it contains
+less variables. The down-side of this is that the loss-augmented prediction
+problem has to be solve much more often until convergence.
+%TODO convergence rate
+
+\citet{joachims2009cutting}, who introduced the method, proposed two enhancements
+to make the algorithm more efficient:
+\begin{description}
+    \item[Constraint Pruning] Members of the working set $\W$ can become inactive during learning.
+        If a constraint has been inactive for a number of itertions, it is removed from $\W$, leading
+        to smaller problem sizes.
+    \item[Inference Caching] In the one-slack algorithm, each constraint is
+        created using a combination of loss-augmented prediction results.
+        Therefore, each of these predictions can be part of multiple
+        constraints during learning.
+        To exploit this, we maintain a set $C^i$ of the last $r$ results of
+        loss-augmented inference for each training example $(x^i, y^i)$
+        (line~\ref{get_cutting_plane} in Algorithm~\ref{alg_one_slack}).
+        For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we
+        find
+        \[ \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n
+            \Delta(y^i, \hat{y}) - \theta^T \sum_{i=1}^n [\phi(x^i, y^i) -
+                \phi(x^i, \hat{y})] \]
+        by enumeration of $C^i$ and continue until
+        line~\ref{convergence_check}.  Only if $\xi' - \xi < \epsilon$, that is
+        the produced constraint is not violated, we return to
+        line~\ref{get_cutting_plane} and actually invoke the loss augmented
+        prediction $I$.
+\end{description}
+
+
+\subsection{Stochastic Dual Coordinate Descent}\seclabel{dual_coordinate_descent}
 
 
 \section{Casting Structured Prediction into Software}\label{sec:api}
@@ -410,6 +532,8 @@ a high-level interface in a dynamic programming language.
 \label{fig:timings}
 \end{figure}
 
+\section{Comparing Learning Algorithms}
+%TODO experiments!!
 
 \section{Summary}
 %TODO summarize structured prediction

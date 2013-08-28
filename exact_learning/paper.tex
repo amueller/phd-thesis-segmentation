@@ -83,31 +83,6 @@ large-scale problems, they perform approximate inference and learning, and do
 not relate their results back to the original SSVM objective they approximate.
 
 
-\begin{algorithm*}[t]
-    \caption{Cutting Plane Training of Structural SVMs \label{alg_cutting_plane}}
-
-\begin{algorithmic}[1]
-    \Require Training samples $\{ (x^{1}, y^{1}), \dots, (x^{n}, y^{n})\}$, regularization parameter $C$, stopping tolerance $\epsilon$, separation oracle $I$.
-    \Ensure Parameters $\theta$, slack $\xi$
-    \State $\W \leftarrow \emptyset$
-    \Repeat
-    \State $(\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi$\label{restricted}\\
-    \begin{equation*}
-        \text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \W:
-        \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i,
-            \hat{y}^i)] \right \rangle \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
-            - \xi
-    \end{equation*}
-    \For {i=1, \dots, n}
-    \State
-    $\hat{y}^i \leftarrow I(x^i, y^i, \theta) \approx \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^n \Delta(y^i, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i, \hat{y})] \right \rangle$ \label{get_cutting_plane}
-    \EndFor
-    \State $\W \leftarrow \W \cup \{ (\hat{y}^1, \dots, \hat{y}^n) \} $
-    \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^n \Delta(y^i, \hat{y}^i) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i, \hat{y}^i)] \right \rangle$
-    \Until $\xi' - \xi < \epsilon$ \label{convergence_check}
-\end{algorithmic}
-\end{algorithm*}
-
 \section{Efficient Cutting Plane Training of SSVMs}\label{learning}
 
 There are two groups of inference procedures, as identified in

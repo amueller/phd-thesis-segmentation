@@ -22,10 +22,19 @@ korrekturlesen?
 
 pystruct / intro to structured prediction
 ============================================
-Linear, introduce 3/4 methods: one slack, n-slack, subgradient and frank-wolfe
-frank wolfe in pystruct text
-Viel mehr generell ueber structured prediction
 
+Linear DONE
+introduce 3/4 methods:
+one slack,
+n-slack,
+subgradient
+and frank-wolfe
+
+Table run-time comparisons?
+frank wolfe in pystruct text
+
+Viel mehr generell ueber structured prediction DONE (vorerst)
+Graphiken?
 
 exact learning
 =================
