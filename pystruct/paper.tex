@@ -1,11 +1,11 @@
 Many classical computer vision applications such as stereo, optical flow, semantic
 segmentation and visual grouping can be naturally formulated as image labeling tasks.
-
+%
 Arguably the most popular way to approach such labeling problems is via graphical
 models, such as Markov random fields (MRFs) and conditional random fields (CRFs).
 MRFs and CRFs provide a principled way of integrating local evidence and
 modeling spacial dependencies, which are strong in most image-based tasks.
-
+%
 While in earlier approaches, model parameters were set by hand or using
 cross-validation, more recently parameters are often learned using a max-margin
 approach.
@@ -15,62 +15,131 @@ trained using structural support vector machines (SSVMs). While linear energy
 functions lead to learning problems that are convex in the parameters, complex
 constraints complicate their optimization. 
 
-In recent years there has been a wealth of research in methods for learning structured prediction,
-as well as in their application in areas such as natural language processing and computer vision.
-Unfortunately only few implementations are publicly available---many applications are based on
-the non-free implementation of~\citet{joachims2009cutting}.
-
-In this chapter, we will first introduce the concepts and algorithms used in structured prediction,
-in particular in maximum margin methods. We will then accompany this by a description of our
-open source implementation of these algorithms, \pystruct.
-
-\pystruct aims at providing a high-quality implementation with an easy-to-use
-interface, in the high-level Python language.  This allows practitioners to
-efficiently test a range of models, as well as allowing researchers to compare
-to baseline methods much more easily than this is possible with current
-implementations.  \pystruct is BSD-licensed, allowing modification and
-redistribution of the code, as well as use in commercial applications.  By
-embracing paradigms established in the scientific Python community and reusing
-the interface of the widely-used {\sc scikit-learn}
-library~\citep{pedregosa2011scikit}, \pystruct can be used in existing
-projects, replacing standard classifiers.  The online documentation and
-examples help new users understand the somewhat abstract ideas behind
-structured prediction.
-
-%The organization of this chapter is as follows. Section~\ref{sec:api} revisits
-%the basic concepts of structured learning algorithms, and how these map to the
-%\pystruct interface. Section~\ref{sec:examples} exemplifies the use of \pystruct
-%on some standard structured prediction benchmarks and showcasts how \pystruct
-%can interact with existing libraries, foremost scikit-learn and scikit-image.
-%Section~\ref{sec:benchmarks} finally compares \pystruct with SVM$^\text{struct}$,
-%arguably the most widely used implementation of structural SVMs, and
-%SVM$^\text{python}$, a Python interface or the same.
+In recent years there has been a wealth of research in methods for learning
+structured prediction, as well as in their application in areas such as natural
+language processing and computer vision (see \citet{nowozin2011structured} for
+an overview).
+%
+In this chapter, we will first introduce the concepts and algorithms used in
+structured prediction, in particular in maximum margin methods. We will then
+accompany this by a description of our open source implementation of these
+algorithms, \pystruct.
 
 \section{Basic Concepts in Structured Prediction}
 
 Structured prediction can be defined as making a prediction $f(x)$ by maximizing a
-compati\-bility function between an input $x$ and the possible labels
-$y$~\citep{nowozin2011structured}. Most current approaches use linear functions,
-leading to:
-\begin{equation}\label{eq:main_equation}
-    f(x) = \argmax_{y \in \mathcal{Y}}\  \theta^T \Psi(x, y).
+compatibility function $g$ between an input $x$ and possible labels
+$y$~\citep{nowozin2011structured}:
+\begin{equation}
+    f(x) = \argmax_{y in \mathcal{Y}} g(x, y)
 \end{equation}
-Here, $y$ is a \emph{structured} label, $\Psi$ is a joint feature function of $x$ and $y$, and
-$\theta$ are parameters of the model. \emph{Structured} means that $y$ is more complicated than a single
-output class, for example a label for each word in a sentence or a label for
-each pixel in an image.
+While using arbitrary functions is possible, and was expored
+in some recent works % TODO cite dtf, conditional neural fields
+most current approaches use linear functions, leading to:
+\begin{equation}\eqlabel{main_equation}
+    f(x) = \argmax_{y \in \mathcal{Y}}\  \theta^T \Phi(x, y).
+\end{equation}
+Here, $y$ is a \emph{structured} label, $\Phi$ is a joint feature function of
+$x$ and $y$, and $\theta$ are parameters of the model. \emph{Structured} means
+that $y$ is more complicated than a single output class, for example a label
+for each word in a sentence or a label for each pixel in an image.
 Learning structured prediction means learning the parameters $\theta$ from training data.
+The particular model that is used is completely encoded in $\Phi(x, y)$, which manifests
+the relation between input $x$ and output $y$. As $\mathcal{Y}$ is typically very large,
+it is crucial to exploit the particular form of $\Phi(x, y)$ to solve the maximization problem
+in \Eqref{main_equation}.
 
-% TODO relate to computer vision here
-When learning for structured prediction in the max-margin framework of
-\cite{tsochantaridis2006large}, predictions are made as
-\[ \argmax_y f(x, y, \theta)\]
-where x is the input and $\theta$ are the parameters to be learned.
-Here, $f$ is a compatibility function of $x$ and $y$, that is linear in the parameters
-\[f(x, y, \theta) = \langle \theta, \Psi(x, y) \rangle\]
-where $\Psi(x, y)$ is a joint feature vector of $x$ and $y$. Specifying a specific CRF model
-amounts to specifying $\Psi$.
+While $y$ could be a complicated like a parsing tree or the geometric configuration of a molecule,
+many setting, such as the image segmentation setting we are interested, can be reduced to the case
+where $y$ is a vector of discrete labels $\mathcal{Y} = \{0, \dotsc, k\}^n$. %TODO n varies.
+In the following, we will only discuss this multivatiate case. In general, $n$ is often different
+for different inputs $x$, such as image with different number of (super) pixels.
+We will ignore this in our notation to simplify the presentation.
 
+\subsection{Factor Graphs and the Relation to Graphical Models}
+In the case when $y$ is multivariate, a very general and widely used method to
+specify the structure of a model, and therefore $\Phi$, is using \emph{factor
+graphs}. A factor graph is a bipartite graph $(\mathcal{V}, \mathcal{F},
+\mathcal{E})$, consisting of variable nodes $\mathcal{V}$, factor nodes
+$\mathcal{F}$ and edges $\mathcal{E}$ connecting variables to factors. The
+\emph{scope} $N_F$ of a factor $F \in \mathcal{F}$ is defined as
+\begin{equation}
+    N_F = \{ v \in \mathcal{V} \,|\, (v,F) \in \mathcal{E} \}
+\end{equation}
+The variable nodes of the factor graph correspond to the entries of the variables $y$,
+that is $\mathcal{V} = \{0, \dotsc, n\}$, and each factor node is associated with a \emph{factor} or \emph{potential function}
+$\psi_F$.
+A factor graph represents a function\footnote{Traditionally factor graphs represent \emph{products} of factors.
+To simplify presentation, we work directly in the log-domain of the product representation.}
+\begin{equation}\eqlabel{log_factor_graph}
+    g(x, y) = \sum_{F \in \mathcal{F}} \psi_F(x, y_{N_F})
+\end{equation}
+Here, $y_{N_F}$ denotes the entries of $y$ indexed by $N_F$.
+
+The benefit of using the factor graph representation is that it decomposes the
+function over the variables of interest $y_i$ and makes. This allows us to
+apply efficient optimization procedures for the maximization in
+\Eqref{mainequation} by exploiting the graph structure of the factor graph.
+
+To obtain a linear function as in \Eqref{mainequation} from
+\Eqref{log_factor_graph}, we can simply let each $\psi$ be of the form
+\begin{equation}\eqlabel{general_psi}
+    \psi_F(x, y_{N_F}) = \theta_F^T \Phi_F(x, y_{N_F}).
+\end{equation}
+The by far most common form is 
+\begin{equation}\eqlabel{linear_psi}
+    \psi_F(x, y_{N_F}) = \theta_{F, y_{N_F}}^T \phi_F(x),
+\end{equation}
+where $\phi_F(x)$ is a vector representation of the input $x$, and there are
+different parameter vectors $\theta_{F, y_{N_F}}$ for each possible assignment
+of $y_{N_F}$.
+
+Both, \Eqref{general_psi} and \Eqref{linear_psi} are instantiations of the general
+linear form \Eqref{main_equation}. To see this, for \Eqref{general_psi} we simply
+concatenate the individual components for all $f \in \mathcal{F}$:
+\begin{align}
+    \theta &= \bigoplus_{F \in \mathcal{F}} \theta_F\\
+    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \Phi_F(x, y)
+\end{align}
+%TODO linear psi explicitly
+
+The benefit of using the factor graph representation is that it allows us to
+apply efficient optimization procedures for the maximization in
+\Eqref{mainequation} by exploiting the graph structure of the factor graph.
+
+This approach to structured prediction is closely related to a probabilistic
+approach using \emph{graphical models}.  Probabilistical graphical models are a
+tool to express factorizations of probability distributions.  Similar to
+\Eqref{log_factor_graph}, the joint probability distribution over a
+multi-variate random variable $y$ can be expressed using a factor-graph:
+\begin{equation}\eqlabel{graphicalmodel}
+    p(y | x) = \frac{1}{Z_x}\prod_{F \in \mathcal{F}} \exp\left(\psi_F(x, y_{N_F})\right)
+\end{equation}
+where
+\begin{equation}
+    Z_x = \sum_{y' \in \mathcal{Y}} \prod_{F \in \mathcal{F}} \exp\left(\psi(x, y'_{N_F})\right)
+\end{equation}
+is the normalization constant of the conditional distribution over $y$.
+If $f$ is choosen as in \Eqref{linear_psi}, then the resulting distribution
+belongs to the exponential family.
+
+The most probable prediction $y$ is given as $\argmax_{y \in \mathcal{Y}}p(y|x)$.
+As $Z$ is independent of $y$, and by the monotonicity of the logarithm,
+maximizing $p(y|x)$ is equivalent to maximizing $g(x,y)$ over $y$ in
+\Eqref{log_factor_graph}. Therefore, from a prediction standpoint, the two
+formulations are equivalent.
+
+During learning, the presence of the factor $Z$ in \Eqref{graphicalmodel}
+introduces additional complications. As we only address the problem of making
+predictions, not modeling probabilities, there are no clear benefits from the
+probabilistic approach.  Consequently, we will work with the more direct
+structured prediction approach of \Eqref{mainequation} and
+\Eqref{log_factor_graph} instead.
+
+% TODO relate to computer vision here ??? Pairwise models?
+
+\subsection{The Maximum Margin Approach to Structured Learning}
+% margin BLABLA here?
 For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
 the loss base soft-margin objective
 \begin{equation}\label{mainequation}
@@ -78,27 +147,16 @@ the loss base soft-margin objective
 \end{equation}
 with regularization parameter $C$, where $r_i$ is an hinge-loss like upper
 bound on $\Delta$ empirical risk:
-\[r_i(x_i, y_i, y) = [\max_{y \in \mathcal{Y}} \Delta(y_i, y) + \left<\theta, \psi(x_i, y) - \psi(x_i, y_i) \right >]_+ \]
+\[r_i(x_i, y_i, y) = [\max_{y \in \mathcal{Y}} \Delta(y_i, y) + \left<\theta, \phi(x_i, y) - \phi(x_i, y_i) \right >]_+ \]
 \citep{ratliff2007online} derive convergence rates for a stochastic version of the subgradient of  Equation~\ref{mainequation}:
 \begin{equation}\label{subgradient}
-    g := \psi(x_i, y) - \psi(x_i, y_i) + \theta / C
+    g := \phi(x_i, y) - \phi(x_i, y_i) + \theta / C
 \end{equation}
 leading to a simple iterative optimization.
 
 \section{Learning Algorithms for Linear Max-Margin Structured Prediction}
 % TODO algorithms here
 \subsection{The Cutting Plane Method}\label{cutting_plane}
-
-When learning for structured prediction in the max-margin framework of
-\citet{tsochantaridis2006large}, predictions are made as
-\[ \argmax_{y \in \mathcal{Y}} f(x, y, \theta),\]
-where $x \in \mathcal{X}$ is the input, $y \in \mathcal{Y}$ the prediction, and $\theta$ are the parameters to be learned.
-We will assume $y$ to be multivariate, $y=(y_1, \dots, y_k)$ with possibly varying $k$.
-
-The function $f$ measures compatibility of $x$ and $y$ and is a linear function of the parameters $\theta$:
-\[f(x, y, \theta) = \langle \theta, \psi(x, y) \rangle.\]
-Here $\psi(x, y)$ is a joint feature vector of $x$ and $y$. Specifying a particular SSVM model
-amounts to specifying $\psi$.
 
 For a given loss $\Delta$, the parameters $\theta$ are learned by minimizing
 the loss-based soft-margin objective
@@ -107,20 +165,20 @@ the loss-based soft-margin objective
 \end{equation}
 with regularization parameter $C$, where $r_i$ is a hinge-loss-like upper
 bound on the empirical $\Delta$-risk:
-\[r_i(x^i, y^i, y) = \left [\max_{y \in \mathcal{Y}} \Delta(y^i, y) + \left<\theta, \psi(x^i, y) - \psi(x^i, y^i) \right > \right]_+ \]
+\[r_i(x^i, y^i, y) = \left [\max_{y \in \mathcal{Y}} \Delta(y^i, y) + \left<\theta, \phi(x^i, y) - \phi(x^i, y^i) \right > \right]_+ \]
 
-We solve the following reformulation of Equation~\eqref{mainequation}, known as one-slack QP formulation:
+We solve the following reformulation of Equation~\Eqref{mainequation}, known as one-slack QP formulation:
 \begin{align}\label{eq:oneslack}
     \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
     \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
-        &\left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i,
-            \hat{y}^i)] \right \rangle \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
+        &\theta^T \sum_{i=1}^n [\phi(x^i, y^i) - \phi(x^i,
+            \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
             - \xi
 \end{align}
 using the cutting plane method described in
 Algorithm~\ref{alg_cutting_plane}~\citep{joachims2009cutting}.
 
-The cutting plane method alternates between solving Equation~\eqref{oneslack}
+The cutting plane method alternates between solving Equation~\Eqref{oneslack}
 with a working set $\W$ of constraints, and expanding the working set using the
 current $\theta$ by finding $\mathbf{y}$ corresponding to the most violated constraint,
 using a separation oracle $I$.
@@ -143,33 +201,40 @@ we maintain a set $C^i$ of the last $r$ results of loss-augmented inference
 (line~\ref{get_cutting_plane} in Algorithm~\ref{alg_cutting_plane}).
 For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we find
 \[ 
-    \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n \Delta(y^i, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^i, \hat{y})] \right \rangle
+    \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n \Delta(y^i, \hat{y}) - \theta^T \sum_{i=1}^n [\phi(x^i, y^i) - \phi(x^i, \hat{y})]
 \]
 by enumeration of $C^i$ and continue until line~\ref{convergence_check}.
 Only if $\xi' - \xi < \epsilon$, that is the produced constraint is not violated, we
 return to line~\ref{get_cutting_plane} and actually invoke the separation
 oracle $I$.
 
-In computer vision applications, or more generally in graph labeling problems,
-$\psi$ is often given as a factor graph over $y$, typically using only unary and pairwise functions:
-\[ \langle \theta, \psi(x, y) \rangle = \sum_{i=0}^k \langle \theta_u,  \psi_u(x, y_k) \rangle + \sum_{(i, j) \in E} \langle \theta_p, \psi_p(x, y_k, y_l) \rangle, \]
-where $E$ a set of pairwise relations. In this form, parameters $\theta_u$ and $\theta_p$ for unary and
-pairwise terms are shared across all entries and pairs.
-The decomposition of $\psi$ into only unary and pairwise interactions allows
-for efficient inference schemes, based on message passing or graph cuts.
-
 
 \section{Casting Structured Prediction into Software}\label{sec:api}
+Unfortunately only few implementations are publicly
+available---many applications are based on the non-free implementation
+of~\citet{joachims2009cutting}.
+Our implementation, \pystruct, aims at providing a high-quality implementation
+with an easy-to-use interface, in the high-level Python language.  This allows
+practitioners to efficiently test a range of models, as well as allowing
+researchers to compare to baseline methods much more easily than this is
+possible with current implementations.  \pystruct is BSD-licensed, allowing
+modification and redistribution of the code, as well as use in commercial
+applications.  By embracing paradigms established in the scientific Python
+community and reusing the interface of the widely-used {\sc scikit-learn}
+library~\citep{pedregosa2011scikit}, \pystruct can be used in existing
+projects, replacing standard classifiers.  The online documentation and
+examples help new users understand the somewhat abstract ideas behind
+structured prediction.
 
 Using the above formulation, learning can be broken down into three sub-problems:
 \begin{enumerate*}
     \item Optimizing the objective with respect to $\theta$.
-    \item Encoding the structure of the problem in a joint feature function $\Psi$.
+    \item Encoding the structure of the problem in a joint feature function $\Phi$.
     \item Solving the maximization problem in Equation~\ref{eq:main_equation}.
 \end{enumerate*}
 The later two problems are usually tightly coupled, as the maximization in
 Equation~\ref{eq:main_equation} is usually only feasible by exploiting the
-structure of $\Psi$, while the first one is usually treated as independent.
+structure of $\Phi$, while the first one is usually treated as independent.
 \pystruct takes an object-oriented approach to decouple the task-dependent
 implementation of 2. and 3. from the general algorithms used to solve 1.
 
@@ -180,7 +245,7 @@ latent variable SSVMs. The cutting plane implementation uses the {\sc cvxopt}
 package \citep{dahl2006cvxopt} for quadratic optimization.
 
 Encoding the structure of the problem is done using \texttt{model} classes, which
-compute $\Psi$ and encode the structure of the problem.
+compute $\Phi$ and encode the structure of the problem.
 \pystruct implements models for many common cases, such as multi-class and
 multi-label classification, conditional random fields with constant or
 data-dependent pairwise potentials, and several latent variable models.
@@ -232,7 +297,7 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
     for simple tasks.
 
 \paragraph{Modularity} \pystruct separates the algorithms of parameter estimation and
-     inference from the task-dependent formulation of $\Psi$. This allows
+     inference from the task-dependent formulation of $\Phi$. This allows
      practitioners, for example in computer vision or natural language
      processing, to improve their model without changing any optimization
      code. On the other hand, researchers working on better inference or
@@ -281,6 +346,7 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
 %a very simnple interface for this problem. Each example is presented as an
 %array of input features of shape % (length_of_sequence, number_of_features).
 %% listing, training time, accuracy, comparision with kraehenbuehl
+%TODO snakes
 
 Conditional random fields are an important tool for semantic image
 segmentation.  We demonstrate how to learn an $n$-slack support
