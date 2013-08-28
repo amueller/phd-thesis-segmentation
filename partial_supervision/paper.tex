@@ -1,25 +1,26 @@
-Most algorithms for semantic image segmentation and object-class segmentation work with strong supervision: a pixel-wise labeling
-of training images. In this chapter, we will investigate a method that works with annotation
-that is much easier to obtain: whole image labels.
+Most algorithms for semantic image segmentation and object-class segmentation
+work with strong supervision: a pixel-wise labeling of training images. In this
+chapter, we will investigate a method that works with annotation that is much
+easier to obtain: whole image labels.
 
 % TODO contrast with Alex
 
-The task of multi-class segmentation is often split up in a segmentation
-and a recognition part. Random forest methods often classify each pixel
-separately and segment using predicted classes~\citep{schroff2008object} while SVM-based methods often work on an
-over-segmentation of the image, called superpixels~\citep{ladicky2009associative,gonfaus2010harmony}. Superpixels avoid the
-computational burden of classifying each pixel separately, but have
-two drawbacks:
-\begin{enumerate}
-    \item A single superpixel does not provide enough context for classification~\citep{fulkerson2009class}.
-    \item Segment boundaries are decided on the lowest level by generating
-        superpixels. This decision cannot be corrected afterwards~\citep{hanbury2008superpixels}.
-\end{enumerate}
+%The task of multi-class segmentation is often split up in a segmentation
+%and a recognition part. Random forest methods often classify each pixel
+%separately and segment using predicted classes~\citep{schroff2008object} while SVM-based methods often work on an
+%over-segmentation of the image, called superpixels~\citep{ladicky2009associative,gonfaus2010harmony}. Superpixels avoid the
+%computational burden of classifying each pixel separately, but have
+%two drawbacks:
+%\begin{enumerate}
+    %\item A single superpixel does not provide enough context for classification~\citep{fulkerson2009class}.
+    %\item Segment boundaries are decided on the lowest level by generating
+        %superpixels. This decision cannot be corrected afterwards~\citep{hanbury2008superpixels}.
+%\end{enumerate}
 In our approach, we work with a set of candidate segments, generated using constrained parametric min-cuts~\citep{carreira2010constrained}.
 For each image, these segments are a set of overlapping, object-like regions, which serve
 as candidates for object locations.
 
-We formulate weakly supervised multi-class image segmentation as a multi-instance problem, based upon candidate segments.
+We formulate weakly supervised multi-class image segmentation as a multi-instance problem, based on candidate segments.
 In multi-instance learning~\citep{dietterich1997solving}, each training example is given as a multi-set of instances, called a bag.
 Each instance is represented as a feature vector $x$ and a label $y$.
 A bag is labeled positive if it contains at least one positive example, and negative otherwise.
@@ -33,7 +34,7 @@ Training examples are tuples $(X_i,y_i)$ of bags $X_i \subset \mathcal{X}$ and l
 It is often assumed that the $f_{MI}$ function stems from a so-called underlying concept, given by an (unknown) function
 $f_{I} \colon \mathcal{X} \rightarrow \{-1,+1\}$, with 
 \begin{equation}\eqlabel{multi_instance}
-f_{MI}(X)= \max_{x \in X} f_{I}(x).
+f_{MI}(X)= \max_{x \in X}\ f_{I}(x).
 \end{equation}
 
 Sometimes, the goal of finding $f_{MI}$ is extended to finding labels not only
@@ -42,7 +43,7 @@ for new bags, but also for all the separate instances within a bag
 Even though finding $f_{I}$ is sometimes included in the task statement, there
 has been very little work that actually reported accuracy on instance label
 prediction. Part of the reason for this might be that for many of the datasets
-used in multi-instance learning no ground truth exists.
+used in multi-instance learning no ground truth for instances exists.
 
 We look explicitly at accuracy on instance-level since we are interested in
 actually segmenting images, not just classifying them. For multi-class image
@@ -85,7 +86,7 @@ A similar approach was investigated by \citet{endres2010category}.
 \subsection{Multi-Instance Methods}
 Multi-instance learning was formally introduced in \citet{dietterich1997solving}.
 Since then, many algorithms were proposed to solve the multi-instance learning problem
-using many different approaches \citep{andrews2003support,gaertner2002multi,zhou2009multi,li2009convex,zhang2002dd,mangasarian2008multiple,leistner2010miforests,chen2006miles}.
+\citep{andrews2003support,gaertner2002multi,zhou2009multi,li2009convex,zhang2002dd,mangasarian2008multiple,leistner2010miforests,chen2006miles}.
 We will discuss only those that are relevant to the present treatment.
 
 \citet{gaertner2002multi} introduced the concept of a multi-instance
@@ -94,22 +95,27 @@ The basic principle of multi-instance kernel is similar to a soft-max over insta
 each bag. This can be viewed as approximating the kernel value of the ``closest pair'' given by two bags. They show that the multi-instance kernel
 is able to separate bags if and only if the original kernel on instances is able to separate the underlying concepts.
 The method of \citet{gaertner2002multi} has a particular appeal in that it transforms a multi-instance problem into a standard
-classification problem by changing the kernel. The downside of this approach is that it does
+classification problem by using an appropriate kernel. The downside of this approach is that it does
 not directly label instances, only bags.
  %and that it assumes that instances inside a bag have i.i.d.
 %labels.
 
-\citet{zhou2009multi} explicitly address non-i.i.d.\  labels, leading to an algorithm that can take
-advantage of correlations inside bags. Computational costs of their algorithm does not scale well with
-the number of instances, although a heuristic algorithm is proposed to overcome this restriction.
-\citet{zhou2009multi} demonstrated only a slight advantage of their algorithm over the MI-kernel of \citet{gaertner2002multi}, so
-we use the MI-kernel for better scalability.
+\citet{zhou2009multi} explicitly address the fact that instances are not
+indpendent within a bag , leading to an algorithm that can take advantage of
+possible correlations. Computational costs of their algorithm does not scale
+well with the number of instances, although a heuristic algorithm is proposed
+to overcome this restriction. 
+%FIXME where does this sentence go?
+\citet{zhou2009multi} demonstrated only a slight
+advantage of their algorithm over the MI-kernel of \citet{gaertner2002multi},
+so we use the MI-kernel for better scalability.
 
-\citet{liconvex2010} compute likelihood ratios for instances, giving a new convex formulation of the multi-instance problem.
-Using these likelihood ratios, classification can be performed directly on the instances, provided an appropriate
-threshold for classifying instances as positive is known.
-We circumvent this problem by applying the same classifier to instances and bags, thereby obtaining hard class
-decisions for each instance.
+\citet{liconvex2010} compute likelihood ratios for instances, giving a new
+convex formulation of the multi-instance problem.  Using these likelihood
+ratios, classification can be performed directly on the instances, provided an
+appropriate threshold for classifying instances as positive is known. We
+circumvent this problem by applying the same classifier to instances and bags,
+thereby obtaining hard class decisions for each instance.
 
 %\subsection{Multi Instance Multi Label (MIML) Methods}
 %Zhou and Zhang~\citet{zhou2007multi} were some of the first to tackle the problem of multi-instance multi-label tasks.
@@ -139,60 +145,76 @@ decisions for each instance.
 %tasks as they occur in weakly supervised multi-class image segmentation, using only a single convex optimization.
 
 \subsection{Semantic Scene Segmentation via Multi-Instance Learning}
-Recently, several methods have been proposed to obtain semantic segmentations of images using only
-image-level supervision~\citep{vezhnevets2011weakly,verbeek2007region,vezhnevets2010towards}. \citet{vezhnevets2011weakly},
-for example, report impressive results on the MSRC dataset.
+Recently, several methods have been proposed to obtain semantic segmentations
+of images using only image-level
+supervision~\citep{vezhnevets2011weakly,verbeek2007region,vezhnevets2010towards}.
+\citet{vezhnevets2011weakly}, for example, report impressive results on the
+MSRC dataset.
 
-While semantic segmentation is closely related to multi-class image segmentation, there are important
-distinctions: In semantic segmentation, each pixel has a semantic annotation, also containing ``background''
-classes like ``sky'', ``grass'' and ``water''. In multi-class image segmentation, the focus is on
-objects, with possibly large parts of the image being labeled as unspecific ``background''.
-The unspecific background class contains much more clutter than for example ``grass'' and is therefore
-much harder to model.
-This makes disseminating the interesting part in multi-class object recognition challenging, since it
-is not necessary possible to identify non-object regions easily.
+While semantic segmentation is closely related to multi-class image
+segmentation, there are important distinctions: In semantic segmentation, each
+pixel has a semantic annotation, also containing non-object ``stuff'' classes like
+``sky'', ``grass'' and ``water''. In multi-class image segmentation, the focus
+is on objects, with possibly large parts of the image being labeled as
+unspecific ``background''.  The unspecific background class contains much more
+clutter than for example ``grass'' and is therefore much harder to model.
+This makes disseminating the interesting part in multi-class object recognition
+challenging, since it is not necessary possible to identify non-object regions
+easily.
 
 
 \section{Multi-Instance Kernels for Image Segmentation}
 \subsection{Constraint Parametric Min Cuts (CPMC)}
-To generate proposal segments, we use the Constraint Parametric Min Cut (CPCM) method from \citet{carreira2010constrained}. In CPMC, initial
-segments are constructed graph cuts on the pixel grid. The energy function for these cuts uses pixel
-color and the response of the global probability of boundary (gPb) detector~\citep{maire2008using}. As much as ten thousand initial segments are generated from foreground
-and background seeds. A fast rejection based on segment size and ratio cut~\citep{wang2003image} reduced these to about 2000 overlapping
-segments per image. Then, the segments are ranked according to a measure of object-likeness that is based on region and Gestalt properties.
-This ranking is computed using an SVR model~\citep{carreira2010constrained}, which is available online.
-For computing the global probability of boundary (gPb), we used the CUDA implementation
-of \citet{catanzaro2009efficient}, which provides a speedup of two orders of magnitude over the original implementation.
+% Repetition?
+To generate proposal segments, we use the Constraint Parametric Min Cut (CPCM)
+method from \citet{carreira2010constrained}. In CPMC, initial segments are
+constructed using graph cuts on the pixel grid. The energy function for these cuts
+uses pixel color and the response of the global probability of boundary (gPb)
+detector~\citep{maire2008using}. As much as ten thousand initial segments are
+generated from foreground and background seeds. A fast rejection based on
+segment size and ratio cut~\citep{wang2003image} reduces these to about 2000
+overlapping segments per image. Then, the segments are ranked according to a
+measure of object-likeness that is based on region and Gestalt properties.
+This ranking is computed using an SVR model~\citep{carreira2010constrained},
+which is available online. 
+% TODO implementation detail?
+For computing the global probability of boundary
+(gPb), we used the CUDA implementation of \citet{catanzaro2009efficient}, which
+provides a speedup of two orders of magnitude over the original implementation.
 
 \subsection{Multi-Instance Learning using MI-Kernels}
-Since scalability is very important in real-world computer vision
-applications, and natural images might need hundreds of segments to
-account for all possible object boundaries, we use the efficient
-multi-instance kernels~\citep{gaertner2002multi}.
-Multi-instance kernels are a form of set kernels that transform a kernel
-on instance level to a kernel on bag level.
-We reduce the multi-instance multi-class problem to a multi-instance problem by using the one-vs-all approach.
+Since scalability is very important in real-world computer vision applications,
+and natural images might need hundreds of segments to account for all possible
+object boundaries, we use the efficient multi-instance
+kernels~\citep{gaertner2002multi}.  Multi-instance kernels are a form of set
+kernels %TODO add reference to earlier work
+ that transform a kernel on instance level to a kernel on bag level.  We
+reduce the multi-instance multi-class problem to a multi-instance problem by
+using the one-vs-all approach.
 
-With $k_I$ denoting a kernel on instances $x,x' \in \mathcal{X}$, we define the corresponding multi-instance kernel $k_{MI}$ on bags $X,X' \in 2^\mathcal{X}$
+With $k_I$ denoting a kernel on instances $x,x' \in \mathcal{X}$, we define the
+corresponding multi-instance kernel $k_{MI}$ on bags $X,X' \in 2^\mathcal{X}$
 as
 \begin{equation}\eqlabel{mi_kernel}
 k_{MI}(X,X') := \sum_{x \in X, x' \in X'} k^p(x,x'),
 \end{equation}
-where $p \in \mathbb{N}$ is a parameter~\citep{gaertner2002multi}. As we use the RBF-kernel $k_{rbf}$ as kernel on $\mathcal{X}$ and powers of RBF-kernels
-are again RBF-kernels, we will not consider $p$ in the following.
+where $p \in \mathbb{N}$ is a free parameter~\citep{gaertner2002multi}. As we use
+the RBF-kernel $k_{rbf}$ as kernel on $\mathcal{X}$ and powers of RBF-kernels
+are again RBF-kernels, we will not consider $p$ explicitly in the following.
 
 We normalize the kernel $k_{MI}$ \citep{gaertner2002multi} using
 \begin{equation}
 k(X,X') := \frac{k_{MI}(X,X')}{\sqrt{k_{MI}(X,X)k_{MI}(X',X')}}.
 \end{equation}
-Training an SVM with this kernel produces a bag-level classifier for each class, which we will refer to as MIK.
-This procedure is very efficient since the resulting kernel matrix is of size
-number of bags, which is much smaller than a kernel matrix of size number of
-instances, as is commonly used in the
+Training an SVM with this kernel produces a bag-level classifier for each
+class, which we will refer to as MIK.  This procedure is very efficient since
+the resulting kernel matrix is of size number of bags, which is much smaller
+than a kernel matrix of size number of instances, as is commonly used in the
 literature~\citep{andrews2003support,nguyen2010new,zhang2008m3miml}.  Another
 advantage over other methods is, that it uses a single convex optimization,
-whereas other approaches often use iterative algorithms~\citep{andrews2003support} or need to fit complex
-probabilistic models~\citep{zha2008joint}.
+whereas other approaches often use iterative
+algorithms~\citep{andrews2003support} or need to fit complex probabilistic
+models~\citep{zha2008joint}.
 
 While using MIK has many advantages, it produces only an instance-level
 classifier. We propose to transform a bag-level classifier $f_{MI}$ as given by
@@ -203,26 +225,33 @@ bag.
 %TODO one classifier per class!
 
 \subsection{Segment Features}
-To describe single segments, we make use of densely computed SIFT~\citep{lowe2004distinctive} and ColorSIFT~\citep{van2009evaluating} features, from which
-we compute bag of visual word histograms. Additionally, we use histograms of oriented gradients~\citep{dalal2005histograms} on the segments.
-We use RBF-kernels for all of the features,
-constructing one MI-kernel per feature. These are then combined using multiple kernel
-learning to produce a single kernel matrix. This kernel matrix can then be used for all classes,
-making classification particularly efficient.
+
+To describe single segments, we make use of densely computed
+SIFT~\citep{lowe2004distinctive} and ColorSIFT~\citep{van2009evaluating}
+features, from which we compute bag of visual word histograms. Additionally, we
+use histograms of oriented gradients~\citep{dalal2005histograms} on the
+segments.  We use RBF-kernels for all of the features, constructing one
+MI-kernel per feature. These are then combined using multiple kernel learning
+to produce a single kernel matrix. This kernel matrix can then be used for all
+classes, making classification particularly efficient.
 
 \subsection{Combining Segments}\seclabel{combiningsegments}
-The framework described above yields an image-level and a segment-level classification.
-In our setup, each segment might be given multiple labels. %TODO explain!
-To obtain a pixel-level object-class segmentation, we have to combine these. 
-When building the segmentation for a given image, we only consider classes whose presence was predicted on image level.
-Since we do not make use of the ground truth segmentation during training, we cannot learn an optimal combination as 
-in \citet{li2010object} but perform a simple majority vote instead.
-We merge segments into pixel-level class labels by setting
-the label $y_x$ of a pixel $x$ according to
+
+The framework described above yields an image-level and a segment-level
+classification.  In our setup, each segment might be given multiple labels.
+%TODO explain!
+To obtain a pixel-level object-class segmentation, we have to combine these.
+When building the segmentation for a given image, we only consider classes
+whose presence was predicted on image level.  Since we do not make use of the
+ground truth segmentation during training, we cannot learn an optimal
+combination as in \citet{li2010object} but perform a simple majority vote
+instead.  We merge segments into pixel-level class labels by setting the label
+$y_x$ of a pixel $x$ according to
 \begin{equation}
     y_x = \argmax_{y \in Y} \#\{S_i | p \in S_i \land y_{S_i}=y \},
 \end{equation}
-where $Y= \{$car, bike, person$ \}$, $S_i$ enumerates all segments within an %FIXME we didn't describe the dataset yet!
+where $Y= \{$car, bike, person$ \}$, $S_i$ enumerates all segments within an
+%FIXME we didn't describe the dataset yet!
 image and $y_{S_i}$ is the label of segment $S_i$. In words: each pixel is
 assigned the class with the highest number of class segments containing it.
 This simple heuristic yields good results in practice.
@@ -234,16 +263,19 @@ This simple heuristic yields good results in practice.
         \caption{Overview of our method. See text for details.}
 	\figlabel{results}
 \end{figure}
+
 \section{Experiments}
+
 \subsection{Instance-Level Predictions using Multi-Instance Kernels}
-To assess the validity of instance-level predictions using multi-instance kernels, we transform $f_{I}$
-back to an instance-level classifier, using the multi-instance learning
-assumption (\eqref{multi_instance}). We refer to these instance-based MIK predictions
-as MIK-instance. In all experiments, the parameters of the MI-Kernel
-and SVM are adjusted using MIK and then used with both MIK and MIK-instance.
-This facilitates very fast parameter scans since MIK is very efficient to
-compute. Note that we cannot adjust parameters using instance prediction error, as we assume
-no instance labels to be known.
+
+To assess the validity of instance-level predictions using multi-instance
+kernels, we transform $f_{I}$ back to an instance-level classifier, using the
+multi-instance learning assumption (\eqref{multi_instance}). We refer to these
+instance-based MIK predictions as MIK-instance. In all experiments, the
+parameters of the MI-Kernel and SVM are adjusted using MIK and then used with
+both MIK and MIK-instance.  This facilitates very fast parameter scans since
+MIK is very efficient to compute. Note that we cannot adjust parameters using
+instance prediction error, as we assume no instance labels to be known.
 
 \begin{table}
     \centering
@@ -261,23 +293,24 @@ no instance labels to be known.
 \end{table}
 We compared the performance of MIK, MIK-instance and state-of-the-art MI
 methods on the Musk benchmark datasets~\citep{dietterich1997solving}, see
-\Tabref{muskacc}. Results were obtained using 10-fold
-cross-validation. While the computational complexity of MIK-instance is
-very low compared to the other methods, it achieves competitive results.
-Using instance-level labels results in a slight loss of accuracy of
-MIK-instances, compared to MIK\@. This small degradation of performance is quite surprising, since the model was
-not trained to provide any instance-level labels.
-i
+\Tabref{muskacc}. Results were obtained using 10-fold cross-validation. While
+the computational complexity of MIK-instance is very low compared to the other
+methods, it achieves competitive results.  Using instance-level labels results
+in a slight loss of accuracy of MIK-instances, compared to MIK\@. This small
+degradation of performance is quite surprising, since the model was not trained
+to provide any instance-level labels.
+
 For multi-class image segmentation, it is beneficial to have a low witness
 rate, that is only a few instances are assumed to be positive in a positive
 bag. Since an object might not be very prominent in an image, only a fraction
 of segments might correspond to the object.
 \Tabref{musk-witness} compares the witness rates of MIK-instance,
 miSVM~\citep{andrews2003support} and SVR-SVM~\citep{liconvex2010} on the Musk
-datasets. MIK-instance is able to achieve similar accuracy
-with much less witnesses than the other methods.  Note that Musk1 consists of
-very small bags while Musk2 contains significantly larger bags, more similar to the
+datasets. MIK-instance is able to achieve similar accuracy with much less
+witnesses than the other methods.  Note that Musk1 consists of very small bags
+while Musk2 contains significantly larger bags, more similar to the
 image/segment setup.
+
 \begin{table}
     \centering
     \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccc}
@@ -298,9 +331,9 @@ image/segment setup.
 \subsection{Partially Supervised Image Segmentation on Graz 02}
 
 We evaluate the performance of the proposed algorithm for object-class
-segmentation on the challenging Graz-02 dataset.
-This dataset contains 1096 images of three object classes, bike, car and person.
-Each image may contain multiple instances of the same class.
+segmentation on the challenging Graz-02 dataset.  This dataset contains 1096
+images of three object classes, bike, car and person.  Each image may contain
+multiple instances of the same class.
 
 %From each image, we extract overlapping object-like segments using constraint
 %parametric min cuts (CPMC,\citet{carreira2010constrained}). We use the top 200 ranked segments and discard the
@@ -310,17 +343,17 @@ Each image may contain multiple instances of the same class.
 %visual word histograms as well as histograms of oriented
 %gradients~\citet{dalal2005histograms}. We construct one MI-Kernel per
 %feature which are combined using multiple kernel learning.
-We adjusted parameters on a hold-out validation set using bag-level information and used the
-training and test sets as given by the dataset.
-It is straight-forward to extend the binary MIK method to the multi-class
-setting using a one-vs-all strategy.
-We train one multiple kernel learning (MKL) SVM per class using MIK and predict class labels on segment level
-using MIK-instance. If at least one SVM classifies a segment as positive,
-it is associated with the most confident class. Otherwise, it is assigned
-``background'' or no class.
-This yields a classification of each segment into one of four classes: car, bike, person,
-or background. We merge segments into pixel-level class labels as described
-in \Secref{combiningsegments}.
+We adjusted parameters on a hold-out validation set using bag-level information
+and used the training and test sets as given by the dataset.  It is
+straight-forward to extend the binary MIK method to the multi-class setting
+using a one-vs-all strategy.
+We train one multiple kernel learning (MKL) SVM per class using MIK and predict
+class labels on segment level using MIK-instance. If at least one SVM
+classifies a segment as positive, it is associated with the most confident
+class. Otherwise, it is assigned ``background'' or no class.
+This yields a classification of each segment into one of four classes: car,
+bike, person, or background. We merge segments into pixel-level class labels as
+described in \Secref{combiningsegments}.
 
 \begin{figure}[tbp]
 	\begin{center}
@@ -356,10 +389,31 @@ in \Secref{combiningsegments}.
     \caption{Pixel-level accuracy on the Graz-02 dataset.
         \tablabel{tab:graz}}
 \end{table}
-Per-class pixel accuracies are reported in \Tabref{tab:graz}; some qualitative results are shown in \figref{results}. The overall
-accuracy on images labels, which is the task that was actually trained, is $90\%$.
-While the performance of our multiple-instance based approach is far
-from current methods that use pixel-level annotations, whose pixel-level accuracy is around $70\%$~\citep{fulkerson2009class,schulz2011} on pixel-level,
-it can serve as a baseline for research on weakly supervised methods for image segmentation.
 
+Per-class pixel accuracies are reported in \Tabref{tab:graz}; some qualitative
+results are shown in \figref{results}. The overall accuracy on images labels,
+which is the task that was actually trained, is $90\%$.  While the performance
+of our multiple-instance based approach is far from current methods that use
+pixel-level annotations, whose pixel-level accuracy is around
+$70\%$~\citep{fulkerson2009class,schulz2011} on pixel-level, it can serve as a
+baseline for research on weakly supervised methods for object class segmentation.
 
+\section{Summary}
+
+We proposed an algorithm for object-class segmentation using only weak
+supervision based on multiple-instance learning. In our approach each image is
+represented as a bag of object-like proposal segments.
+
+We described a way to extent bag level predictions made by the multi-instance
+kernel method to instance level while remaining competitive with the
+state-of-the-art in bag label prediction.
+
+We evaluated the proposed object-class segmentation method on the challenging
+Graz02 dataset. While not reaching the performance of methods using strong
+supervision, our result can work as a baseline for further research into weakly
+supervised object class segmentation.
+
+%In future work, we plan to scale our approach to much larger image datasets. As much
+%more images with weak annotations are available than with pixel level segmentation,
+%we hope that we can improve upon the state-of-the-art in object-class segmentation
+%by making use of larger bodies of training images.
