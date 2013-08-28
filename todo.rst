@@ -17,18 +17,13 @@ Itm
 weak supervision
 ==================
 multi-class...
-
-MIL: why so bad? much worse than constant?
-
-MIL: reviewer comments DONE (except bad errors)
-MIL: cleanup intro
-MIL: get rid of shorthands DONE
-MIL: fix plots!!! we don't have an upper bound in the conditioned setting..
+kick out?
+korrekturlesen?
 
 pystruct / intro to structured prediction
 ============================================
 Linear, introduce 3/4 methods: one slack, n-slack, subgradient and frank-wolfe
-
+frank wolfe in pystruct text
 Viel mehr generell ueber structured prediction
 
 
