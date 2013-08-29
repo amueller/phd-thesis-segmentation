@@ -156,7 +156,9 @@ structured prediction approach of \Eqref{main_equation} and
 % talk about inference?
 
 
+
 \section{Learning Algorithms for Linear Max-Margin Structured Prediction}
+
 Maximum Margin learning is now one of the most popular methods to learn
 structural models in computervision and in other fields.
 There are several reasons for the popularity of linear maximum margin approaches:
@@ -172,19 +174,19 @@ There are several reasons for the popularity of linear maximum margin approaches
         convex, leading to efficient optimization and unique solutions.
 \end{description}
 
-For learning, a dataset $(x^{(1)}, y^{(1)}),\dotsc,(x^{(k)}, y^{(k)})$, together with a loss
+For learning, a dataset $(x\hoch{1}, y\hoch{1}),\dotsc,(x\hoch{k}, y\hoch{k})$ is given, together with a loss
 \begin{equation}
     \Delta \colon \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}.
 \end{equation}
 The parameters $\theta$ are learned by minimizing the loss based soft-margin
 objective
 \begin{equation}\eqlabel{learning_equation}
-    \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  \ell(x^{(i)}, y^{(i)}, \theta)
+    \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  \ell(x\hoch{i}, y\hoch{i}, \theta)
 \end{equation}
 with regularization parameter $C$. Here $r_i$ is an hinge-loss like upper bound
 on $\Delta$ empirical risk:
 \begin{equation}\eqlabel{loss_augmentation}
-    \ell(x^{(i)}, y^{(i)}, \theta)= [\max_{y \in \mathcal{Y}} \Delta(y^{(i)}, y) + \theta^T \phi(x^{(i)}, y) - \theta^T \phi(x^{(i)}, y^{(i)}]_+
+    \ell(x\hoch{i}, y\hoch{i}, \theta)= [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y) - \theta^T \phi(x\hoch{i}, y\hoch{i}]_+
 \end{equation}
 
 This is an instance of regularized empirical risk minimization, with a
@@ -213,13 +215,42 @@ is is natural to work in a stochastic setting (see \citet{ratliff2007online}).
 %leading to a simple iterative optimization.
 
 \subsection{The N-Slack Cutting Plane Method}\seclabel{n_slack}
+\begin{algorithm*}[t]
+    \caption{N-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
+    \begin{doublespacing}
+    \begin{algorithmic}[1]
+        \Require training samples $\{ (x\hoch{1}, y\hoch{1}), \dots, (x\hoch{k}, y\hoch{k})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
+        \Ensure parameters $\theta$, slack $(\xi_1, \dotsc, \xi_k)$
+        \State $\W_i \leftarrow \emptyset, \xi_i \leftarrow 0 \text{ for all } i=1,\dots,k$
+        \Repeat
+            \For {i=1, \dots, k}
+                \State
+                $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})] $
+                \If{$\displaystyle \delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})] \geq \xi_i + \epsilon$}
+                    \State $\W_i \leftarrow \W_i \cup \{ \hat{y}\} $
+                    \State
+                    \vspace{-15mm}
+                    \begin{align*}
+                    (\theta, \xi_1, \dots, \xi_k) \leftarrow \displaystyle &\argmin_{\theta, \xi_1, \dots, \xi_k} \frac{||\theta||}{2}^2 + C \sum_{i=1}^k\xi_i\\
+                    &\text{s.t. }\forall i=1,\dots,k \forall \hat{y} \in \W_i:\\
+                    &\theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi_i
+                    \end{align*}
+                \EndIf
+            \EndFor
+            \vspace{-10mm}
+            \Until no $\W_i$ changes any more.
+        \end{algorithmic}
+    \end{doublespacing}
+    \end{algorithm*}
+
+
 The n-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
 into a quadratic objective with a combinatorial number of constraints:
 \begin{align}\label{eq:oneslack}
     \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i\\
-    \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
-        &\theta^T \sum_{i=1}^n [\phi(x^i, y^i) - \phi(x^i,
-            \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
+    \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \mathcal{Y}^k:\\
+    &\theta^T \sum_{i=1}^n [\phi(x\hoch{i}, y\hoch{i}) - \phi(x\hoch{i},
+        \hat{y}\hoch{i})] \geq \sum_{i=1}^k \Delta(y\hoch{i}, \hat{y}\hoch{i})
             - \xi
 \end{align}
 As is not feasible to deal with all constraints, only a working set $\W$ of active constraints
@@ -229,56 +260,31 @@ again, with the new set of constraints.
 The algorithm terminates when no constraint can be found that is more violated then $\epsilon$,
 which guarantees a suboptimality of at most $\epsilon$.
 
-The complete algorithm is described in Algorithm~\ref{alg_n_slack}.
-
-%\begin{algorithm*}[t]
-    %\caption{N-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
-    %%FIXME
-
-    %\begin{algorithmic}[1]
-        %\require training samples $\{ (x^{(1)}, y^{(1)}), \dots, (x^{(n)}, y^{(n)})\}$, regularization parameter $c$, stopping tolerance $\epsilon$.
-        %\ensure parameters $\theta$, slack $\xi$
-        %\state $\w \leftarrow \emptyset$
-        %\repeat
-        %\state $(\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + c \xi$\label{restricted}\\
-        %\begin{equation*}
-            %\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \in \w:
-            %\left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^i, \hat{y}^{(i)})] \right \rangle \geq \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)})
-                %- \xi
-            %\end{equation*}
-            %\for {i=1, \dots, n}
-            %\state
-            %$\hat{y}^{(i)} \leftarrow i(x^{(i)}, y^{(i)}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{y}} \sum_{i=1}^n \delta(y^{(i)}, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^{(i)}, \hat{y})] \right \rangle$ \label{get_cutting_plane}
-            %\endfor
-            %\state $\w \leftarrow \w \cup \{ (\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \} $
-            %\state $ \displaystyle \xi' \leftarrow  \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^{(i)}, \hat{y}^{(i)})] \right \rangle$
-            %\until $\xi' - \xi < \epsilon$ \label{convergence_check}
-        %\end{algorithmic}
-    %\end{algorithm*}
-
+The complete procedure is described in Algorithm~\ref{alg_n_slack}.
 
 \subsection{The 1-Slack Cutting Plane Method}\seclabel{one_slack}
 
 \begin{algorithm*}[t]
     \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack}}
     \begin{algorithmic}[1]
-        \require training samples $\{ (x^{(1)}, y^{(1)}), \dots, (x^{(n)}, y^{(n)})\}$, regularization parameter $c$, stopping tolerance $\epsilon$.
-        \ensure parameters $\theta$, slack $\xi$
-        \state $\w \leftarrow \emptyset$
-        \repeat
-            \state $(\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + c \xi$\label{restricted}\\
-            \begin{equation*}
-                \text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \in \w:
-                \left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^i, \hat{y}^{(i)})] \right \rangle \geq \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)})
-                - \xi
-            \end{equation*}
-            \for {i=1, \dots, n}
-                \state
-                $\hat{y}^{(i)} \leftarrow i(x^{(i)}, y^{(i)}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{y}} \sum_{i=1}^n \delta(y^{(i)}, \hat{y}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^{(i)}, y^{(i)}) - \psi(x^{(i)}, \hat{y})] \right \rangle$ \label{get_cutting_plane}
-            \endfor
-            \state $\w \leftarrow \w \cup \{ (\hat{y}^{(1)}, \dots, \hat{y}^{(n)}) \} $
-            \state $ \displaystyle \xi' \leftarrow  \sum_{i=1}^n \delta(y^{(i)}, \hat{y}^{(i)}) - \left \langle \theta, \sum_{i=1}^n [\psi(x^i, y^i) - \psi(x^{(i)}, \hat{y}^{(i)})] \right \rangle$
-        \until $\xi' - \xi < \epsilon$ \label{convergence_check}
+        \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
+        \Ensure parameters $\theta$, slack $\xi$
+        \State $\W \leftarrow \emptyset$
+        \Repeat
+            \State 
+            \vspace{-5mm}
+            \begin{align*}
+            (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi\\
+            &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
+            &\theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
+            \end{align*}
+            \For {i=1, \dots, k}
+                \State
+                $\hat{y}\hoch{i} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane}
+            \EndFor
+            \State $\W \leftarrow \W \cup \{ (\hat{y}\hoch{i}, \dots, \hat{y}\hoch{i}) \} $
+            \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] $
+        \Until $\xi' - \xi < \epsilon$ \label{convergence_check}
     \end{algorithmic}
 \end{algorithm*}
 
@@ -295,7 +301,7 @@ Informally, the one-slack formulation corresponds to joining all training
 samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
 interactions between variables corresponding to different data points, and
 then applying the n-slack algorithm.
-The complete algorithm is described in Algorithm~\ref{alg_one_slack}.
+A detailed description can be found in Algorithm~\ref{alg_one_slack}.
 
 By construction only a single constraint is added in each iteration of
 Algorithm~\ref{alg_one_slack}, leading to very small working sets $\W$.
