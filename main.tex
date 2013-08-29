@@ -26,6 +26,7 @@
 \usepackage[urw-garamond]{mathdesign}
 \usepackage{garamondx}
 \usepackage{xspace}
+\usepackage{setspace}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -57,6 +58,9 @@
 \newcommand\hzero{\ensuremath{p(h_I(x)=0)}}
 \newcommand\bagerror{\ensuremath{p(h_B(X) \neq Y)}}
 \newcommand\instanceerror{\ensuremath{p(h_I(x) \neq y)}}
+
+%\newcommand{\hoch}[1]{^{(#1)}}
+\newcommand{\hoch}[1]{^{#1}}
 
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}}
 \newcommand{\W}{\mathcal{W}}
@@ -122,20 +126,14 @@ endeavour.
 
 \pagenumbering{arabic}
 
-\chapter{Overview}
 \include{intro}
 
-\chapter{Information Theoretic Clustering}
 \include{itm/paper}
 
-\chapter{Weakly Supervised Object segmentation via Multiple Instance Learning}
 \include{partial_supervision/paper}
-
-\chapter{Concepts and Implementation of Conditional Random Field-based Semantic Segmentation}\label{ch:structured_pystruct}
 
 \include{pystruct/paper}
 
-\chapter{Efficient Exact Learning of Loopy CRFs}
 
 \include{exact_learning/paper}
 
