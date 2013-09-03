@@ -27,7 +27,7 @@ structured prediction, in particular in maximum margin methods. We will then
 accompany this by a description of our open source implementation of these
 algorithms, \pystruct.
 
-\section{Basic Concepts in Structured Prediction}
+\section{Basic Concepts in Structured Prediction}\seclabel{basics_structured_prediction}
 
 Structured prediction can be defined as making a prediction $f(x)$ by maximizing a
 compatibility function $g$ between an input $x$ and possible labels
@@ -61,7 +61,7 @@ In the following, we will only discuss this multivatiate case. In general, $n$ i
 for different inputs $x$, such as image with different number of (super) pixels.
 We will ignore this in our notation to simplify the presentation.
 
-\subsection{Factor Graphs and the Relation to Graphical Models}
+\subsection{Factor Graphs and the Relation to Graphical Models}\seclabel{factor_graphs}
 % one factor graph per instance?
 In the case when $y$ is multivariate, a very general and widely used method to
 specify the structure of a model, and therefore $\Phi$, is using \emph{factor
@@ -360,38 +360,45 @@ to make the algorithm more efficient:
 
 
 \section{Casting Structured Prediction into Software}\label{sec:api}
+
 Unfortunately only few implementations are publicly
 available---many applications are based on the non-free implementation
 of~\citet{joachims2009cutting}.
-Our implementation, \pystruct, aims at providing a high-quality implementation
-with an easy-to-use interface, in the high-level Python language.  This allows
-practitioners to efficiently test a range of models, as well as allowing
+We provide an implementation, \pystruct, which aims at providing a high-quality
+code with an easy-to-use interface, in the high-level Python language.  This
+allows practitioners to efficiently test a range of models, as well as allowing
 researchers to compare to baseline methods much more easily than this is
 possible with current implementations.  \pystruct is BSD-licensed, allowing
 modification and redistribution of the code, as well as use in commercial
 applications.  By embracing paradigms established in the scientific Python
 community and reusing the interface of the widely-used {\sc scikit-learn}
 library~\citep{pedregosa2011scikit}, \pystruct can be used in existing
-projects, replacing standard classifiers.  The online documentation and
+projects, replacing standard classifiers. The online documentation and
 examples help new users understand the somewhat abstract ideas behind
 structured prediction.
+We will base the experiments in the rest of this work on the algorithms
+implemented in \pystruct.
 
-Using the above formulation, learning can be broken down into three sub-problems:
+Using the formulation of structured prediction introduced in
+\Secref{basics_structured_prediction}, learning can be broken down into three
+sub-problems:
 \begin{enumerate*}
-    \item Optimizing the objective with respect to $\theta$.
     \item Encoding the structure of the problem in a joint feature function $\Phi$.
-    \item Solving the maximization problem in Equation~\ref{eq:main_equation}.
+    \item Solving the loss-augmented prediction problem in Equation~\eqref{loss_augmentation}.
+    \item Optimizing the objective \Eqref{learning_equation} with respect to $\theta$.
 \end{enumerate*}
-The later two problems are usually tightly coupled, as the maximization in
+The first two problems are usually tightly coupled, as the maximization in
 Equation~\ref{eq:main_equation} is usually only feasible by exploiting the
-structure of $\Phi$, while the first one is usually treated as independent.
+structure of $\Phi$, as described in \Secref{factor_graphs}. The last problem,
+finding $\theta$, on the other hand, is usually treated as independent.
 \pystruct takes an object-oriented approach to decouple the task-dependent
 implementation of 2. and 3. from the general algorithms used to solve 1.
 
 Estimating $\theta$ is done in \texttt{learner} classes, which currently
 support cutting plane algorithms for structural support vector
-machines~(SSVMs), subgradient methods for SSVMs, the structured perceptron and
-latent variable SSVMs. The cutting plane implementation uses the {\sc cvxopt}
+machines~(SSVMs), the Block-Coordinate Frank Wolfe (BCFW) algorithm for SSVMs,
+subgradient methods for SSVMs, the structured perceptron and latent variable
+SSVMs. The cutting plane implementation uses the {\sc cvxopt}
 package \citep{dahl2006cvxopt} for quadratic optimization.
 
 Encoding the structure of the problem is done using \texttt{model} classes, which
@@ -406,9 +413,9 @@ LibDAI}~\citep{Mooij_libDAI_10}, QPBO fusion moves~\citep{rother2007optimizing},
 and {\sc AD$^3$}~\citep{martins2011augmented}. It also includes an interface to
 a general purpose linear programming solver from \textsc{cvxopt}~\cite{dahl2006cvxopt}.
 
-Table~\ref{table:comparision} lists algorithms and models that are implemented in \pystruct and
-compares them to other public structured prediction libraries, together with
-the programming language and the project license.
+Table~\ref{table:comparision} lists algorithms and models that are implemented
+in \pystruct and compares them to other public structured prediction libraries,
+together with the programming language and the project license.
 
 
 \begin{table}[t]
@@ -425,14 +432,16 @@ Package &     Language &     License&\multicolumn{4}{c}{Algorithms}&\multicolumn
 
 \bottomrule
 \end{tabularx}
-    \caption{\label{table:comparision}Comparison of structured prediction software packages. CP stands
-for cutting plane optimization of SSVMs~\citep{joachims2009cutting}, SG for
-online subgradient optimization of SSVMs~\citep{ratliff2007online}, LV for
-latent variable SSVMs~\citep{yu2009learning}, ML for maximum likelihood
-learning, Chain for chain-structured models
-with pairwise interactions, Graph for arbitrary graphs with pairwise
-interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
-{\footnotesize $^1$\pystruct itself is BSD licensed, but uses the GPL-licensed package {\sc cvxopt} for cutting-plane learning.}
+    \caption{\label{table:comparision}Comparison of structured prediction
+        software packages. CP stands for cutting plane optimization of
+        SSVMs~\citep{joachims2009cutting}, SG for online subgradient
+        optimization of SSVMs~\citep{ratliff2007online}, LV for latent variable
+        SSVMs~\citep{yu2009learning}, ML for maximum likelihood learning, Chain
+        for chain-structured models with pairwise interactions, Graph for
+        arbitrary graphs with pairwise interactions, and LDCRF for latent
+        dynamic CRF~\citep{morency2007latent}.  {\footnotesize $^1$\pystruct
+        itself is BSD licensed, but uses the GPL-licensed package {\sc cvxopt}
+    for cutting-plane learning.}
 }
 \end{table}
 \vfill
@@ -440,13 +449,14 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
 
 \subsection{Project Goals}\label{sec:goals}
 
-\paragraph{Completeness}\pystruct aims at providing full pipelines that can be
-    used in applications. It contains model formulation for many typical
-    applications.  This is in contrast to \svmstruct that provides no
-    models at all, requiring the user to develop significant amounts of code, even
-    for simple tasks.
+\paragraph{Completeness}
+    \pystruct aims at providing complete predictors that can be used directly in
+    applications. It contains model formulation for many typical scenarios.
+    This is in contrast to \svmstruct that provides no models at all, requiring the
+    user to develop significant amounts of code, even for simple tasks.
 
-\paragraph{Modularity} \pystruct separates the algorithms of parameter estimation and
+\paragraph{Modularity}
+    \pystruct separates the algorithms for parameter estimation and
      inference from the task-dependent formulation of $\Phi$. This allows
      practitioners, for example in computer vision or natural language
      processing, to improve their model without changing any optimization
@@ -457,6 +467,9 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
 \paragraph{Efficiency}
      While \pystruct focuses on usability, providing efficient and competative
      implementations is important to allow fast prototyping and scaling to
+     large datasets. \pystruct achieves the same runtime performance
+     as the popular \svmstruct model for cutting plane algorithms, and
+     provides implementations of the BCFW and Subgradient methods that scale to
      large datasets.
 
 \paragraph{Documentation and Examples}
@@ -467,16 +480,18 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
      easy comparison with the literature.
 
 \paragraph{Testing}
-     \pystruct contains a testing-suite with 80\% line-coverage. It also employs continuous integration
-     to ensure stability and seamless user experience.
+     \pystruct contains a testing-suite with 80\% line-coverage. It also
+     employs continuous integration to ensure stability and seamless user
+     experience.
 
 \paragraph{Integration}
-     To improve usability, \pystruct is interoperable with other numeric and scientific Python projects,
-     such as {\sc scikit-learn}~\citep{pedregosa2011scikit},
-     {\sc mahotas}~\citep{coelho:mahotas}, {\sc gensim}~\citep{rehurek_lrec}, and {\sc scikit-image}.
-     This allows users to build powerful applications with little effort. In
-     particular, most of the model-selection methods of {\sc scikit-learn} can be used
-     directly with \pystruct.
+     To improve usability, \pystruct is interoperable with other numeric and
+     scientific Python projects, such as {\sc
+     scikit-learn}~\citep{pedregosa2011scikit},
+     {\sc mahotas}~\citep{coelho:mahotas}, {\sc gensim}~\citep{rehurek_lrec},
+     and {\sc scikit-image}.  This allows users to build powerful applications
+     with little effort. In particular, most of the model-selection methods of
+     {\sc scikit-learn} can be used directly with \pystruct.
 
 
 \subsection{Usage Example: Semantic Image Segmentation}\label{sec:examples}
@@ -498,8 +513,8 @@ interactions, and LDCRF for latent dynamic CRF~\citep{morency2007latent}.
 %% listing, training time, accuracy, comparision with kraehenbuehl
 %TODO snakes
 
-Conditional random fields are an important tool for semantic image
-segmentation.  We demonstrate how to learn an $n$-slack support
+We demonstrate the use of \pystruct on the task of semantic image segmentation,
+the main focus of this work. The example shows how to learn an $n$-slack support
 vector machine on a superpixel-based CRF on the popular Pascal dataset. We use
 unary potentials generated using TextonBoost
 from \citet{krahenbuhl2012efficient}. The superpixels are generated using SLIC~\citep{achanta2012slic}.%
@@ -554,8 +569,8 @@ a high-level interface in a dynamic programming language.
 
 \begin{figure}
 \centering
-\includegraphics[width=.45\textwidth]{times_MNIST}
-\includegraphics[width=.45\textwidth]{accs_MNIST}
+\includegraphics[width=.49\textwidth]{times_MNIST}
+\includegraphics[width=.49\textwidth]{accs_MNIST}
 \caption{Runtime comparison of \pystruct and \svmstruct for multi-class
     classification.
 }
@@ -566,12 +581,19 @@ a high-level interface in a dynamic programming language.
 %TODO experiments!!
 
 \section{Summary}
+Im this chapter, we introduced basic concepts of structured prediction. In particular, we discussed
+Structured Support Vector Machines, a max-margin approach for training linear predictors for
+structured data. %TODO comparison of algorithms?
+We gave a description of several popular learning algorithms, together with their theoretical
+runtime bounds and practical considerations.
 %TODO summarize structured prediction
-This chapter introduced \pystruct, a modular structured learning and prediction library in Python.
-\pystruct is geared towards ease of use, while providing efficient implementations.
+We also introduced \pystruct, our modular structured learning and prediction library in Python.
+\pystruct is geared towards ease of use, while providing efficient implementations and will be the
+basis of our further experiments.
 \pystruct integrates itself into the scientific Python eco-system, making it easy to use with
 existing libraries and applications.
-Currently, \pystruct focuses on max-margin and perceptron-based approaches. In the future,
-we plan to integrate other paradigms, such as sampling-based learning~\citep{wick2011samplerank},
-surrogate objectives (for example pseudo-likelihood), and approaches that allow for a better integration
-of inference and learning~\citep{meshi2010learning}.
+Currently, \pystruct focuses on max-margin and perceptron-based approaches.
+In the future, we plan to integrate other paradigms, such as sampling-based
+learning~\citep{wick2011samplerank}, surrogate objectives (for example
+pseudo-likelihood), and approaches that allow for a better integration of
+inference and learning~\citep{meshi2010learning}.
