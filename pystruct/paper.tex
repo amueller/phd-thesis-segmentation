@@ -37,7 +37,7 @@ $y$~\citep{nowozin2011structured}:
 \end{equation}
 The computation of $y$ in the above equation is often referred to as inference
 or prediction.
-While using arbitrary functions is possible, and was expored
+While using arbitrary functions is possible, and was explored
 in some recent works % TODO cite dtf, conditional neural fields
 most current approaches use linear functions, leading to:
 \begin{equation}\eqlabel{main_equation}
@@ -57,7 +57,7 @@ While $y$ could be a complicated like a parsing tree or the geometric
 configuration of a molecule, many setting, such as the image segmentation
 setting we are interested, can be reduced to the case where $y$ is a vector of
 discrete labels $\mathcal{Y} = \{1, \dotsc, k\}^n$.
-In the following, we will only discuss this multivatiate case. In general, $n$ is often different
+In the following, we will only discuss this multivariate case. In general, $n$ is often different
 for different inputs $x$, such as image with different number of (super) pixels.
 We will ignore this in our notation to simplify the presentation.
 
@@ -124,7 +124,7 @@ apply efficient optimization procedures for the maximization in
 \Eqref{main_equation} by exploiting the graph structure of the factor graph.
 
 This approach to structured prediction is closely related to a probabilistic
-approach using \emph{graphical models}.  Probabilistical graphical models are a
+approach using \emph{graphical models}.  Probabilistic graphical models are a
 tool to express factorizations of probability distributions.  Similar to
 \Eqref{log_factor_graph}, the joint probability distribution over a
 multi-variate random variable $y$ can be expressed using a factor-graph:
@@ -136,7 +136,7 @@ where
     Z_x = \sum_{y' \in \mathcal{Y}} \prod_{F \in \mathcal{F}} \exp\left(\psi(x, y'_{N_F})\right)
 \end{equation}
 is the normalization constant of the conditional distribution over $y$.
-If $f$ is choosen as in \Eqref{linear_psi}, then the resulting distribution
+If $f$ is chosen as in \Eqref{linear_psi}, then the resulting distribution
 belongs to the exponential family.
 
 The most probable prediction $y$ is given as $\argmax_{y \in \mathcal{Y}}p(y|x)$.
@@ -160,14 +160,14 @@ structured prediction approach of \Eqref{main_equation} and
 \section{Learning Algorithms for Max-Margin Structured Prediction}
 
 Maximum Margin learning is now one of the most popular methods to learn
-structural models in computervision and text processing.
+structural models in computer vision and text processing.
 There are several reasons for the popularity of linear maximum margin approaches:
 \begin{description}
     \item[Loss-sensitivity] In contrast to probabilistic approaches, maximum margin learning approaches can directly
         minimize a user-specified loss.
     \item[Feasibility] If the loss decomposes over the factor graph that
         specifies $g$, then learning is feasible as soon as the maximization
-        over $y$ in \Eqref{main_equation} can be caried out.
+        over $y$ in \Eqref{main_equation} can be carried out.
     \item[Generalization] The maximum margin principle yields generalization
         bounds using the effective complexity~\citep{taskar2003max}.
     \item[Strong Convexity] The resulting optimization problem is strongly
@@ -196,7 +196,7 @@ a central part of all maximum-margin based learning algorithms, and is referred 
 as loss-augmented prediction. For complex models, such as the ones used for
 image segmentation, this optimization often dominates the learning process in
 terms of computational complexity.
-Therefore, it is often desireable to find learning algorithms that converge with
+Therefore, it is often desirable to find learning algorithms that converge with
 as little optimizations of the loss-augmented prediction problem as possible.
 
 There are several popular algorithms to solve \Eqref{learning_equation}. We
@@ -334,7 +334,7 @@ problem has to be solve much more often until convergence.
 to make the algorithm more efficient:
 \begin{description}
     \item[Constraint Pruning] Members of the working set $\W$ can become inactive during learning.
-        If a constraint has been inactive for a number of itertions, it is removed from $\W$, leading
+        If a constraint has been inactive for a number of iterations, it is removed from $\W$, leading
         to smaller problem sizes.
     \item[Inference Caching] In the one-slack algorithm, each constraint is
         created using a combination of loss-augmented prediction results.
@@ -465,7 +465,7 @@ Package &     Language &     License&\multicolumn{4}{c}{Algorithms}&\multicolumn
      array of applications.
 
 \paragraph{Efficiency}
-     While \pystruct focuses on usability, providing efficient and competative
+     While \pystruct focuses on usability, providing efficient and competitive
      implementations is important to allow fast prototyping and scaling to
      large datasets. \pystruct achieves the same runtime performance
      as the popular \svmstruct model for cutting plane algorithms, and
@@ -552,7 +552,7 @@ approximately 30 minutes using a single i7 core.
 \subsection{Experiments}\label{sec:benchmarks}
 While \pystruct focuses on usability and covers a wide range of applications, it is also
 important that the implemented learning algorithms run in acceptable time.
-In this section, we compare our implementation of the one-slack cutting plance
+In this section, we compare our implementation of the one-slack cutting plane
 algorithm with the implementation in \svmstruct.
 We compare performance of the Crammer-Singer multi-class SVM with respect to
 learning time and accuracy on the MNIST dataset of handwritten digits.
@@ -590,7 +590,7 @@ runtime bounds and practical considerations.
 We also introduced \pystruct, our modular structured learning and prediction library in Python.
 \pystruct is geared towards ease of use, while providing efficient implementations and will be the
 basis of our further experiments.
-\pystruct integrates itself into the scientific Python eco-system, making it easy to use with
+\pystruct integrates itself into the scientific Python ecosystem, making it easy to use with
 existing libraries and applications.
 Currently, \pystruct focuses on max-margin and perceptron-based approaches.
 In the future, we plan to integrate other paradigms, such as sampling-based
