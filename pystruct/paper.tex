@@ -160,7 +160,7 @@ structured prediction approach of \Eqref{main_equation} and
 \section{Learning Algorithms for Max-Margin Structured Prediction}
 
 Maximum Margin learning is now one of the most popular methods to learn
-structural models in computervision and in other fields.
+structural models in computervision and text processing.
 There are several reasons for the popularity of linear maximum margin approaches:
 \begin{description}
     \item[Loss-sensitivity] In contrast to probabilistic approaches, maximum margin learning approaches can directly
@@ -186,7 +186,7 @@ objective
 with regularization parameter $C$. Here $r_i$ is an hinge-loss like upper bound
 on $\Delta$ empirical risk:
 \begin{equation}\eqlabel{loss_augmentation}
-    \ell(x\hoch{i}, y\hoch{i}, \theta)= [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y) - \theta^T \phi(x\hoch{i}, y\hoch{i}]_+
+    \ell(x\hoch{i}, y\hoch{i}, \theta) = [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y) - \theta^T \phi(x\hoch{i}, y\hoch{i}]_+
 \end{equation}
 
 This is an instance of regularized empirical risk minimization, with a
@@ -205,9 +205,29 @@ cutting plane algorithms, a stochastic primal subgradient algorithm, and
 recently proposed stochastic dual coordinate descent method.
 
 \subsection{Stochastic Subgradient Descent}\seclabel{subgradient}
-Arguably the most straight-foward way to approach \Eqref{learning_equation} is using subgradient descent.
-In light of the complexity of solving the loss-augmented prediction problem in \Eqref{loss_augmentation},
-is is natural to work in a stochastic setting (see \citet{ratliff2007online}).
+Arguably the most straight-foward way to approach \Eqref{learning_equation} is
+using subgradient descent.  In light of the complexity of solving the
+loss-augmented prediction problem in \Eqref{loss_augmentation}, is is natural
+to work in a stochastic setting (see \citet{ratliff2007online}).
+Given a model through $\phi$ and a set of parameters $\theta$, a subgradient
+considering a single training example $(x\hoch{i}, y\hoch{i})$
+can be computed simply by solving the loss-augmented prediction problem:
+\begin{align}
+    &\frac{d}{d\theta} \left [ \frac{1}{2} ||\theta||^2 + C \ell(x\hoch{i}, y\hoch{i}, \theta) \right ] \ni C\left [ \phi(x\hoch{i}, \hat{y}) - \phi(x\hoch{i}, y\hoch{i}) \right]+ \theta\\
+    &\text{with }\hat{y} \in \argmax_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y)
+\end{align}
+The most commonly used update has the simple form
+\begin{equation}
+    \theta \leftarrow (1 - \eta_t) \theta - \eta_t C \left [\phi(x\hoch{i}, \hat{y}) - \phi(x\hoch{i}, y\hoch{i})\right]
+\end{equation}
+Where $\eta_t$ is a sequence of learning rates.
+%Theoretical convergence guarantees of \ldots can be given whenever \ldots,
+but in practice the choice of $\eta_t$ is often strongly influences the convergence behavior.
+Many practitioners adopted the sequence proposed for binary SVMs in the Pegasos algorithm~\citep{pegasos}:
+%\begin{equation}
+
+%\end{equation}
+
 %\citep{ratliff2007online} derive convergence rates for a stochastic version of the subgradient of  Equation~\ref{mainequation}:
 %\begin{equation}\label{subgradient}
     %g := \phi(x_i, y) - \phi(x_i, y_i) + \theta / C
@@ -489,8 +509,10 @@ tuple consisting of input features and a graph representation.
 \begin{listing}[t]
 \begin{pythoncode}
 model = crfs.EdgeFeatureGraphCRF(
-    class_weight=inverse_frequency, symmetric_edge_features=[0, 1],
-    antisymmetric_edge_features=[2], inference_method='qpbo')
+            class_weight=inverse_frequency,
+            symmetric_edge_features=[0, 1],
+            antisymmetric_edge_features=[2],
+            inference_method='qpbo')
 
 ssvm = learners.NSlackSSVM(model, C=0.01, n_jobs=-1)
 ssvm.fit(X, Y)

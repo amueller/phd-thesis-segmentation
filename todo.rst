@@ -25,13 +25,14 @@ pystruct / intro to structured prediction
 
 Linear DONE
 introduce 3/4 methods:
-one slack,
-n-slack,
-subgradient
+one slack DONE
+n-slack DONE 
+subgradient STARTED
 and frank-wolfe
 
-Table run-time comparisons?
+Table complexity comparisons?
 frank wolfe in pystruct text
+talk about parallelization
 
 Viel mehr generell ueber structured prediction DONE (vorerst)
 Graphiken?
@@ -46,6 +47,10 @@ TO WRITE: comparison of learning algs for large-scale
 ========================================================
 Dataset? Applications?
 Segmentation? Chains ocr / colln?
+
+
+TO WRITE: Importance of conditioning in edges!
+===============================================
 
 TO WRITE: latent variable stuff?
 =================================
