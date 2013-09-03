@@ -4,6 +4,11 @@ most important parts: intros and conclusions!
 Give detailed results for MSRC and Pascal
 Visualize Weights wherever possible!
 bibliography consistency! (first names?)
+Datasets? Ganz an den Anfang hinter die introduction?
+
+STRUKTUR: zuerste conditioning wichtig oder zuerst exact lernen? NYU?
+Erstmal modelle, auswerten, ... dann am schluss: so haben wir das exakt gemacht.
+oder erst exakt, dann "gut mal, das ist wichtig bei den modellen", dann nyu?
 
 Itm
 =====
@@ -33,6 +38,7 @@ and frank-wolfe
 Table complexity comparisons?
 frank wolfe in pystruct text
 talk about parallelization
+mehr ueber modelle? conditional?
 
 Viel mehr generell ueber structured prediction DONE (vorerst)
 Graphiken?
@@ -40,8 +46,11 @@ Graphiken?
 exact learning
 =================
 referenzen auf algorithm davor
+viele todos!!! schlecht geschrieben :-/ 
 multi-label
 snakes?
+snakes / multi-label bei caching!? caching koennen wir sogar auf sequence
+ausprobieren!
 
 TO WRITE: comparison of learning algs for large-scale
 ========================================================
