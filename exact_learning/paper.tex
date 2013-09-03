@@ -2,20 +2,20 @@
 
 \section{Introduction}
 % Remove duplication with pystruct intro
-As discussed previously, many computer vision algorithms empoy conditional random
-field models on pixel or superpixel graphs. These graphs by nature contain loops,
-making exact prediction and loss-augmented prediction intractable.
-As loss-augmented prediction is a centreal step in the learning algorithms
+As discussed previously, %TODO in the introduction? in pystruct chapter?
+ many computer vision algorithms employ conditional random
+field models on pixel or superpixel graphs. These graphs, by nature, contain loops,
+making exact prediction and loss-augmented prediction in general intractable.
+As loss-augmented prediction is a central step in the learning algorithms
 discussed in Chapter~\ref{ch:structured_pystruct}
-in the inference then lead to approximate learning.
+in the inference lead to only approximate learning.
 
-In this chapter, we investigate the impact of these approximations in
-the one-slack learning algorithms in the context of semantic 
+In this chapter, we investigate the necessity and consequences of these
+approximations in the one-slack learning algorithms in the context of semantic
 image segmentation. We show that despite inference being deemed intractable in
-loopy superpixel models, we are able to learn a structured support vector machine
-for this application exactly.
-learning a model of pairwise
-We will evaluate our approach on the popular MSRC-21 and Pascal VOC datasets.
+loopy superpixel models, we are able to learn a pairwise conditional random
+field model using a structured support vector machine exactly for this task.
+We evaluate our approach on the popular MSRC-21 and Pascal VOC datasets. % and nyu?
 
 The contribution of this chapter is threefold:
 \begin{itemize}
@@ -27,6 +27,7 @@ The contribution of this chapter is threefold:
     \item We demonstrate that using a combination of under-generating and exact
         inference methods, we can learn an SSVM exactly in a practical
         application, even in the presence of loopy graphs.
+    % also fusion moves is pretty good?
 \end{itemize}
 
 While empirically exact learning yields results comparable to those using
@@ -37,19 +38,18 @@ designing the model for the application at hand.
 
 \section{Related Work}
 
-Max margin learning for structured prediction was introduced by
-\citet{taskar2003max}, in the form of maximum-margin Markov models. Later, this
-framework was generalized to structural support vector machines by
-\citet{tsochantaridis2006large}. Both works assume tractable loss-augmented
-inference.
+%Max margin learning for structured prediction was introduced by
+%\citet{taskar2003max}, in the form of maximum-margin Markov models. Later, this
+%framework was generalized to structural support vector machines by
+%\citet{tsochantaridis2006large}. Both works assume tractable loss-augmented
+%inference.
 
-Currently the most widely used method is the one-slack cutting plane formulation
-introduced by \citet{joachims2009cutting}.
-This work also introduced the caching of constraints,
-which serves as a basis for our work. We improve upon their caching scheme, and in
-particular consider how it interacts with approximate inference algorithms.
+%Currently the most widely used method is the one-slack cutting plane formulation
+%introduced by \citet{joachims2009cutting}.
+%This work also introduced the caching of constraints,
+%which serves as a basis for our work. We improve upon their caching scheme, and in
+%particular consider how it interacts with approximate inference algorithms.
 
-% TODO learning for inference?
 Recently, there has been much research in learning structured prediction models
 where standard exact inference techniques are not applicable.
 The influence of approximate inference on structural support vector machine
@@ -60,9 +60,12 @@ feasible solutions, and optimal solutions from a larger (unfeasible) set,
 respectively.
 \citet{finley2008training} demonstrate that over-generating approaches---in
 particular linear programming (LP)---perform best on the considered model.
-They also give a bound on the empirical risk for this case.
-In contrast, we aim at optimizing the non-relaxed objective directly, yielding
-the original, tighter bound.
+They also show that learning parameters with the LP relaxation minimizes a
+bound on the empirical risk when extending the target domain to the relaxed
+solutions.
+In contrast, we aim at optimizing the non-relaxed objective directly, minimizing
+the original empirical risk. This is an important difference, as relaxed solutions
+are usually not acceptable in practice.
 
 As using LP relaxations was considered too costly for typical computer vision
 approaches, later work employed graph-cuts~\citep{szummer2008learning} or Loopy
@@ -81,10 +84,13 @@ of parameters efficiently.
 While these approaches show great promise, in particular for pixel-level or
 large-scale problems, they perform approximate inference and learning, and do
 not relate their results back to the original SSVM objective they approximate.
+It is unclear how they compare to standard structured prediction approaches
+on real-world applications.
 
 
-\section{Efficient Cutting Plane Training of SSVMs}\label{learning}
-
+\section{Learnint Structure Support Vector Machines with Approximate Inference}
+%TODO ueberleitung zu approximate inference
+% wir machen one-slack und I ist jetzt das und das.
 There are two groups of inference procedures, as identified in
 \citet{finley2008training}: under-generating and over-generating approaches.
 An under-generating approach satisfies $I(x^i, y^i, \theta) \in
@@ -94,8 +100,7 @@ hand, will solve the loss-augmented inference in line~\ref{get_cutting_plane}
 exactly, but for a larger set $\hat{\mathcal{Y}} \supset \mathcal{Y}$, meaning
 that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.  We will elaborate on
 the properties of under-generating and over-generating inference procedures in
-Section~\ref{bounds}.
-
+Section~\ref{bounds}. %TODO Filler sentence? wat?
 
 \subsection{Bounding the Objective}\label{bounds}
 Even using approximate inference procedures, several statements
@@ -134,6 +139,8 @@ This way, we can empirically bound the estimation error, using only approximate
 inference.
 We will now describe how we can further use 1. to both speed up and improve learning.
 
+
+\section{Efficient Cutting Plane Training of SSVMs}\label{learning}
 
 \subsection{Combining Inference Procedures}\label{combining}
 The cutting plane method described in Section~\ref{cutting_plane} relies only
@@ -208,9 +215,10 @@ o_{\W}))$ times more often than the strategy from \citet{joachims2009cutting} in
 worst case.
 
 
-
 \section{Experiments}
+
 \subsection{Inference Algorithms}
+
 As a fast under-generating inference algorithm, we used $\alpha$-expansion
 moves based on non-submodular graph-cuts using Quadratid Pseudo-Boolean
 Optimization (QPBO)~\citep{rother2007optimizing}.  This move-making strategy
@@ -252,7 +260,7 @@ branch-and-bound.
 %TODO
 
 \subsection{Image Segmentation}
-We choose superpixel-based semantic image segmentation as sample application
+We use superpixel-based semantic image segmentation as our application as this is our task of interest. %TODO formulation
 for this work.  CRF based models have a history of success in this application,
 with much current work investigating models and
 learning~\citep{gonfaus2010harmony, lucchi2013learning, ladicky2009associative,
