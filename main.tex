@@ -1,4 +1,4 @@
-\documentclass[12pt,toc=bibnumbered, a4paper,twoside]{scrbook}
+\documentclass[12pt,toc=bibnumbered, a4paper,twoside,DIV=calc]{scrbook}
 
 \usepackage{hyperref}
 \usepackage{epsfig}
@@ -11,6 +11,7 @@
 \usepackage{amsthm}
 \usepackage{multicol}
 \usepackage{pslatex}
+\usepackage{microtype}
 \usepackage{natbib}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -26,7 +27,8 @@
 \usepackage[urw-garamond]{mathdesign}
 \usepackage{garamondx}
 \usepackage{xspace}
-\usepackage{setspace}
+\onehalfspacing
+\KOMAoptions{DIV=last}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -69,9 +71,10 @@
 \newcommand{\given}{\, | \,}
 \newcommand{\B}[1]{\textbf{#1}}
 
+
 \begin{document}
 
-
+\begin{spacing}{1}
 \begin{titlepage}
 \begin{center}
 \vspace*{1in}
@@ -90,7 +93,7 @@ Friedrich-Willhelm Universit\"at Bonn \par
 \pagenumbering{Roman}
 
 \tableofcontents
-
+\end{spacing}
 %\listoffigures
 %\listoftables
 \chapter*{Zusammenfassung}
