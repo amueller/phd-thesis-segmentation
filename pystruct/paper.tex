@@ -18,6 +18,7 @@ structured prediction.
 We will base the experiments in the rest of this work on the algorithms
 implemented in \pystruct.
 
+\subsection{Library Structure and Content}
 Using the formulation of structured prediction introduced in
 \Secref{basics_structured_prediction}, learning can be broken down into three
 sub-problems:
@@ -45,6 +46,7 @@ compute $\Phi$ and encode the structure of the problem.
 \pystruct implements models for many common cases, such as multi-class and
 multi-label classification, conditional random fields with constant or
 data-dependent pairwise potentials, and several latent variable models.
+
 The maximization for finding $y$ in Equation~\ref{eq:main_equation} is carried out
 using highly optimized implementations from external libraries. \pystruct
 includes support for using {\sc OpenGM}~\citep{kappes2013comparative}, {\sc
@@ -52,39 +54,48 @@ LibDAI}~\citep{Mooij_libDAI_10}, QPBO fusion moves~\citep{rother2007optimizing},
 and {\sc AD$^3$}~\citep{martins2011augmented}. It also includes an interface to
 a general purpose linear programming solver from \textsc{cvxopt}~\cite{dahl2006cvxopt}.
 
-Table~\ref{table:comparision} lists algorithms and models that are implemented
-in \pystruct and compares them to other public structured prediction libraries,
-together with the programming language and the project license.
+Table~\ref{table:comparision_algorithms} lists learning algorithms that are implemented
+in \pystruct and compares them to other public structured prediction libraries.
+Table~\ref{table:comparision_models} lists 
 
-
+%TODO what about language / license?
 \begin{table}[t]
 \centering
-\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccccccc}
+\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccc}
 \toprule
-Package &     Language &     License&\multicolumn{4}{c}{Algorithms}&\multicolumn{3}{c}{Models} \\
-\cmidrule(r){1-1} \cmidrule(r){2-2} \cmidrule(r){3-3} \cmidrule(r){4-7} \cmidrule{8-10}
-&             &&                     \footnotesize{CP}& \footnotesize{SG}& \footnotesize{LV}& \footnotesize{ML}& \footnotesize{Chain} & \footnotesize{Graph} & \footnotesize{LDCRF}\\
-\pystruct&      Python &       BSD$^1$  & \x$^1$    & \x      & \x   & \o & \x     & \x     & \x \\
-\svmstruct & C++ & non-free         & \x    & \o      & \x   & \o & \o     & \o     & \o \\
-\sc{Dlib}         & C++        & boost            & \x    & \x      & \o   & \o & \x     & \x     &\o\\
-\sc{CRFsuite}     & C++        & BSD              & \o    & \o      & \o   & \x & \x     & \o     &\o\\
+Package       & Cutting Plane& SSGD & BCFW & Latent SSVM & Perceptron & ML\\
+\cmidrule(r){1-1} \cmidrule(r){2-7}
+\pystruct     & \x        & \x   & \x   & \x          & \x         & \o\\
+\svmstruct    & \x        & \o   & \o   & \x          & \o         & \o\\
+\sc{Dlib}     & \x        & \x   & \o   & \o          & \x         & \o\\
+\sc{CRFsuite} & \o        & \o   & \o   & \o          & \x         & \x\\
 
 \bottomrule
 \end{tabularx}
-    \caption{\label{table:comparision}Comparison of structured prediction
-        software packages. CP stands for cutting plane optimization of
-        SSVMs~\citep{joachims2009cutting}, SG for online subgradient
-        optimization of SSVMs~\citep{ratliff2007online}, LV for latent variable
-        SSVMs~\citep{yu2009learning}, ML for maximum likelihood learning, Chain
-        for chain-structured models with pairwise interactions, Graph for
-        arbitrary graphs with pairwise interactions, and LDCRF for latent
-        dynamic CRF~\citep{morency2007latent}.  {\footnotesize $^1$\pystruct
-        itself is BSD licensed, but uses the GPL-licensed package {\sc cvxopt}
-    for cutting-plane learning.}
-}
+    \caption{\label{table:comparision_algorithms}Comparison of learning
+        algorithms implemented in popular structured prediction software
+        packages. SSGD stochastic subgradient decent learning of SSVMs, BCFW for
+    Block-Coordinate Frank-Wolfe, Latent SSVM for latent variable SSVMs, ML for
+    maximum likelihood learning}
 \end{table}
-\vfill
-\pagebreak
+
+\begin{table}[t]
+\centering
+\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccc}
+\toprule
+Package        &Multi-Class &  Multi-Label & Chain & Graph & LSVM  &LDCRF \\
+\cmidrule(r){1-1} \cmidrule(r){2-7}
+\pystruct      & \x         & \x           & \x    & \x    & \x    & \x    \\
+\svmstruct     & \x         & \x           & \o    & \o    & \o    & \o    \\
+\sc{Dlib}      & \x         & \o           & \x    & \x    & \o    & \o    \\
+\sc{CRFsuite}  & \o         & \o           & \x    & \o    & \o    & \o    \\
+
+\bottomrule
+\end{tabularx}
+    \caption{\label{table:comparision_models}Comparison of models implemented
+    in popular structured prediction software packages. LSVM stands for the latent multi-class SVM, LDCRF for
+    latend dynamic conditional random fields.}
+\end{table}
 
 \subsection{Project Goals}\label{sec:goals}
 
