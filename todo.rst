@@ -36,7 +36,7 @@ subgradient STARTED
 and frank-wolfe
 
 Table complexity comparisons?
-frank wolfe in pystruct text
+frank wolfe in pystruct text (kind of done)
 talk about parallelization
 mehr ueber modelle? conditional?
 

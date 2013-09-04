@@ -15,15 +15,15 @@ approach.
 Most models employ linear energy functions of unary and pairwise interactions,
 trained using structural support vector machines (SSVMs). While linear energy
 functions lead to learning problems that are convex in the parameters, complex
-constraints complicate their optimization. 
+constraints complicate their optimization.  % computation? ;)
 
 In recent years there has been a wealth of research in methods for learning
 structured prediction, as well as in their application in areas such as natural
-language processing and computer vision (see \citet{nowozin2011structured} for
-an overview).
+language processing and computer vision (see \citet{nowozin2011structured} %TODO ms book too!
+for an overview).
 %
-In this chapter, we will first introduce the concepts and algorithms used in
-structured prediction, in particular in maximum margin methods. We will then
+In this chapter, we first introduce the concepts and algorithms used in
+structured prediction, in particular in maximum margin methods. We 
 accompany this by a description of our open source implementation of these
 algorithms, \pystruct.
 
@@ -35,11 +35,12 @@ $y$~\citep{nowozin2011structured}:
 \begin{equation}
     f(x) = \argmax_{y \in \mathcal{Y}} g(x, y)
 \end{equation}
-The computation of $y$ in the above equation is often referred to as inference
+Finding $y$ in the above equation is often referred to as inference
 or prediction.
-While using arbitrary functions is possible, and was explored
-in some recent works % TODO cite dtf, conditional neural fields
-most current approaches use linear functions, leading to:
+Most current approaches use linear functions,
+with some notable examples: % TODO cite dtf, conditional neural fields
+
+The linear approach leads to
 \begin{equation}\eqlabel{main_equation}
     f(x) = \argmax_{y \in \mathcal{Y}}\  \theta^T \Phi(x, y).
 \end{equation}
@@ -47,22 +48,23 @@ Here, $y$ is a \emph{structured} label, $\Phi$ is a joint feature function of
 $x$ and $y$, and $\theta$ are parameters of the model. \emph{Structured} means
 that $y$ is more complicated than a single output class, for example a label
 for each word in a sentence or a label for each pixel in an image.
-Learning structured prediction means learning the parameters $\theta$ from training data.
-The particular model that is used is completely encoded in $\Phi(x, y)$, which manifests
-the relation between input $x$ and output $y$. As $\mathcal{Y}$ is typically very large,
-it is crucial to exploit the particular form of $\Phi(x, y)$ to solve the inference problem
-of \Eqref{main_equation}.
+Learning structured prediction means learning the parameters $\theta$ from
+training data.  The particular model that is used is completely encoded in
+$\Phi(x, y)$, which manifests the relation between input $x$ and output $y$. As
+$\mathcal{Y}$ is typically very large, it is crucial to exploit the particular
+form of $\Phi(x, y)$ to solve the inference problem of \Eqref{main_equation}.
 
 While $y$ could be a complicated like a parsing tree or the geometric
 configuration of a molecule, many setting, such as the image segmentation
 setting we are interested, can be reduced to the case where $y$ is a vector of
 discrete labels $\mathcal{Y} = \{1, \dotsc, k\}^n$.
-In the following, we will only discuss this multivariate case. In general, $n$ is often different
-for different inputs $x$, such as image with different number of (super) pixels.
-We will ignore this in our notation to simplify the presentation.
+In the following, we will only discuss this multivariate case. In general, $n$
+is often different for different inputs $x$, such as image with different
+number of (super) pixels.  We will ignore this in our notation to simplify the
+presentation.
 
 \subsection{Factor Graphs and the Relation to Graphical Models}\seclabel{factor_graphs}
-% one factor graph per instance?
+% one factor graph per instance? FIXME
 In the case when $y$ is multivariate, a very general and widely used method to
 specify the structure of a model, and therefore $\Phi$, is using \emph{factor
 graphs}. A factor graph is a bipartite graph $(\mathcal{V}, \mathcal{F},
