@@ -236,7 +236,6 @@ Many practitioners adopted the sequence proposed for binary SVMs in the Pegasos 
 %\end{equation}
 %leading to a simple iterative optimization.
 
-\subsection{The N-Slack Cutting Plane Method}\seclabel{n_slack}
 \begin{algorithm*}[t]
     \caption{N-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
     \begin{doublespacing}
@@ -265,6 +264,7 @@ Many practitioners adopted the sequence proposed for binary SVMs in the Pegasos 
     \end{doublespacing}
     \end{algorithm*}
 
+\subsection{The N-Slack Cutting Plane Method}\seclabel{n_slack}
 
 The n-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
 into a quadratic objective with a combinatorial number of constraints:
@@ -358,6 +358,22 @@ to make the algorithm more efficient:
 \end{description}
 
 
-\subsection{Stochastic Dual Coordinate Descent}\seclabel{dual_coordinate_descent}
+\subsection{The STLJSP algorithm}\seclabel{dual_coordinate_descent}
+Very recently, two groups independently derived a very performant new algorithm.
+\citet{shalev2012proximal} investigated stochastic dual coordinate descent applied
+to structured support vector machines. \citet{lacoste2012block} started from the Frank-Wolfe algorithm %TODO details
+and derived a block-coordinate version, where each block corresponds to the constraints associated with a single training example.
+Both groups showed that closed-form line search is possible, and, surprisingly ended up with
+the exact same algorithm and closely related convergence guarantees.
+The algorithm processes a single training example at a time, and can be applied while
+remaining completely in the primal domain, making it applicable to very large datasets.
+We will refer to the algorithm as STDJSP, after the authors of the two papers, to honor
+the independent development of the two views of the method.
+The STDJSP algorithm has properties that are very simliar to stochastic subgradient descent,
+but with two main advantages:
+\begin{description}
+\item[Stopping Criterion] Both views of STLJSP give rise to a dual objective, which can be used as a theoretically sound stopping criterion.
+\item[Learning Rate] TODO %TODO
+\end{description}
 
 

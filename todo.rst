@@ -39,6 +39,9 @@ Table complexity comparisons?
 frank wolfe in pystruct text (kind of done)
 talk about parallelization
 mehr ueber modelle? conditional?
+ALGORITM table update, dlib algorithms?
+do we call FrankWolfe STLJSP
+another row in library table: bundle methods
 
 Viel mehr generell ueber structured prediction DONE (vorerst)
 Graphiken?
