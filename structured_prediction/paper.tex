@@ -204,9 +204,21 @@ as little optimizations of the loss-augmented prediction problem as possible.
 There are several popular algorithms to solve \Eqref{learning_equation}. We
 will briefly review three standard algorithms: the one-slack and n-slack
 cutting plane algorithms, a stochastic primal subgradient algorithm, and
-recently proposed stochastic dual coordinate descent method.
+recently proposed stochastic dual coordinate descent method, which we
+will now describe in detail.
+
+% discuss online vs batch?
+
+We will also discuss practical implications and implementation.
+One particularly intereresting aspect is parallelization.
+In image segmentation tasks, inference is often costly, making loss-augmented
+prediction the most expensive step in learning. In \emph{batch} algorithms,
+which process all training examples at once, loss-augmented inference is
+embarassingly parallel, leading to a linear speed-up in terms of processes.
+
 
 \subsection{Stochastic Subgradient Descent}\seclabel{subgradient}
+
 Arguably the most straight-foward way to approach \Eqref{learning_equation} is
 using subgradient descent.  In light of the complexity of solving the
 loss-augmented prediction problem in \Eqref{loss_augmentation}, is is natural
@@ -226,15 +238,15 @@ Where $\eta_t$ is a sequence of learning rates.
 %Theoretical convergence guarantees of \ldots can be given whenever \ldots,
 but in practice the choice of $\eta_t$ is often strongly influences the convergence behavior.
 Many practitioners adopted the sequence proposed for binary SVMs in the Pegasos algorithm~\citep{pegasos}:
-%\begin{equation}
-
-%\end{equation}
-
-%\citep{ratliff2007online} derive convergence rates for a stochastic version of the subgradient of  Equation~\ref{mainequation}:
-%\begin{equation}\label{subgradient}
-    %g := \phi(x_i, y) - \phi(x_i, y_i) + \theta / C
-%\end{equation}
-%leading to a simple iterative optimization.
+\begin{equation}
+    \eta_t = \frac{C}{t},
+\end{equation}
+which has been found to work well in many settings.
+Implementation of the algorithm is straight-forward, but unfortunately
+detecting convergence is often tricky.
+It is possible to use mini-batches instead of processing one sample at a time
+to make use of multiple processors for inference. Unfortunately this negatively
+affects the number of iterations needed, and did not provide a benefit in practice.
 
 \begin{algorithm*}[t]
     \caption{N-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
@@ -281,10 +293,24 @@ and in each iteration adds the most violated constraint to $\W$. Then, the quadr
 again, with the new set of constraints.
 The algorithm terminates when no constraint can be found that is more violated then $\epsilon$,
 which guarantees a suboptimality of at most $\epsilon$.
-
+%
 The complete procedure is described in Algorithm~\ref{alg_n_slack}.
+The n-slack cutting plane can be understood is a sequential algorithm that processes each sample individually.
+While this allows fast process of the optimization with respect to the number of calls to loss-augmented prediction,
+individual iterations become more and more costly. The number of the constraints is usually a multiple of
+the number of training  samples, which leads to very large QP problems, even for medium sized datasets.
+This makes the algorithm often slow in practice.
+%
+Solving the quadratic programm can be accelerated using several techniques. We found that
+agressively removing constraints that are inactive or contribute little to the solution
+often makes the difference between the algorithm being practical or not.
+Another possible technique is to update the quadratic program only every $r$ samples, for some
+small integer $r$ (\citet{joachims2009cutting} suggest 100). While this strategy on its own
+did not provide a large benefits in our experiments, it allows for parallel loss-augmented
+inference on these mini-batches of size $r$.
 
 \subsection{The 1-Slack Cutting Plane Method}\seclabel{one_slack}
+
 
 \begin{algorithm*}[t]
     \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack}}
@@ -324,12 +350,13 @@ samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
 interactions between variables corresponding to different data points, and
 then applying the n-slack algorithm.
 A detailed description can be found in Algorithm~\ref{alg_one_slack}.
-
+%
 By construction only a single constraint is added in each iteration of
 Algorithm~\ref{alg_one_slack}, leading to very small working sets $\W$.
-This has the advantage of making the solution of the QP faster, as it contains
-less variables. The down-side of this is that the loss-augmented prediction
-problem has to be solve much more often until convergence.
+This has the advantage of making the solution of the QP faster, as it contains far
+less variables than in the $n$-slack algorithm. The down-side of this is that
+the loss-augmented prediction problem has to be solve much more often until
+convergence.
 %TODO convergence rate
 
 \citet{joachims2009cutting}, who introduced the method, proposed two enhancements
@@ -357,23 +384,34 @@ to make the algorithm more efficient:
         prediction $I$.
 \end{description}
 
-
+ 
 \subsection{The STLJSP algorithm}\seclabel{dual_coordinate_descent}
+
 Very recently, two groups independently derived a very performant new algorithm.
 \citet{shalev2012proximal} investigated stochastic dual coordinate descent applied
 to structured support vector machines. \citet{lacoste2012block} started from the Frank-Wolfe algorithm %TODO details
-and derived a block-coordinate version, where each block corresponds to the constraints associated with a single training example.
-Both groups showed that closed-form line search is possible, and, surprisingly ended up with
-the exact same algorithm and closely related convergence guarantees.
-The algorithm processes a single training example at a time, and can be applied while
-remaining completely in the primal domain, making it applicable to very large datasets.
-We will refer to the algorithm as STDJSP, after the authors of the two papers, to honor
-the independent development of the two views of the method.
-The STDJSP algorithm has properties that are very simliar to stochastic subgradient descent,
-but with two main advantages:
+and derived a block-coordinate version, where each block corresponds to the
+constraints associated with a single training example.  Both groups showed that
+closed-form line search is possible, and, surprisingly ended up with the exact
+same algorithm and closely related convergence guarantees.  The algorithm
+processes a single training example at a time, and can be applied while
+remaining completely in the primal domain, making it applicable to very large
+datasets.  We will refer to the algorithm as STLJSP, after the authors of the
+two papers, to honor the independent development of the two views of the
+method.
+%
+The STDJSP algorithm has properties that are very simliar to
+stochastic subgradient descent, but with two main advantages:
 \begin{description}
-\item[Stopping Criterion] Both views of STLJSP give rise to a dual objective, which can be used as a theoretically sound stopping criterion.
-\item[Learning Rate] TODO %TODO
+\item[Stopping Criterion] Both views of STLJSP give rise to a dual objective,
+    which can be used as a theoretically sound stopping criterion.
+\item[Learning Rate] While there are several theoretical results on choosing
+    the learning rate in stochastic subgradient descent, choosing a concrete
+    schedule is often problematic in practice. By using analytic line-search,
+    STLJSP removes the need for any learning rate parameter, making application
+    of the algorithm in practice much simpler.
 \end{description}
 
-
+The STLJSP algorithm is usually used with weighted averaging, as this is known
+to improve performance in similar stochastic algorithms, and empirically
+improves convergence. % TODO weighted averaging here? or at SGD?
