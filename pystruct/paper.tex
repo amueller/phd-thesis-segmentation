@@ -63,7 +63,7 @@ Table~\ref{table:comparision_models} lists
 \centering
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccc}
 \toprule
-Package       & Cutting Plane& SSGD & BCFW & Latent SSVM & Perceptron & ML\\
+Package       & Cutting Plane& SSGD & STLJSP & Latent SSVM & Perceptron & ML\\
 \cmidrule(r){1-1} \cmidrule(r){2-7}
 \pystruct     & \x        & \x   & \x   & \x          & \x         & \o\\
 \svmstruct    & \x        & \o   & \o   & \x          & \o         & \o\\
@@ -74,9 +74,9 @@ Package       & Cutting Plane& SSGD & BCFW & Latent SSVM & Perceptron & ML\\
 \end{tabularx}
     \caption{\label{table:comparision_algorithms}Comparison of learning
         algorithms implemented in popular structured prediction software
-        packages. SSGD stochastic subgradient decent learning of SSVMs, BCFW for
-    Block-Coordinate Frank-Wolfe, Latent SSVM for latent variable SSVMs, ML for
-    maximum likelihood learning}
+        packages. SSGD stochastic subgradient decent learning of SSVMs, STLJSP is
+        as described in \secref{dual_coordinate_descent}, Latent SSVM for latent variable SSVMs, ML for
+        maximum likelihood learning.}
 \end{table}
 
 \begin{table}[t]
