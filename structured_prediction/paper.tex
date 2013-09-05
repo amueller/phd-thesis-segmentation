@@ -401,31 +401,33 @@ to make the algorithm more efficient:
 \subsection{The SZLJSP algorithm}\seclabel{dual_coordinate_descent}
 \begin{algorithm*}[t]
     \caption{Shalev-Shwartz Zhang Lacoste-Julien Jaggi Schmidt Pletscher\label{alg_szljsp}}
+    \begin{doublespacing}
     \begin{algorithmic}[1]
         \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
         \Ensure parameters $\theta$
-        \State $\theta_0, \theta_0\hoch{i}, \bar{\theta}_0  \leftarrow \mathbf{0}, \ell_0, \ell_0\hoch{i} \leftarrow 0 $
-        \State $t \leftarrow 0$
+        \State $\theta_0, \theta_0\hoch{i}, \bar{\theta}_0  \leftarrow \mathbf{0},\quad \ell_0, \ell_0\hoch{i}, t \leftarrow 0 $
         \Repeat
             \State $t \leftarrow t + 1$
-            \State Pick $i$ uniformly at random from \{1, \dotsc, k\}.
-            \State $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})] $
-            \State Compute parameter and loss updates based on sample $i$:\\
-                $\theta_s \leftarrow \frac{C}{n} \phi(\hat{y})$
-                $l_s \leftarrow \frac{C}{n} \delta(y\hoch{i}, \hat{y})$
-            \State Compute optimum step size $\eta$:\\
-                $\eta \leftarrow \frac{(\theta_t\hoch{i} - \theta_s)^T \theta_t + C (\ell_s - \ell_k\hoch{i} )}{\lVert \theta_t\hoch{i} - \theta_s \rVert^2}$ and clip to $[0, 1]$
-            \State Update per-sample parameters and loss estimate:\\
-                $\theta_{t+1}\hoch{i} \leftarrow (1 - \eta) \theta_{t+1}\hoch{i} + \eta \theta_s$\\
-                $\ell_{t+1}\hoch{i} \leftarrow (1 - \eta) \theta_{t+1}\hoch{i} + \eta \ell_s$
-            \State Update global parameters and loss estimate:\\
-                $\theta_{t+1} \leftarrow \theta_{t+1} + \theta_{t}\hoch{i} - \theta_{t+1}\hoch{i}$\\
-                $\ell_{t+1} \leftarrow \ell_{t+1} + \ell_{t}\hoch{i} - \ell_{t+1}\hoch{i}$
-            \State Compute the weighted running average:\\
-            $\bar{\theta}_{t+1} = \frac{k}{k + 2} \bar{\theta}_k + \frac{2}{k + 2}\theta_{k+1}$
-            \vspace{-5mm}
-        \Until
+            \State Pick $i$ uniformly at random from $\{1, \dotsc, k\}$.
+            \State Perform loss-augmented prediction on sample $i$:
+            \Statex[2]   $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \Delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$
+            \State Compute parameter and loss updates based on sample $i$:
+            \Statex[2]     $\theta_s \leftarrow \frac{C}{n} \phi(\hat{y})$
+            \Statex[2]     $l_s \leftarrow \frac{C}{n} \delta(y\hoch{i}, \hat{y})$
+            \State Compute optimum step size $\eta$:
+            \Statex[2]    $\eta \leftarrow \frac{(\theta_t\hoch{i} - \theta_s)^T \theta_t + C (\ell_s - \ell_k\hoch{i} )}{\lVert \theta_t\hoch{i} - \theta_s \rVert^2}$ and clip to $[0, 1]$
+            \State Update per-sample parameters and loss estimate:
+            \Statex[2]    $\theta_{t+1}\hoch{i} \leftarrow (1 - \eta) \theta_{t+1}\hoch{i} + \eta \theta_s$
+            \Statex[2]    $\ell_{t+1}\hoch{i} \leftarrow (1 - \eta) \theta_{t+1}\hoch{i} + \eta \ell_s$
+            \State Update global parameters and loss estimate:
+            \Statex[2]   $\theta_{t+1} \leftarrow \theta_{t+1} + \theta_{t}\hoch{i} - \theta_{t+1}\hoch{i}$
+            \Statex[2]   $\ell_{t+1} \leftarrow \ell_{t+1} + \ell_{t}\hoch{i} - \ell_{t+1}\hoch{i}$
+            \State Compute the weighted running average:
+            \Statex[2] $\bar{\theta}_{t+1} = \frac{k}{k + 2} \bar{\theta}_k + \frac{2}{k + 2}\theta_{k+1}$
+        \Until $(\theta - \theta_s)^T\theta - \ell + \ell_s \leq \epsilon$
+        \Statex where $\theta_s$ and $\ell_s$ are recomputed over the whole dataset.
     \end{algorithmic}
+    \end{doublespacing}
 \end{algorithm*}
 
 Very recently, two groups independently derived a very performant new algorithm.
