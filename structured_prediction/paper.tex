@@ -19,13 +19,15 @@ constraints complicate their optimization.  % computation? ;)
 
 In recent years there has been a wealth of research in methods for learning
 structured prediction, as well as in their application in areas such as natural
-language processing and computer vision (see \citet{nowozin2011structured} %TODO ms book too!
-for an overview).
+language processing and computer vision (see \citet{nowozin2011structured}
+for an introduction and \citet{blake2011markov} for a recent survey).
 %
 In this chapter, we first introduce the concepts and algorithms used in
 structured prediction, in particular in maximum margin methods. We 
 accompany this by a description of our open source implementation of these
 algorithms, \pystruct.
+
+\pagebreak %FIXME maybe?
 
 \section{Basic Concepts in Structured Prediction}\seclabel{basics_structured_prediction}
 
@@ -52,15 +54,15 @@ Learning structured prediction means learning the parameters $\theta$ from
 training data.  The particular model that is used is completely encoded in
 $\Phi(x, y)$, which manifests the relation between input $x$ and output $y$. As
 $\mathcal{Y}$ is typically very large, it is crucial to exploit the particular
-form of $\Phi(x, y)$ to solve the inference problem of \Eqref{main_equation}.
+form of $\Phi(x, y)$ to solve the prediction problem of \Eqref{main_equation}.
 
 While $y$ could be a complicated like a parsing tree or the geometric
 configuration of a molecule, many setting, such as the image segmentation
-setting we are interested, can be reduced to the case where $y$ is a vector of
+setting we are interested in, can be reduced to the case where $y$ is a vector of
 discrete labels $\mathcal{Y} = \{1, \dotsc, k\}^n$.
 In the following, we will only discuss this multivariate case. In general, $n$
-is often different for different inputs $x$, such as image with different
-number of (super) pixels.  We will ignore this in our notation to simplify the
+is often different for different inputs $x$, such as images with different
+numbers of pixels.  We will ignore this in our notation to simplify the
 presentation.
 
 \subsection{Factor Graphs and the Relation to Graphical Models}\seclabel{factor_graphs}
@@ -79,17 +81,17 @@ variables $y$, that is $\mathcal{V} = \{1, \dotsc, n\}$, and each factor node
 is associated with a \emph{factor} or \emph{potential function} $\psi_F$.
 A factor graph represents a function\footnote{Traditionally factor graphs
  represent \emph{products} of factors.  To simplify presentation, we work
-directly in the log-domain of the product representation.}
+directly in the log-domain with respect to the more standard product representation.}
 \begin{equation}\eqlabel{log_factor_graph}
     g(x, y) = \sum_{F \in \mathcal{F}} \psi_F(x, y_{N_F})
 \end{equation}
 Here, $y_{N_F}$ denotes the entries of $y$ indexed by $N_F$.
 
 The benefit of using the factor graph representation is that it decomposes the
-function over the variables of interest $y_i$ and makes. This allows us to
-apply efficient optimization procedures for the maximization in
+function over subsets the variables of interest $y_i$. This allows us to apply
+efficient optimization procedures for the prediction problem in
 \Eqref{main_equation} by exploiting the graph structure of the factor graph.
-
+%
 To obtain a linear function as in \Eqref{main_equation} from
 \Eqref{log_factor_graph}, we can simply let each $\psi$ be of the form
 \begin{equation}\eqlabel{general_psi}
@@ -121,12 +123,8 @@ In words, $\Phi_F$ is build simply by creating a vector of
 $|\mathcal{Y}_{N_F}|$ times the size of $\phi_F$, which is zero everywhere,
 except for the place corresponding to $y_{N_F}$. %TODO unclear!
 
-The benefit of using the factor graph representation is that it allows us to
-apply efficient optimization procedures for the maximization in
-\Eqref{main_equation} by exploiting the graph structure of the factor graph.
-
-This approach to structured prediction is closely related to a probabilistic
-approach using \emph{graphical models}.  Probabilistic graphical models are a
+This approach to structured prediction is closely related to 
+approachs using \emph{probabilistic graphical models}.  Probabilistic graphical models are a
 tool to express factorizations of probability distributions.  Similar to
 \Eqref{log_factor_graph}, the joint probability distribution over a
 multi-variate random variable $y$ can be expressed using a factor-graph:
@@ -141,7 +139,7 @@ is the normalization constant of the conditional distribution over $y$.
 If $f$ is chosen as in \Eqref{linear_psi}, then the resulting distribution
 belongs to the exponential family.
 
-The most probable prediction $y$ is given as $\argmax_{y \in \mathcal{Y}}p(y|x)$.
+The most probable prediction $y$ is given as $\displaystyle \argmax_{y \in \mathcal{Y}}p(y|x)$.
 As $Z$ is independent of $y$, and by the monotonicity of the logarithm,
 maximizing $p(y|x)$ is equivalent to maximizing $g(x,y)$ over $y$ in
 \Eqref{log_factor_graph}. Therefore, from a prediction standpoint, the two
@@ -159,13 +157,13 @@ structured prediction approach of \Eqref{main_equation} and
 
 
 
-\section{Learning Algorithms for Max-Margin Structured Prediction}
+\section{Learning Algorithms for Max-Margin Structured Prediction}\seclabel{learning_algorithms}
 
-Maximum Margin learning is now one of the most popular methods to learn
-structural models in computer vision and text processing.
+Maximum margin learning has become one of the most popular methods to learn
+classifiers and structural models in computer vision and text processing.
 There are several reasons for the popularity of linear maximum margin approaches:
 \begin{description}
-    \item[Loss-sensitivity] In contrast to probabilistic approaches, maximum margin learning approaches can directly
+    \item[Loss-sensitivity] In contrast to most probabilistic approaches, maximum margin learning approaches can directly
         minimize a user-specified loss.
     \item[Feasibility] If the loss decomposes over the factor graph that
         specifies $g$, then learning is feasible as soon as the maximization
@@ -185,8 +183,8 @@ objective
 \begin{equation}\eqlabel{learning_equation}
     \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  \ell(x\hoch{i}, y\hoch{i}, \theta)
 \end{equation}
-with regularization parameter $C$. Here $r_i$ is an hinge-loss like upper bound
-on $\Delta$ empirical risk:
+with regularization parameter $C$. Here $\ell$ is an hinge-loss like upper bound
+on the empirical $\Delta$-risk:
 \begin{equation}\eqlabel{loss_augmentation}
     \ell(x\hoch{i}, y\hoch{i}, \theta) = [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y) - \theta^T \phi(x\hoch{i}, y\hoch{i}]_+
 \end{equation}
@@ -202,20 +200,23 @@ Therefore, it is often desirable to find learning algorithms that converge with
 as little optimizations of the loss-augmented prediction problem as possible.
 
 There are several popular algorithms to solve \Eqref{learning_equation}. We
-will briefly review three standard algorithms: the one-slack and n-slack
-cutting plane algorithms, a stochastic primal subgradient algorithm, and
-recently proposed stochastic dual coordinate descent method, which we
-will now describe in detail.
+will briefly review three standard algorithms, and a very recent one: the
+$1$-slack and $n$-slack cutting plane algorithms, a stochastic primal subgradient
+algorithm, and recently proposed stochastic dual coordinate descent method,
+which we will now describe in detail.
 
 % discuss online vs batch?
 
-We will also discuss practical implications and implementation.
-One particularly intereresting aspect is parallelization.
+We will also discuss practical implications and implementation.  One
+particularly intereresting aspect is the difference between \emph{sequention}
+(or \emph{online}) and \emph{batch} algorithms.  Batch algorithms process the
+whole dataset before adjusting parameters, while sequential algorithms process
+one sample at a time, and adjust parameters incrementally.
 In image segmentation tasks, inference is often costly, making loss-augmented
-prediction the most expensive step in learning. In \emph{batch} algorithms,
-which process all training examples at once, loss-augmented inference is
-embarassingly parallel, leading to a linear speed-up in terms of processes.
-
+prediction the most expensive step in learning. This often leads to longer
+run-times for batch algorithms. On the other hand, loss-augmented prediction in
+batch algorithms is embarassingly parallel, allowing the use of multiple
+processors with almost linear speed improvements.
 
 \subsection{Stochastic Subgradient Descent}\seclabel{subgradient}
 
@@ -257,8 +258,9 @@ Implementation of the stochastic subgradient algorithm (with or without
 averaging) is straight-forward, but unfortunately detecting convergence is
 often tricky.
 It is possible to use mini-batches instead of processing one sample at a time
-to make use of multiple processors for inference. Unfortunately this negatively
-affects the number of iterations needed, and did not provide a benefit in practice.
+to make use of multiple processors for loss-augmented prediction. Unfortunately
+this negatively affects the number of iterations needed, and did not provide a
+benefit in our experiments.
 
 \begin{algorithm*}[t]
     \caption{N-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
@@ -290,7 +292,7 @@ affects the number of iterations needed, and did not provide a benefit in practi
 
 \subsection{The N-Slack Cutting Plane Method}\seclabel{n_slack}
 
-The n-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
+The $n$-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
 into a quadratic objective with a combinatorial number of constraints:
 \begin{align}\label{eq:oneslack}
     \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i\\
@@ -299,30 +301,34 @@ into a quadratic objective with a combinatorial number of constraints:
         \hat{y}\hoch{i})] \geq \sum_{i=1}^k \Delta(y\hoch{i}, \hat{y}\hoch{i})
             - \xi
 \end{align}
-As is not feasible to deal with all constraints, only a working set $\W$ of active constraints
+As it is not feasible to deal with all constraints, only a working set $\W$ of active constraints
 is maintained, using the cutting plane method. The algorithm starts with an empty working set,
-and in each iteration adds the most violated constraint to $\W$. Then, the quadratic program is solved
+and repeatedly iterates over the training data. For each sample, the most
+violated constraint is added to $\W$, and the quadratic program is solved
 again, with the new set of constraints.
 The algorithm terminates when no constraint can be found that is more violated then $\epsilon$,
 which guarantees a suboptimality of at most $\epsilon$.
 %
 The complete procedure is described in Algorithm~\ref{alg_n_slack}.
-The n-slack cutting plane can be understood is a sequential algorithm that processes each sample individually.
-While this allows fast process of the optimization with respect to the number of calls to loss-augmented prediction,
-individual iterations become more and more costly. The number of the constraints is usually a multiple of
-the number of training  samples, which leads to very large QP problems, even for medium sized datasets.
-This makes the algorithm often slow in practice.
+The $n$-slack cutting plane is a sequential algorithm that processes each sample
+individually. While this allows fast process of the optimization with respect
+to the number of calls to loss-augmented prediction, individual steps
+become more and more costly. The number of the constraints is usually a
+multiple of the number of training  samples, which leads to very large QP
+problems, even for medium sized datasets. This makes the algorithm often slow
+in practice.
 %
-Solving the quadratic programm can be accelerated using several techniques. We found that
-agressively removing constraints that are inactive or contribute little to the solution
-often makes the difference between the algorithm being practical or not.
-Another possible technique is to update the quadratic program only every $r$ samples, for some
-small integer $r$ (\citet{joachims2009cutting} suggest 100). While this strategy on its own
-did not provide a large benefits in our experiments, it allows for parallel loss-augmented
-inference on these mini-batches of size $r$.
+Solving the quadratic programm can be accelerated using several techniques. We
+found that agressively removing constraints that are inactive or contribute
+little to the solution often makes the difference between the algorithm being
+practical or not.  Another possible technique is to update the quadratic
+program only every $r$ samples, for some small integer $r$
+(\citet{joachims2009cutting} suggest 100). While this strategy on its own did
+not provide a large benefits in our experiments, it allows for parallel
+loss-augmented prediction on these mini-batches of size $r$.
+
 
 \subsection{The 1-Slack Cutting Plane Method}\seclabel{one_slack}
-
 
 \begin{algorithm*}[t]
     \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack}}
@@ -348,7 +354,7 @@ inference on these mini-batches of size $r$.
     \end{algorithmic}
 \end{algorithm*}
 
-The one-slack cutting plane method~\citep{joachims2009cutting} solves the
+The $1$-slack cutting plane method~\citep{joachims2009cutting} solves the
 following reformulation of Equation~\Eqref{learning_equation}:
 \begin{align}\label{eq:oneslack}
     \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
@@ -357,10 +363,10 @@ following reformulation of Equation~\Eqref{learning_equation}:
             \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
             - \xi
 \end{align}
-Informally, the one-slack formulation corresponds to joining all training
+Informally, the $1$-slack formulation corresponds to joining all training
 samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
 interactions between variables corresponding to different data points, and
-then applying the n-slack algorithm.
+then applying the $n$-slack algorithm with a single data point.
 A detailed description can be found in Algorithm~\ref{alg_one_slack}.
 %
 By construction only a single constraint is added in each iteration of
@@ -374,15 +380,16 @@ convergence.
 \citet{joachims2009cutting}, who introduced the method, proposed two enhancements
 to make the algorithm more efficient:
 \begin{description}
-    \item[Constraint Pruning] Members of the working set $\W$ can become inactive during learning.
-        If a constraint has been inactive for a number of iterations, it is removed from $\W$, leading
-        to smaller problem sizes.
-    \item[Inference Caching] In the one-slack algorithm, each constraint is
+    \item[Constraint Pruning] As in the $n$-slack algorithm, members of the
+        working set $\W$ can become inactive during learning.  If a constraint
+        has been inactive for a number of iterations, it is removed from $\W$,
+        leading to smaller problem sizes.
+    \item[Inference Caching] In the $1$-slack algorithm, each constraint is
         created using a combination of loss-augmented prediction results.
         Therefore, each of these predictions can be part of multiple
         constraints during learning.
         To exploit this, we maintain a set $C^i$ of the last $r$ results of
-        loss-augmented inference for each training example $(x^i, y^i)$
+        loss-augmented prediction for each training example $(x^i, y^i)$
         (line~\ref{get_cutting_plane} in Algorithm~\ref{alg_one_slack}).
         For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we
         find
@@ -391,7 +398,7 @@ to make the algorithm more efficient:
                 \phi(x^i, \hat{y})] \]
         by enumeration of $C^i$ and continue until
         line~\ref{convergence_check}.  Only if $\xi' - \xi < \epsilon$, that is
-        the produced constraint is not violated, we return to
+        the produced constraint is not violated stronly enough, we return to
         line~\ref{get_cutting_plane} and actually invoke the loss augmented
         prediction $I$.
 \end{description}
@@ -405,7 +412,7 @@ to make the algorithm more efficient:
     \begin{algorithmic}[1]
         \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
         \Ensure parameters $\theta$
-        \State $\theta_0, \theta_0\hoch{i}, \bar{\theta}_0  \leftarrow \mathbf{0},\quad \ell_0, \ell_0\hoch{i}, t \leftarrow 0 $
+        \State  $\displaystyle \theta_0^{\vphantom{i}}, \theta_0\hoch{i}, \bar{\theta}_0^{\vphantom{i}} \leftarrow \mathbf{0},\quad \ell_0^{\vphantom{i}}, \ell_0\hoch{i}, t \leftarrow 0 $
         \Repeat
             \State $t \leftarrow t + 1$
             \State Pick $i$ uniformly at random from $\{1, \dotsc, k\}$.
@@ -413,7 +420,7 @@ to make the algorithm more efficient:
             \Statex[2]   $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \Delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$
             \State Compute parameter and loss updates based on sample $i$:
             \Statex[2]     $\theta_s \leftarrow \frac{C}{n} \phi(\hat{y})$
-            \Statex[2]     $l_s \leftarrow \frac{C}{n} \delta(y\hoch{i}, \hat{y})$
+            \Statex[2]     $\ell_s \leftarrow \frac{C}{n} \delta(y\hoch{i}, \hat{y})$
             \State Compute optimum step size $\eta$:
             \Statex[2]    $\eta \leftarrow \frac{(\theta_t\hoch{i} - \theta_s)^T \theta_t + C (\ell_s - \ell_k\hoch{i} )}{\lVert \theta_t\hoch{i} - \theta_s \rVert^2}$ and clip to $[0, 1]$
             \State Update per-sample parameters and loss estimate:
@@ -440,8 +447,7 @@ same algorithm and closely related convergence guarantees.  The algorithm
 processes a single training example at a time, and can be applied while
 remaining completely in the primal domain, making it applicable to very large
 datasets.  We will refer to the algorithm as SZLJSP, after the authors of the
-two papers, to honor the independent development of the two views of the
-method.
+two papers.
 %
 The SZLJSP algorithm has properties that are very simliar to
 stochastic subgradient descent, but with two main advantages:
@@ -452,7 +458,7 @@ stochastic subgradient descent, but with two main advantages:
     the learning rate in stochastic subgradient descent, choosing a concrete
     schedule is often problematic in practice. By using analytic line-search,
     SZLJSP removes the need for any learning rate parameter, making application
-    of the algorithm in practice much simpler.
+    of the algorithm much simpler.
 \end{description}
 
 In practice, the SZLJSP algorithm is usually used with the weighted averaging

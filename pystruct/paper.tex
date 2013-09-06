@@ -1,22 +1,23 @@
 \section{Casting Structured Prediction into Software}\label{sec:api}
 
-Unfortunately only few implementations are publicly
-available---many applications are based on the non-free implementation
+Unfortunately only few implementations for learning structured prediction are
+publicly available---many applications are based on the non-free implementation
 of~\citet{joachims2009cutting}.
-We provide an implementation, \pystruct, which aims at providing a high-quality
-code with an easy-to-use interface, in the high-level Python language.  This
-allows practitioners to efficiently test a range of models, as well as allowing
-researchers to compare to baseline methods much more easily than this is
-possible with current implementations.  \pystruct is BSD-licensed, allowing
-modification and redistribution of the code, as well as use in commercial
-applications.  By embracing paradigms established in the scientific Python
-community and reusing the interface of the widely-used {\sc scikit-learn}
-library~\citep{pedregosa2011scikit}, \pystruct can be used in existing
-projects, replacing standard classifiers. The online documentation and
+In this section, we introduce our implementation, \pystruct, which aims at
+providing a high-quality code with an easy-to-use interface, in the high-level
+Python language. This allows practitioners to efficiently test a range of
+models, as well as allowing researchers to compare to baseline methods much
+more easily than this is possible with current implementations. \pystruct is
+BSD-licensed, allowing modification and redistribution of the code, as well as
+use in commercial applications.  By embracing paradigms established in the
+scientific Python community and reusing the interface of the widely-used {\sc
+scikit-learn} library~\citep{pedregosa2011scikit}, \pystruct can be used in
+existing projects, replacing standard classifiers. The online documentation and
 examples help new users understand the somewhat abstract ideas behind
 structured prediction.
-We will base the experiments in the rest of this work on the algorithms
-implemented in \pystruct.
+We base the experiments in the rest of this work on the algorithms
+implemented in \pystruct. In the following, we briefly discuss implementation
+and features of the \pystruct library.
 
 \subsection{Library Structure and Content}
 Using the formulation of structured prediction introduced in
@@ -25,7 +26,7 @@ sub-problems:
 \begin{enumerate*}
     \item Encoding the structure of the problem in a joint feature function $\Phi$.
     \item Solving the loss-augmented prediction problem in Equation~\eqref{loss_augmentation}.
-    \item Optimizing the objective \Eqref{learning_equation} with respect to $\theta$.
+    \item Optimizing the objective in \Eqref{learning_equation} with respect to $\theta$.
 \end{enumerate*}
 The first two problems are usually tightly coupled, as the maximization in
 Equation~\ref{eq:main_equation} is usually only feasible by exploiting the
@@ -36,10 +37,11 @@ implementation of 2. and 3. from the general algorithms used to solve 1.
 
 Estimating $\theta$ is done in \texttt{learner} classes, which currently
 support cutting plane algorithms for structural support vector
-machines~(SSVMs), the Block-Coordinate Frank Wolfe (BCFW) algorithm for SSVMs,
+machines~(SSVMs), the SZLJSP algorithm for SSVMs,
 subgradient methods for SSVMs, the structured perceptron and latent variable
-SSVMs. The cutting plane implementation uses the {\sc cvxopt}
-package \citep{dahl2006cvxopt} for quadratic optimization.
+SSVMs. See \Secref{learning_algorithms} for a detailed description of the
+algorithms. The cutting plane implementation uses the {\sc cvxopt} package
+\citep{dahl2006cvxopt} for quadratic optimization.
 
 Encoding the structure of the problem is done using \texttt{model} classes, which
 compute $\Phi$ and encode the structure of the problem.
@@ -54,16 +56,17 @@ LibDAI}~\citep{Mooij_libDAI_10}, QPBO fusion moves~\citep{rother2007optimizing},
 and {\sc AD$^3$}~\citep{martins2011augmented}. It also includes an interface to
 a general purpose linear programming solver from \textsc{cvxopt}~\cite{dahl2006cvxopt}.
 
-Table~\ref{table:comparision_algorithms} lists learning algorithms that are implemented
-in \pystruct and compares them to other public structured prediction libraries.
-Table~\ref{table:comparision_models} lists 
+Table~\ref{table:comparision_algorithms} and
+Table~\ref{table:comparision_models} list learning algorithms and models that
+are implemented in \pystruct and compares them to other publicly available
+structured prediction libraries.
 
 %TODO what about language / license?
 \begin{table}[t]
 \centering
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccc}
 \toprule
-Package       & Cutting Plane& SSGD & STLJSP & Latent SSVM & Perceptron & ML\\
+Package       & Cutting Plane& SSGD & SZLJSP & Latent SSVM & Perceptron & ML\\
 \cmidrule(r){1-1} \cmidrule(r){2-7}
 \pystruct     & \x        & \x   & \x   & \x          & \x         & \o\\
 \svmstruct    & \x        & \o   & \o   & \x          & \o         & \o\\
@@ -74,7 +77,7 @@ Package       & Cutting Plane& SSGD & STLJSP & Latent SSVM & Perceptron & ML\\
 \end{tabularx}
     \caption{\label{table:comparision_algorithms}Comparison of learning
         algorithms implemented in popular structured prediction software
-        packages. SSGD stochastic subgradient decent learning of SSVMs, STLJSP is
+        packages. SSGD stochastic subgradient decent learning of SSVMs, SZLJSP is
         as described in \secref{dual_coordinate_descent}, Latent SSVM for latent variable SSVMs, ML for
         maximum likelihood learning.}
 \end{table}
@@ -131,7 +134,7 @@ Package        &Multi-Class &  Multi-Label & Chain & Graph & LSVM  &LDCRF \\
 
 \paragraph{Testing}
      \pystruct contains a testing-suite with 80\% line-coverage. It also
-     employs continuous integration to ensure stability and seamless user
+     employs continuous integration to ensure stability and a seamless user
      experience.
 
 \paragraph{Integration}
@@ -193,7 +196,7 @@ constant feature, color similarity, and relative vertical position. The first tw
 are declared to be symmetric with respect to the direction of an edge, the last
 is antisymmetric. The inference method used is QPBO-fusion moves.  Line 5
 creates a \texttt{learner} object that will learn the parameters for the given
-model using the n-slack cutting plane method, and line 6 performs the actual
+model using the $n$-slack cutting plane method, and line 6 performs the actual
 learning.  Using this simple setup, we achieve an accuracy of 30.3 on the
 validation set following the protocol of \citet{krahenbuhl2012efficient}, who
 report 30.2 using a more complex approach. Training the structured model takes
@@ -202,13 +205,13 @@ approximately 30 minutes using a single i7 core.
 \subsection{Experiments}\label{sec:benchmarks}
 While \pystruct focuses on usability and covers a wide range of applications, it is also
 important that the implemented learning algorithms run in acceptable time.
-In this section, we compare our implementation of the one-slack cutting plane
+In this section, we compare our implementation of the $1$-slack cutting plane
 algorithm with the implementation in \svmstruct.
 We compare performance of the Crammer-Singer multi-class SVM with respect to
 learning time and accuracy on the MNIST dataset of handwritten digits.
 While multi-class classification is not very interesting from a structured
 prediction point of view, this problem is well-suited to benchmark the cutting
-plane solvers with respect to accuracy and speed.
+plane solvers, as loss-augmented prediction is trivial.
 
 Results are shown in \Figref{timings}. We report learning times and accuracy for
 varying regularization parameter $C$. The MNIST dataset has 60\,000 training
@@ -227,7 +230,7 @@ a high-level interface in a dynamic programming language.
 \label{fig:timings}
 \end{figure}
 
-\section{Comparing Learning Algorithms}
+%\section{Comparing Learning Algorithms}
 %TODO experiments!!
 
 \section{Summary}

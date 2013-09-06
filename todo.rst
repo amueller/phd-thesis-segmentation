@@ -5,6 +5,7 @@ Give detailed results for MSRC and Pascal
 Visualize Weights wherever possible!
 bibliography consistency! (first names?)
 Datasets? Ganz an den Anfang hinter die introduction?
+Superpixels!!?
 
 STRUKTUR: zuerste conditioning wichtig oder zuerst exact lernen? NYU?
 Erstmal modelle, auswerten, ... dann am schluss: so haben wir das exakt gemacht.
@@ -13,6 +14,9 @@ oder erst exakt, dann "gut mal, das ist wichtig bei den modellen", dann nyu?
 SQUARED AVERAGING!
 
 s/learning rate/step size/g
+
+1-slack und n-slack consistent (one/1, n, $n$)
+
 Itm
 =====
 * clustering: bag of word experiments? Segmentation experiments? mnist experiments?  ONLY MNIST
@@ -30,16 +34,16 @@ korrekturlesen?
 
 intro to structured prediction
 ============================================
-algorithm box SZLJSP
-
+Consistency \phi \Phi
+subgradient learning rate citations?
+examples for non-linear energyies: dft, neural fields
 Table complexity comparisons?
-
 Graphiken?
 
 Pystruct
 ========
+wann fuere ich die abkuerzung SSVM ein?
 mehr ueber modelle? conditional?
-frank wolfe in pystruct text (kind of done)
 another row in library table: bundle methods BMRM ?
 ALGORITM table update, dlib algorithms?
 
