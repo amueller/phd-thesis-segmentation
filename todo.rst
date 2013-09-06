@@ -13,9 +13,9 @@ oder erst exakt, dann "gut mal, das ist wichtig bei den modellen", dann nyu?
 
 SQUARED AVERAGING!
 
-s/learning rate/step size/g
+s/learning rate/step size/g  Done (check again later)
 
-1-slack und n-slack consistent (one/1, n, $n$)
+1-slack und n-slack consistent (one/1, n, $n$)  (done, check again later)
 
 Itm
 =====
@@ -34,18 +34,18 @@ korrekturlesen?
 
 intro to structured prediction
 ============================================
-Consistency \phi \Phi
+Consistency \phi \Phi DONE
 subgradient learning rate citations?
-examples for non-linear energyies: dft, neural fields
 Table complexity comparisons?
 Graphiken?
 
 Pystruct
 ========
-wann fuere ich die abkuerzung SSVM ein?
-mehr ueber modelle? conditional?
+wann fuere ich die abkuerzung SSVM ein? DONE
+mehr ueber modelle? conditional? -> meh erstmal nicht?
 another row in library table: bundle methods BMRM ?
 ALGORITM table update, dlib algorithms?
+Pairwise?! -> meh erstmal nicht ^^
 
 exact learning
 =================
