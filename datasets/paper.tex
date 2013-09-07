@@ -1,0 +1,51 @@
+\chapter{Datasets and Evaluation Methodology}
+This work uses several public datasets for semantic segmentation
+and object class segmentation. This chapter briefly introduces each of the datasets,
+and discusses its characteristic. The datasets we use are among the most well-known
+and most-used datasets in the current semantic segmentation and object class segmentation
+literature.
+
+\section{Graz}
+% really?
+
+\section{Microsoft Research Cambridge Segmentation}
+% intro + description
+The Microsoft Research Cambridge dataset V2 (MSRC-23) was introduced in \citet{shotton2006textonboost}, and
+has been widely used since. It is a dataset for semantic segmentation, and contains annotations for
+several object categories: car, body, face, dog, boat, plane, bike, cow, cat, sheep,
+building, bird, book, chair, horse, and sign. It also contains several ``stuff''
+categories: sky, grass, tree, water, road, flower, and mountain.
+This division is somewhat arbitrary, as some of the object classes also have a ``stuff'' character:
+buildings are often not isolated, but rather whole street-scenes, and books are mostly whole
+shelfs.
+%
+As the dataset contains only very few instances of mountain and horse, we do
+not consider these classes, as is common in the literature. The resulting
+dataset is known as MSRC-21.
+The dataset contains %FIXME
+images in total, usually split into a training set of size , a validation set of size ,
+and a testing set of size .
+
+% characteristics
+The size of the dataset is quite small considering the variety of categories. In particular the
+bird class consists mostly of ducks, swans and geese, but also contains two instances of peacocks
+and one image showing tits. Few samples combined with large intra-class variety introduces considerable
+variance in the performance. Using a fixed training and test set makes comparison with the literature possible,
+but does not solve this problem.
+%
+On the other hand, many of the images obey very similar scene layouts, such as centered cars from the side,
+centered planes on the run way, and centered faces. We will keep with the literature in not exploiting
+this property of the dataset, as it can be considered an unwanted artifact of the dataset collection.
+One striking characteristic of the MSRC dataset is that 
+
+Most of the classes in the MSRC-21 dataset can be well distinguished using local texture.
+This is particularly true for the stuff classes, but also for the animal classes, buildings, and signs.
+Consequently, many approaches use low-level approaches such as texton-boost or random forests as base features,
+as these are particularly well-suited for the dataset.
+
+
+\section{Pascal VOC}
+
+\section{New York University RGB-D Segementation 
+
+\section{Evaluation}
