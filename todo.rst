@@ -53,13 +53,14 @@ Pairwise?! -> meh erstmal nicht ^^
 
 exact learning
 =================
-viele todos!!! schlecht geschrieben :-/ 
 multi-label
 snakes?
 snakes / multi-label bei caching!? caching koennen wir sogar auf sequence ausprobieren!
 implementation details scratchen?
 using linear programming to bound the objective?
-FIX!!! : does not upper bound really... well, we can round... nein doch nicht... wait wat? nochmal nachdenken andy...
+subsection image segmentation: referenz auf davor / intro?
+much more details?
+pascal und msrc ausfuerliche tabellen
 
 
 TO WRITE: comparison of learning algs for large-scale

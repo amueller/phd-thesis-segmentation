@@ -128,7 +128,7 @@ $|\mathcal{Y}_{N_F}|$ times the size of $\phi_F$, which is zero everywhere,
 except for the place corresponding to $y_{N_F}$. %TODO unclear!
 
 This approach to structured prediction is closely related to 
-approachs using \emph{probabilistic graphical models}.  Probabilistic graphical models are a
+approaches using \emph{probabilistic graphical models}.  Probabilistic graphical models are a
 tool to express factorizations of probability distributions.  Similar to
 \Eqref{log_factor_graph}, the joint probability distribution over a
 multi-variate random variable $y$ can be expressed using a factor-graph:
@@ -210,19 +210,19 @@ which we now describe in detail. We also give simplified known
 convergence rates in terms of calls to the loss-augmented prediction.
 
 Additionally, we discuss practical implications and implementation.  One
-particularly intereresting aspect is the difference between \emph{sequention}
+particularly interesting aspect is the difference between \emph{sequential}
 (or \emph{online}) and \emph{batch} algorithms.  Batch algorithms process the
 whole dataset before adjusting parameters, while sequential algorithms process
 one sample at a time, and adjust parameters incrementally.
 In image segmentation tasks, inference is often costly, making loss-augmented
 prediction the most expensive step in learning. This often leads to longer
 run-times for batch algorithms. On the other hand, loss-augmented prediction in
-batch algorithms is embarassingly parallel, allowing the use of multiple
+batch algorithms is embarrassingly parallel, allowing the use of multiple
 processors with almost linear speed improvements.
 
 \subsection{Stochastic Subgradient Descent}\seclabel{subgradient}
 
-Arguably the most straight-foward way to approach \Eqref{learning_equation} is
+Arguably the most straight-forward way to approach \Eqref{learning_equation} is
 using subgradient descent.  In light of the complexity of solving the
 loss-augmented prediction problem in \Eqref{loss_augmentation}, is is natural
 to work in a stochastic setting (see \citet{ratliff2007online}).
@@ -329,8 +329,8 @@ multiple of the number of training  samples, which leads to very large QP
 problems, even for medium sized datasets. This makes the algorithm often slow
 in practice.
 %
-Solving the quadratic programm can be accelerated using several techniques. We
-found that agressively removing constraints that are inactive or contribute
+Solving the quadratic program can be accelerated using several techniques. We
+found that aggressively removing constraints that are inactive or contribute
 little to the solution often makes the difference between the algorithm being
 practical or not.  Another possible technique is to update the quadratic
 program only every $r$ samples, for some small integer $r$
@@ -409,7 +409,7 @@ to make the algorithm more efficient:
                 \Phi(x^i, \hat{y})] \]
         by enumeration of $C^i$ and continue until
         line~\ref{convergence_check}.  Only if $\xi' - \xi < \epsilon$, that is
-        the produced constraint is not violated stronly enough, we return to
+        the produced constraint is not violated strongly enough, we return to
         line~\ref{get_cutting_plane} and actually invoke the loss augmented
         prediction $I$.
 \end{description}

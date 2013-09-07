@@ -130,25 +130,22 @@ Depending on the properties of the inference procedure $I$ used, it is easy to s
         bound on $o(\theta^*)$.
 \end{enumerate}
 
-These two observations can be used in a number of ways.
-\citet{finley2008training} used 2. to show that learning with an
-over-generating approach minimizes an upper bound on the empirical risk.
-
-We can also use these observations to judge the suboptimality of a given parameter $\theta$,
-that is see how far the current objective is from the true optimum.
-Learning with any under-generating approach, we can use 1. to maintain a lower bound
-on the objective. At any point during learning, in particular if no more constraints
-can be found, we can then use 2., to also find an upper bound.
-This way, we can empirically bound the estimation error, using only approximate
-inference.
-We now describe how we can further use 1. to both speed up and improve learning.
+We can also use these observations to judge the suboptimality of a given
+parameter $\theta$, that is see how far the current objective is from the true
+optimum.  Learning with any under-generating approach, we can use 1. to
+maintain a lower bound on the objective. At any point during learning, in
+particular if no more constraints can be found, we can then use 2., to also
+find an upper bound.  This way, we can empirically bound the estimation error,
+using only approximate inference.  We now describe how we can further use 1. to
+both speed up and improve learning.
 
 
 \section{Efficient Cutting Plane Training of SSVMs}\label{learning}
 
 \subsection{Combining Inference Procedures}\label{combining}
 The cutting plane method described in Section~\ref{cutting_plane} relies only
-on some separation oracle $I$ that produces violated constraints.
+on some separation oracle $I$ that produces violated constraints when
+performing loss-augmented prediction.
 
 Using any under-generating oracle $I$, learning can proceed as long as a
 constraint is found that is violated by more than the stopping tolerance
@@ -166,7 +163,7 @@ moving from one to the next if no more constraints can be found:
 \begin{enumerate*}
     \item Produce a constraint using previous, cached inference results.
     \item Use a fast under-generating algorithm.
-    \item Use exact inference.
+    \item Use a strong but slow algorithm that can certify optimality.
 \end{enumerate*}
 
 While using more different oracles is certainly possible, we found
@@ -176,6 +173,7 @@ in the end.
 Notably, it is not necessary for an algorithm used as 3) to always produce
 exact results. For guaranteeing optimality of the model, it is sufficient that
 we obtain a certificate of optimality when learning stops.
+% TODO certify optimality != exact...
 
 \subsection{Dynamic Constraint Selection}\label{caching}
 Combining inference algorithm as described in Section~\ref{combining}
@@ -229,10 +227,10 @@ Optimization (QPBO)~\citep{rother2007optimizing}.  This move-making strategy
 can be seen as a simple instantiation of the more general framework of fusion
 moves, as introduced by \citet{lempitsky2010fusion}
 
-For exact inference, we use the recently developed Alternating Direction Dual
-Decomposition (AD$^3$) method of \citet{martins2011augmented}. AD$^3$ produces
-a solution to the linear programming relaxation, which we use as the basis for
-branch-and-bound.
+For inference with optimality certificate, we use the recently developed
+Alternating Direction Dual Decomposition (AD$^3$) method of
+\citet{martins2011augmented}. AD$^3$ produces a solution to the linear
+programming relaxation, which we use as the basis for branch-and-bound.
 
 \begin{table}
     \begin{center}
@@ -263,13 +261,11 @@ branch-and-bound.
 %\subsection{Snake}
 %TODO
 
-\subsection{Image Segmentation}
-We use superpixel-based semantic image segmentation as our application as this is our task of interest. %TODO formulation
-for this work.  CRF based models have a history of success in this application,
-with much current work investigating models and
-learning~\citep{gonfaus2010harmony, lucchi2013learning, ladicky2009associative,
-kohli2009robust, krahenbuhl2012efficient}.  We use the MSRC-21 and Pascal VOC 20120 datasets, two
-widely used benchmark in the field.
+\subsection{Semantic Image Segmentation}
+% TODO reference auf davor / intro?
+Our main application is of course semantic segmentation and object class
+segmentation. We evaluate the proposed learning approach on Pascal VOC 2013 and
+MSRC-21
 
 We use the same model and pairwise features for the two datasets.
 Each image is represented as a neighborhood graph of superpixels.
@@ -358,7 +354,7 @@ in using the official ``validation'' set as our evaluation set, and splitting th
 We use the unary potentials provided by the same work, and compare only against methods
 using the same setup and potentials, \citet{krahenbuhlparameter} and \citet{dann2012pottics}.
 Note that state-of-the-art approaches, some not build on the CRF framework, obtain
-around 40\% Jaccard score (also call VOC score), notably \cite{xia2012segmentation}, who 
+around a Jaccard Index (also call VOC score) of 40\% , notably \cite{xia2012segmentation}, who 
 evaluate on the Pascal VOC 2010 ``test'' set.
 
 
@@ -379,9 +375,9 @@ evaluate on the Pascal VOC 2010 ``test'' set.
 \end{table}
 
 \subsubsection{Results}
-We compare classification results using different inference schemes in
-with results from the literature. As a sanity check, we
-also provide results without pairwise interactions.
+We compare classification results using different inference schemes with
+results from the literature. As a sanity check, we also provide results without
+pairwise interactions.
 
 Results on the MSRC-21 dataset are shown in Table~\ref{msrcacc}.
 We find that our model is on par with state-of-the-art approaches, implying
@@ -415,7 +411,7 @@ remains when using only under-generating inference.
 Additionally, the estimated primal objective $o^I$ using under-generating inference is
 too optimistic, as can be expected. This underlines the fact that
 under-generating approaches can not be used to upper-bound the primal
-objective.
+objective or compute meaningful duality gaps.
 
 \begin{table}
     \begin{center}
@@ -453,27 +449,21 @@ for the pairwise model takes less than an hour on a 12 core CPU\@. Solving the
 QP is done in a single thread, while inference is parallelized over all cores.
  
 \section{Summary}
-In this chapter we demonstrated that it is possible to learn state-of-the-art CRF models
-exactly using structural support vector machines, despite the model containing many loops.
-The key to efficient learning is the combination of different inference mechanisms and
-a novel caching scheme for the one-slack cutting plane method, in combination
-with state-of-the-art inference methods.
+In this chapter we demonstrated that it is possible to learn state-of-the-art
+conditional random field models exactly using structural support vector
+machines, despite the model containing many loops.  The key to efficient
+learning is the combination of different inference mechanisms and a novel
+caching scheme for the one-slack cutting plane method, in combination with
+state-of-the-art inference methods.
 
 We show that guaranteeing exact results is feasible in a practical setting, and
 hope that this result provides a new perspective onto learning loopy models for
 computer vision applications.
-
+%
 Even though exact learning does not necessarily lead to a large improvement in
 accuracy, it frees the practitioner from worrying about optimization and
 approximation issues, leaving more room for improving the model, instead of the
 optimization.
-
-While our model is trained on a relatively small dataset, we expect that scaling to
-datasets of several thousand images, such as Pascal VOC, is unproblematic.
-The time for a single iteration of the cutting plane solver will only grow
-linearly for the inference. The cost of solving the QP is actually independent
-of the number of samples, as only a single constraint will be added in each
-iteration.
 
 We do not expect learning of pixel-level models, which typically have tens or
 hundreds of thousands of variables, to be efficient using exact inference. However we
