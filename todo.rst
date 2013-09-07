@@ -7,6 +7,8 @@ bibliography consistency! (first names?)
 Datasets? Ganz an den Anfang hinter die introduction?
 Superpixels!!?
 
+definiere ich unary und pairwise terms?
+
 STRUKTUR: zuerste conditioning wichtig oder zuerst exact lernen? NYU?
 Erstmal modelle, auswerten, ... dann am schluss: so haben wir das exakt gemacht.
 oder erst exakt, dann "gut mal, das ist wichtig bei den modellen", dann nyu?
@@ -35,9 +37,11 @@ korrekturlesen?
 intro to structured prediction
 ============================================
 Consistency \phi \Phi DONE
-subgradient learning rate citations?
-Table complexity comparisons?
+subgradient learning rate citations? haben ja pegasos jetzt...
+Table complexity comparisons? -> in text vorerst
 Graphiken?
+
+summary of intro...
 
 Pystruct
 ========
@@ -49,12 +53,14 @@ Pairwise?! -> meh erstmal nicht ^^
 
 exact learning
 =================
-referenzen auf algorithm davor
 viele todos!!! schlecht geschrieben :-/ 
 multi-label
 snakes?
-snakes / multi-label bei caching!? caching koennen wir sogar auf sequence
-ausprobieren!
+snakes / multi-label bei caching!? caching koennen wir sogar auf sequence ausprobieren!
+implementation details scratchen?
+using linear programming to bound the objective?
+FIX!!! : does not upper bound really... well, we can round... nein doch nicht... wait wat? nochmal nachdenken andy...
+
 
 TO WRITE: comparison of learning algs for large-scale
 ========================================================

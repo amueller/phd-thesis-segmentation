@@ -1,17 +1,16 @@
 \chapter{Efficient Exact Learning of Loopy CRFs}
 
 \section{Introduction}
-% Remove duplication with pystruct intro
 As discussed previously, %TODO in the introduction? in pystruct chapter?
  many computer vision algorithms employ conditional random
 field models on pixel or superpixel graphs. These graphs, by nature, contain loops,
 making exact prediction and loss-augmented prediction in general intractable.
 As loss-augmented prediction is a central step in the learning algorithms
-discussed in Chapter~\ref{ch:structured_pystruct}
-in the inference lead to only approximate learning.
+discussed in Chapter~\ref{ch:structured_pystruct}, approximate inference leads
+to complications in learning.
 
 In this chapter, we investigate the necessity and consequences of these
-approximations in the one-slack learning algorithms in the context of semantic
+approximations in the one-slack cutting-plane learning algorithm in the context of semantic
 image segmentation. We show that despite inference being deemed intractable in
 loopy superpixel models, we are able to learn a pairwise conditional random
 field model using a structured support vector machine exactly for this task.
@@ -21,7 +20,7 @@ The contribution of this chapter is threefold:
 \begin{itemize}
     \item We analyze the simultaneous use of multiple approximate inference
         methods for learning SSVMs using the cutting plane method, relating
-        approximate learning to the exact optimum.
+        approximate learning to the exact optimum. %FIXME really?
     \item We introduce an efficient caching scheme to accelerate cutting plane
         training.
     \item We demonstrate that using a combination of under-generating and exact
@@ -32,7 +31,7 @@ The contribution of this chapter is threefold:
 
 While empirically exact learning yields results comparable to those using
 approximate inference alone, certification of optimality allows treating
-learning as a black-box, allowing the researcher to focus attention on
+learning as a black-box, enabling the researcher to focus attention on
 designing the model for the application at hand.
 
 
@@ -50,8 +49,9 @@ designing the model for the application at hand.
 %which serves as a basis for our work. We improve upon their caching scheme, and in
 %particular consider how it interacts with approximate inference algorithms.
 
-Recently, there has been much research in learning structured prediction models
-where standard exact inference techniques are not applicable.
+Recently, there has been an increase in research in learning structured
+prediction models where standard exact inference techniques are not applicable,
+in particular in the computer vision community.
 The influence of approximate inference on structural support vector machine
 learning was first analyzed by  \citet{finley2008training}.
 \citet{finley2008training} show convergence results for under-generating and
@@ -70,10 +70,10 @@ are usually not acceptable in practice.
 As using LP relaxations was considered too costly for typical computer vision
 approaches, later work employed graph-cuts~\citep{szummer2008learning} or Loopy
 Believe Propagation (LBP)~\citep{lucchi2011spatial}. These works use a single
-inference algorithm for during the whole learning process, and can not provide any
-bounds on the true objective or the empirical risk. In contrast, we combine
-different inference methods that are more appropriate for different stages of
-learning.
+inference algorithm for the whole learning process, and can not provide any
+bounds on the true objective or the empirical risk. In contrast, in this chapter
+we show how to combine different inference methods that are more appropriate
+for different stages of learning.
 
 Recently, \citet{meshi2010learning}, \citet{hazan2010primal} and
 \citet{komodakis2011efficient} introduced formulations for joint inference and
@@ -88,19 +88,23 @@ It is unclear how they compare to standard structured prediction approaches
 on real-world applications.
 
 
-\section{Learnint Structure Support Vector Machines with Approximate Inference}
-%TODO ueberleitung zu approximate inference
-% wir machen one-slack und I ist jetzt das und das.
+\section{Learning Structure Support Vector Machines with Approximate Inference}
+In this chapter, we will use the 1-slack cutting plane algorithm, as we found this
+algorithm to be most suitable for out approach. For reference, the algorithm is outlined
+\Secref{one_slac}, Algorithm~\ref{alg_one_slack}. The inference algorithm $I$ is called
+in line~\ref{get_cutting_plane}. We investigate algorithms $I$ (often called separation
+oracles in the context) that will not yield the exact maximum here.
 There are two groups of inference procedures, as identified in
 \citet{finley2008training}: under-generating and over-generating approaches.
 An under-generating approach satisfies $I(x^i, y^i, \theta) \in
 \mathcal{Y}$, but does not guarantee maximality in line~\ref{get_cutting_plane}
 of Algorithm~\ref{alg_cutting_plane}. An over-generating approach on the other
-hand, will solve the loss-augmented inference in line~\ref{get_cutting_plane}
+hand, will solve the loss-augmented prediction in line~\ref{get_cutting_plane}
 exactly, but for a larger set $\hat{\mathcal{Y}} \supset \mathcal{Y}$, meaning
-that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.  We will elaborate on
-the properties of under-generating and over-generating inference procedures in
-Section~\ref{bounds}. %TODO Filler sentence? wat?
+that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.
+%We will elaborate on
+%the properties of under-generating and over-generating inference procedures in
+%Section~\ref{bounds}. %TODO Filler sentence? wat?
 
 \subsection{Bounding the Objective}\label{bounds}
 Even using approximate inference procedures, several statements
@@ -114,7 +118,7 @@ line~\ref{restricted} of Algorithm~\ref{alg_cutting_plane} and  let
     o^I(\theta) = C\xi' + \frac{||\theta||}{2}^2
 \]
 when using inference algorithm $I$, that is $o^I(\theta)$ is the approximation of the primal
-objective given by $I$. To simplify exposure, we will drop the dependency on $\theta$.
+objective given by $I$. To simplify exposure, we drop the dependency on $\theta$.
 
 Depending on the properties of the inference procedure $I$ used, it is easy to see:
 \begin{enumerate}
@@ -137,7 +141,7 @@ on the objective. At any point during learning, in particular if no more constra
 can be found, we can then use 2., to also find an upper bound.
 This way, we can empirically bound the estimation error, using only approximate
 inference.
-We will now describe how we can further use 1. to both speed up and improve learning.
+We now describe how we can further use 1. to both speed up and improve learning.
 
 
 \section{Efficient Cutting Plane Training of SSVMs}\label{learning}
@@ -196,8 +200,8 @@ procedure.
     %\]
 %when using inference algorithm $I$, that is $o^I(\theta)$ is the approximation of the primal
 
-%objective given by $I$. To simplify exposure, we will drop the dependency on $\theta$.
-In the following, we will use the notation of Section~\ref{bounds} and indicate
+%objective given by $I$. To simplify exposure, we drop the dependency on $\theta$.
+In the following, we use the notation of Section~\ref{bounds} and indicate
 the choices of oracle $I$ with $Q$ for a chosen inference algorithm and $C$ for
 using cached constraints.
 
@@ -431,18 +435,14 @@ objective.
 
 
 \subsection{Implementation Details}
-We implemented the cutting plane Algorithm~\ref{alg_cutting_plane} and our pairwise
-model in Python.
-Our cutting plane solver for Equation~\eqref{mainequation} uses
-\texttt{cvxopt}~\citep{dahl2006cvxopt} for solving the QP in the inner loop. Code for
-our structured prediction framework will be released under an open source
-license upon acceptance.
+We implemented the described procedure in \pystruct.
 
 We used the SLIC implementation provided by \citet{achanta2012slic} to extract superpixels and
 the SIFT implementation in the \texttt{vlfeat} package~\citep{vedaldi08vlfeat}.
 For clustering visual words, piecewise training of unary potentials and the
 approximation to the $\chi^2$-kernel, we made use of the \texttt{scikit-learn}
 machine learning package~\citep{pedregosa2011scikit}.
+%TODO implementation details here?
 The move-making algorithm using QPBO is implemented with the help of the QPBO-I
 method provided by \citet{rother2007optimizing}.
 We use the excellent implementation of AD$^3$ provided by the authors of
