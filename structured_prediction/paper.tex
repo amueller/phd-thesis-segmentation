@@ -312,7 +312,9 @@ The algorithm terminates when no constraint can be found that is more violated t
 which guarantees a suboptimality of at most $\epsilon$.
 %
 \citet{tsochantaridis2006large} showed a convergence rate of $O(\frac{1}{T^2})$
-with respect to calls to loss-augmented prediction. The recent work
+with respect to calls to the QP solver. In the worst-case, only a single new constraint
+could be found in one pass over the dataset, which leads to $O(\frac{1}{kT^2})$ in terms
+of calls to loss-augmented prediction. The recent work
 of~\citet{lacoste2012block}, however, suggests a rate of $O(\frac{1}{T})$,
 which empirically seems more plausible. This analysis does not include the cost
 of solving the QP, which depends on the size of the dataset and the number of
