@@ -108,7 +108,43 @@ Friedrich-Willhelm Universit\"at Bonn \par
 %\listoffigures
 %\listoftables
 \chapter*{Zusammenfassung}
+Automatische Segementierung und Erkennung von semantischen Klassen in
+natuerlichen Bildern ist ein wichtiges offenes Problem des machinellen Sehens.
+Einer der am weitest verbreiteten Ans\"atze zu dieser Aufgabe basiert auf
+Conditional Random Fields und Verfahren der strukturierten Vorhersage. Die
+Vorhersage f\"ur Modelle zur Bild-Markierung mittels Conditional Random Fields
+ist f\"ur gew\"ohnlich nur approiximativ moeglich, bedingt d\"urch das
+Vorhandensein von Kreisen in den zugrunde liegenden Nachbarschaftsgraphen.
+Aus diesem Grund, und trotz der Beliebtheit von Conditional Random Field
+Verfahren, ist das strukturierte Lernen f\"ur solche Anwendungen schlecht
+verstanden.
+%
+Wir untersuchen verschiedene Lernalgorithmen in diesem
+Zusammenhang. Wir zeigen, dass es m\"oglich ist trotz des Vorhandenseins von
+Kreisen in den Nachbarschaftsgraphen exakte strukturierte Modelle zu lernen.
+Wir stellen ausserdem eine Software-Bibliothek vor, die es erlaubt einen
+weitreichenden Vergleich der besten Lernverfahren f\"ur strukturiertes Lernen
+durchzuf\"uhren.
+Unsere Studie erlaubt uns eine Charakterisation der betrachteten Algorithmen
+in einer Reihe von Anwendungen, insbesondere der semantischen Segmentierung und
+Objektklassensegmentierung.
+
 \chapter*{Abstract}
+Automatic segmentation and recognition of semantic classes in natural images is an important open problem in computer vision.
+One of the most popular approaches to this task is based on conditional random fields and structured prediction.
+For image labeling tasks, prediction using conditional random fields is usually only approximate, because of the presence
+of loops of the neighborhood graph in the the image. Consequently, learning in
+this setting is still little understood, despite the popularity of these
+methods.
+%
+We investigate several learning algorithms in this setting. We show
+how structured models can be learned exactly in practical settings, even in the
+presence of many loops in the underlying neighborhood graphs.  We introduce a
+software library that allows us to perform extensive empirical comparisons of
+state-of-the-art structured learning approaches. This allows us to characterize
+their practical properties in a range of applications, in particular for semantic segmentation
+and object class segmentation.
+
 
 \chapter*{Acknowledgements}
 First, I would like to thank my advisor Sven Behnke, who allowed me

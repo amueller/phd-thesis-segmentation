@@ -443,7 +443,7 @@ the quantitative analysis.
 \centering
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lccc}
 \toprule
-Algorithm &     Objective &     Deterministic&      Complexity \\
+Algorithm &     Objective &     Det.&      Complexity \\
 \cmidrule{1-4}
 $k$-Means &     $\displaystyle \sum_y \sum_{i, y_i = y} \| x_i - \mu_y \|^2$ & No  & $O(nk)$ per iteration%
 %\footnote{The worst-time complexity of the Lloyd-Algorithm is exponential~\cite{arthur2006slow}, though online algorithm are observed to converge in linear time~\cite{bottou1995convergence}.}
@@ -453,7 +453,7 @@ Single Link &   -- &    Yes    &    $O(n\log n)$\\
 ITM & $\displaystyle \sum_{y=0}^k d p(y) \log(\bar{L}_y  ) + p(y) \log{p(y)}$ & Yes & $O(\alpha(n) n \log n + nk)$\\
 \bottomrule
 \end{tabularx}
-\caption{Comparing properties of related algorithms.}\label{nowotab}
+\caption{Comparing properties of related algorithms. Det.\ stands for Deterministic}\label{nowotab}
 \end{table}
 
 %As our objective is motivated by limit properties of the entropy estimate of \Eqref{hmst},

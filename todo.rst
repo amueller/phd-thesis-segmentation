@@ -43,6 +43,7 @@ Consistency \phi \Phi DONE
 subgradient learning rate citations? haben ja pegasos jetzt...
 Table complexity comparisons? -> in text vorerst
 Graphiken?
+factor-graph?
 
 summary of intro...
 
