@@ -64,21 +64,23 @@ structured prediction libraries.
 %TODO what about language / license?
 \begin{table}[t]
 \centering
-\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccc}
+\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lccccccc}
 \toprule
-Package       & Cutting Plane& SSGD & SZLJSP & Latent SSVM & Perceptron & ML\\
-\cmidrule(r){1-1} \cmidrule(r){2-7}
-\pystruct     & \x        & \x   & \x   & \x          & \x         & \o\\
-\svmstruct    & \x        & \o   & \o   & \x          & \o         & \o\\
-\sc{Dlib}     & \x        & \x   & \o   & \o          & \x         & \o\\
-\sc{CRFsuite} & \o        & \o   & \o   & \o          & \x         & \x\\
+Package       & 1-SP & $n$-SP & SSGD & SZLJSP & L-SSVM & Perceptron & ML\\
+\cmidrule(r){1-1} \cmidrule(r){2-8}
+\pystruct     & \x   & \x     & \x   & \x   & \x          & \x         & \o\\
+\svmstruct    & \x   & \x     & \o   & \o   & \x          & \o         & \o\\
+\sc{Dlib}     & \x   & \o     & \o   & \o   & \o          & \x         & \o\\
+\sc{CRFsuite} & \o   & \o     & \o   & \o   & \o          & \x         & \x\\
 
 \bottomrule
 \end{tabularx}
     \caption{\label{table:comparision_algorithms}Comparison of learning
         algorithms implemented in popular structured prediction software
-        packages. SSGD stochastic subgradient decent learning of SSVMs, SZLJSP is
-        as described in \secref{dual_coordinate_descent}, Latent SSVM for latent variable SSVMs, ML for
+        packages. 1-CP stands for 1-slack Cutting Plane, $n$-CP for $n$-slack
+        Cutting plane, SSGD for stochastic subgradient decent learning of
+        SSVMs, SZLJSP is as described in \secref{dual_coordinate_descent},
+        L-SVM stands for latent variable SSVMs, and ML for
         maximum likelihood learning.}
 \end{table}
 
