@@ -1,9 +1,13 @@
-\chapter{Datasets and Evaluation Methodology}
+\chapter{Computer Vision Tools, Datasets and Evaluation}
 This work uses several public datasets for semantic segmentation
 and object class segmentation. This chapter briefly introduces each of the datasets,
 and discusses its characteristic. The datasets we use are among the most well-known
 and most-used datasets in the current semantic segmentation and object class segmentation
 literature.
+
+\section{Computer Vision Tools}
+Textonboost
+SIFT, SLIC, CPMC, BOW
 
 \section{Graz}
 % really?
@@ -38,14 +42,20 @@ centered planes on the run way, and centered faces. We will keep with the litera
 this property of the dataset, as it can be considered an unwanted artifact of the dataset collection.
 One striking characteristic of the MSRC dataset is that 
 
+% Typical methods
 Most of the classes in the MSRC-21 dataset can be well distinguished using local texture.
 This is particularly true for the stuff classes, but also for the animal classes, buildings, and signs.
 Consequently, many approaches use low-level approaches such as texton-boost or random forests as base features,
 as these are particularly well-suited for the dataset.
+%
+Following this line of work, we use the texton-boost implementation provided by \citet{krahenbuhl2012efficient}
+as a basis of all our experiments.
 
 
 \section{Pascal VOC}
+The Pascal VOC competition has 
 
-\section{New York University RGB-D Segementation 
+\section{New York University RGB-D Segmentation 
 
 \section{Evaluation}
+

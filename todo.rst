@@ -7,6 +7,8 @@ bibliography consistency! (first names?)
 Datasets? Ganz an den Anfang hinter die introduction?
 Superpixels!!?
 
+appendix on datasets?
+
 definiere ich unary und pairwise terms?
 
 STRUKTUR: zuerste conditioning wichtig oder zuerst exact lernen? NYU?
@@ -14,6 +16,7 @@ Erstmal modelle, auswerten, ... dann am schluss: so haben wir das exakt gemacht.
 oder erst exakt, dann "gut mal, das ist wichtig bei den modellen", dann nyu?
 
 SQUARED AVERAGING!
+
 
 s/learning rate/step size/g  Done (check again later)
 
