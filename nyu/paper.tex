@@ -27,10 +27,9 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Learning Depth-Sensitive Conditional Random Fields for Semantic
-Segmentation of RGB-D Images}
+\chapter{Learning Depth-Sensitive Conditional Random Fields}
 
-\section{Introduction}
+%\section{Introduction}
 For robots to perform varied tasks in unstructured environments, understanding their
 surroundings is essential. We formulate the problem of semantic annotation of maps
 as a dense labeling of RGB-D images into semantic classes. Dense labeling of objects
@@ -69,7 +68,7 @@ particular the loss-based learning are integral ingredients of the success of ou
         \includegraphics[width=\linewidth]{nyu/images/teaser}
     \end{center}
     \caption{%
-        Overview of the proposed semantic segmentation method.\label{teaser}
+        Overview of the proposed semantic segmentation method.\figlabel{teaser}
     \figlabel{height}}
 \end{figure}
 
@@ -250,13 +249,11 @@ little use in scenes without horizontal surfaces.
     \begin{center}
         \includegraphics[width=\linewidth]{nyu/images/normal_feature}
     \end{center}
-    \vspace{-3mm}
     \caption{%
         Visualization of one of the pairwise features, the similarity between superpixel normals.
         The image shows the zoom-in of a bedroom scene, together with the superpixel over-segmentation.
         Lines connect adjacent superpixels, and line-strength gives the magnitude of the orientation similarity.
     \figlabel{normal_feature}}
-    \vspace{-9mm}
 \end{figure}
 
 \subsection{Pairwise Depth-Sensitive Features}
@@ -269,7 +266,9 @@ There are five different features used to build pairwise potentials in our model
 \emph{Color Contrast}
     We employ a non-linear color contrast, as is common in the computer
     vision literature, between the superpixel mean colors $c_i$ and $c_j$:
-    $\exp\left(-\gamma \lVert c_i - c_j \rVert^2\right)$.
+    \[
+        \exp\left(-\gamma \lVert c_i - c_j \rVert^2\right).
+     \]
 
 
 \emph{Vertical Alignment}
@@ -303,19 +302,19 @@ There are five different features used to build pairwise potentials in our model
 \begin{table*}[t]
     \caption{Quantitative comparison of the proposed method with the
     literature.\tablabel{results}}
-\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lcccccc}
+\begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}l@{}cccccc}
 \toprule
-                        & ground        &  structure    & furniture     & props         & class average   & pixel average\\
-\cmidrule(r){1-7}
+                        & \footnotesize{ground}        &  \footnotesize{structure}    & \footnotesize{furniture}     & \footnotesize{props}         & \footnotesize{class avg.}   & \footnotesize{pixel avg.}\\
+\cmidrule{1-7}
 
 RF                              &         90.8  &   81.6        & 67.9          & 19.9          &  65.0        &  68.3 \\
 RF + SP                         &         92.5  &   83.3        & \textbf{73.8} & 13.9          &  65.7        &  70.1 \\ 
 RF + SP + SVM                   &         94.4  &   79.1        & 64.2          & \textbf{44.0} &  70.4        &  70.3 \\
 RF + SP + CRF                   & \textbf{94.9} &   78.9        &          71.1 & 42.7          &\textbf{71.9} &  \textbf{72.3} \\
-\cmidrule(r){1-7}
+\cmidrule{1-7}
 \citet{SilbermanECCV12}         &         68    &   59          & 70           & 42            &  59.6        & 58.6 \\
 \citet{couprie-iclr-13}         &         87.3  & \textbf{86.1} & 45.3         & 35.5          &  63.5        & 64.5 \\
-\cmidrule(r){1-7}
+\cmidrule{1-7}
 \citet{stueckler2013}$^\dagger$ & \textbf{95.6} &   83.0        & \textbf{75.1}& 14.2          &  67.0        & 70.9 \\
 
 \bottomrule
@@ -328,7 +327,6 @@ accuracy.\\
 $^\dagger$ \footnotesize Note that the work of \citet{stueckler2013} is not directly
 comparable, as they integrated information over multiple frames, and did not
 measure accuracy for pixels without valid depth measurement.
-\vspace{-5mm}
 \end{table*}
 
 We evaluate our approach on the public NYU depth V2 segmentation dataset of
@@ -403,14 +401,12 @@ crowded scenes, the CRF has little chance to recover.
         \includegraphics[width=.45\linewidth]{nyu/images/vertical_alignment}
     \includegraphics[width=.45\linewidth]{nyu/images/depth_difference}
     \end{center}
-    \vspace{-3mm}
     \caption{%
         Visualization of some of the learned potentials. The right potential is
         applied to relative depth between superpixels, the second on the
         feature encoding whether one superpixel is above the other in the
         image. See \secref{results} for details.
     \figlabel{weights}}
-    \vspace{-3mm}
 \end{figure}
 
 \Figref{weights} visualizes some learned potential functions.
@@ -471,7 +467,7 @@ the top left to the bottom right in the image, is also exploited by the potentia
     \includegraphics[width=\linewidth]{nyu/images/01203_gt.png}\\
     \multicolumn{5}{@{}c@{}}{Ground Truth}\vspace{3mm}\\
     \multicolumn{5}{@{}c@{}}{%
-        \includegraphics[]{legend.pdf}
+        \includegraphics[]{nyu/legend.pdf}
     }
     \end{tabu}
 \caption{%
