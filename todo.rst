@@ -64,8 +64,11 @@ implementation details scratchen?
 using linear programming to bound the objective?
 subsection image segmentation: referenz auf davor / intro?
 much more details?
-pascal und msrc ausfuerliche tabellen
+pascal und msrc ausfuerliche tabellen ?
 
+
+nyu depth stuff
+================
 
 TO WRITE: comparison of learning algs for large-scale
 ========================================================
@@ -75,6 +78,3 @@ Segmentation? Chains ocr / colln?
 
 TO WRITE: Importance of conditioning in edges!
 ===============================================
-
-TO WRITE: latent variable stuff?
-=================================

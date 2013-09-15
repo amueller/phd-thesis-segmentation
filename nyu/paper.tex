@@ -180,12 +180,10 @@ f(x) = \argmax_{y \in \mathcal{Y}} \theta^T \Phi(x, y).
 We choose $\psi$ in \Eqref{energy} to be linear in the learnable parameters and
 the data-depended features, resulting in a form equivalent to
 \Eqref{prediction}. Our features are described in detail below.  We use the
-$1$-slack formulation of the structural SVM~\citep{joachims2009cutting} and
-solve the maximization in \Eqref{prediction} using a combination of fusion
-moves~\citep{lempitsky2010fusion} and the AD$^3$ algorithm of
-\citet{martins2011augmented}.  In contrast to graph-cut inference, fusion moves
-and AD$^3$ can work with arbitrary potential function, and allow precise
-learning using the SSVM approach.
+$1$-slack formulation of the structural SVM~\citep{joachims2009cutting} as
+implemented in \pystruct and described in Chapter~\ref{ch:structured_pystruct}. The combination
+of fusion moves and AD$^3$ described in Chapter~\ref{ch:exact_learning} allows us
+to learn the SSVM to optimality \emph{exactly}.
 
 \begin{figure}
     \begin{center}

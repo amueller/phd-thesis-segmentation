@@ -1,4 +1,4 @@
-\chapter{Efficient Exact Learning of Loopy CRFs}
+\chapter{Efficient Exact Learning of Loopy CRFs}\label{ch:exact_learning}
 
 \section{Introduction}
 As discussed previously, %TODO in the introduction? in pystruct chapter?
@@ -106,9 +106,9 @@ that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.
 %the properties of under-generating and over-generating inference procedures in
 %Section~\ref{bounds}. %TODO Filler sentence? wat?
 
-\subsection{Bounding the Objective}\label{bounds}
+\subsection{Bounding the Objective}\seclabel{bounds}
 Even using approximate inference procedures, several statements
-about the original exact objective (Equation~\eqref{mainequation}) can be
+about the original exact objective (\eqref{mainequation}) can be
 obtained.
 
 Let $o_{\W}(\theta)$ denote objective \eqref{oneslack} with
@@ -140,10 +140,10 @@ using only approximate inference.  We now describe how we can further use 1. to
 both speed up and improve learning.
 
 
-\section{Efficient Cutting Plane Training of SSVMs}\label{learning}
+\section{Efficient Exact Cutting Plane Training of SSVMs}\seclabel{learning}
 
-\subsection{Combining Inference Procedures}\label{combining}
-The cutting plane method described in Section~\ref{cutting_plane} relies only
+\subsection{Combining Inference Procedures}\seclabel{combining}
+The cutting plane method described in \Secref{cutting_plane} relies only
 on some separation oracle $I$ that produces violated constraints when
 performing loss-augmented prediction.
 
@@ -185,8 +185,8 @@ exact results. For guaranteeing optimality of the model, it is sufficient that
 we obtain a certificate of optimality when learning stops.
 % TODO certify optimality != exact...
 
-\subsection{Dynamic Constraint Selection}\label{caching}
-Combining inference algorithm as described in Section~\ref{combining}
+\subsection{Dynamic Constraint Selection}\seclabel{caching}
+Combining inference algorithm as described in \Secref{combining}
 accelerates calls to the separation oracle by using faster, less accurate
 methods. On the down-side, this can lead to the inclusion of many constraints
 that make little progress in the overall optimization, resulting in much more
@@ -209,7 +209,7 @@ procedure.
 %when using inference algorithm $I$, that is $o^I(\theta)$ is the approximation of the primal
 
 %objective given by $I$. To simplify exposure, we drop the dependency on $\theta$.
-In the following, we use the notation of Section~\ref{bounds} and indicate
+In the following, we use the notation of \Secref{bounds} and indicate
 the choices of oracle $I$ with $Q$ for a chosen inference algorithm and $C$ for
 using cached constraints.
 
@@ -260,7 +260,7 @@ programming relaxation, which we use as the basis for branch-and-bound.
     \end{center}
     \caption{Accuracies on the MSRC-21 Dataset.  We compare a baseline model,
     our exact and approximately learned models and state-of-the-art
-    approaches.\label{msrcacc}}
+    approaches.\tablabel{msrcacc}}
     
 \end{table}
 
@@ -292,7 +292,7 @@ the under-generating method, training always stopped prematurely as no violated
 constraints could be found any more.
 
 \subsection{Caching}
-First, we compare our caching scheme, as described in Section~\ref{combining}, with the
+First, we compare our caching scheme, as described in \Secref{combining}, with the
 scheme of \citet{joachims2009cutting}, which produces constrains from the cache
 as long as possible, and with not using caching of constraints at all.  For this experiment,
 we only use the under-generating move-making inference on the MSRC-21 dataset. Times until convergence
@@ -300,7 +300,7 @@ are 397s for our heuristic, 1453s for the heuristic of
 \citet{joachims2009cutting}, and 2661s for using no cache, with all strategies
 reaching essentially the same objective.
 
-Figure~\ref{caching} shows a visual comparison that highlights the differences
+\Figref{caching} shows a visual comparison that highlights the differences
 between the methods. Note that neither $o^Q$ nor $o^C$ provide valid upper bounds on the objective,
 which is particularly visible for $o^C$ using the method of \cite{joachims2009cutting}.
 Using no cache leads to a relatively smooth, but slow convergence, as inference is run often.
@@ -316,7 +316,7 @@ $o^C$ is not to far from $o^Q$.
 \caption{%
 Training time comparison using different caching heuristics.
 Large dots correspond to $o^Q$, small dots correspond to $o^C$,
-and the line shows $o_\W$. See the text for details.\label{caching}}
+and the line shows $o_\W$. See the text for details.\figlabel{caching}}
 \end{figure*}
 % much simpler model?
 
@@ -353,7 +353,7 @@ validation split.
     \end{tabularx}
     \end{center}
     \caption{Accuracies on the Pascal VOC Dataset. We compare our approach
-    against approaches using the same unary potentials.\label{pascalacc}}
+    against approaches using the same unary potentials.\tablabel{pascalacc}}
     
 \end{table}
 
@@ -381,7 +381,7 @@ evaluate on the Pascal VOC 2010 ``test'' set.
     \end{tabularx}
     \end{center}
     \caption{Objective function values on the MSRC-21 Dataset}
-    \label{msrc_objective}
+    \tablabel{msrc_objective}
 \end{table}
 
 \subsubsection{Results}
@@ -389,7 +389,7 @@ We compare classification results using different inference schemes with
 results from the literature. As a sanity check, we also provide results without
 pairwise interactions.
 
-Results on the MSRC-21 dataset are shown in Table~\ref{msrcacc}.
+Results on the MSRC-21 dataset are shown in \Tabref{msrcacc}.
 We find that our model is on par with state-of-the-art approaches, implying
 that our model is realistic for this task. In particular, our results are comparable to those of
 \citet{lucchi2013learning}, who use a stochastic subgradient method with working sets.
@@ -402,7 +402,7 @@ Learning the structured prediction model using move-making inference alone
 takes 4 minutes, while guaranteeing optimality up to  $\epsilon=10^{-4}$
 takes only 18 minutes.
 
-Results on the Pascal-VOC dataset are shown in Table~\ref{pascalacc}.
+Results on the Pascal-VOC dataset are shown in \Tabref{pascalacc}.
 We compare against several approaches using the same unary potentials.
 For completeness, we also list state-of-the-art approaches not based on CRF models.
 Notably, out model matches or exceeds the performance of the much more involved approaches of
@@ -411,11 +411,11 @@ unary potentials.
 Using exact learning and inference slightly increased performance on this dataset.
 Learning took 25 minutes using move-making alone and 100 minutes to guarantee optimality
 up to $\epsilon=10^{-4}$.
-A visual comparison of selected cases is shown in Figure~\ref{visual}.
+A visual comparison of selected cases is shown in \Figref{visual}.
 
 
 The objective function values using only the under-generating move-making and
-the exact inference are detailed in Table~\ref{msrc_objective} and Table~\ref{pascal_objective}.
+the exact inference are detailed in \Tabref{msrc_objective} and \Tabref{pascal_objective}.
 We see that a significant gap between the cutting plane objective and the primal objective
 remains when using only under-generating inference.
 Additionally, the estimated primal objective $o^I$ using under-generating inference is
@@ -436,7 +436,7 @@ objective or compute meaningful duality gaps.
     \end{tabularx}
     \end{center}
     \caption{Objective function values on the Pascal Dataset.}
-    \label{pascal_objective}
+    \tablabel{pascal_objective}
 \end{table}
 
 
@@ -490,6 +490,6 @@ objective, even in the pixel-level domain.
     selected images from the test set.  From left to right: the input image,
     prediction using approximate learning, prediction using exact learning, and
     ground truth.
-\label{visual}}
+\figlabel{visual}}
 \end{figure*}
 
