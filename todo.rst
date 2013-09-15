@@ -9,6 +9,8 @@ Superpixels!!?
 
 appendix on datasets?
 
+MSRC state of the art?
+
 definiere ich unary und pairwise terms?
 
 STRUKTUR: zuerste conditioning wichtig oder zuerst exact lernen? NYU?
@@ -22,20 +24,23 @@ s/learning rate/step size/g  Done (check again later)
 
 1-slack und n-slack consistent (one/1, n, $n$)  (done, check again later)
 
+INTRO
+======
+superpixels
+some related work?
+precise contributions
+
+
 Itm
 =====
 * clustering: bag of word experiments? Segmentation experiments? mnist experiments?  ONLY MNIST
-* remove MLPack runtime claims from ITM? DONE
-* redo summary DONE
-* ALGORITHM FIX!! DONE
-* beschreibe benutzung der dim estimation DONE
+* MOTIVATION / INTEGRATION
 * optional: table dimension estimates
 
 weak supervision
 ==================
 multi-class...
-kick out?
-korrekturlesen?
+korrekturlesen!
 
 intro to structured prediction
 ============================================
@@ -69,6 +74,8 @@ pascal und msrc ausfuerliche tabellen ?
 
 nyu depth stuff
 ================
+crf learning hinweise auf davor
+energy function hinweise auf davor
 
 TO WRITE: comparison of learning algs for large-scale
 ========================================================
