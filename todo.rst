@@ -41,6 +41,7 @@ weak supervision
 ==================
 multi-class...
 korrekturlesen!
+zitate auf andere zwei approaches!!
 
 intro to structured prediction
 ============================================
