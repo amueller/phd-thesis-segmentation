@@ -2,7 +2,7 @@
 
 \section{Introduction}
 As discussed previously, %TODO in the introduction? in pystruct chapter?
- many computer vision algorithms employ conditional random
+many computer vision algorithms employ conditional random
 field models on pixel or superpixel graphs. These graphs, by nature, contain loops,
 making exact prediction and loss-augmented prediction in general intractable.
 As loss-augmented prediction is a central step in the learning algorithms
@@ -89,20 +89,20 @@ on real-world applications.
 
 
 \section{Learning Structure Support Vector Machines with Approximate Inference}
-In this chapter, we will use the 1-slack cutting plane algorithm, as we found this
+In this chapter, we use the 1-slack cutting plane algorithm, as we found this
 algorithm to be most suitable for out approach. For reference, the algorithm is outlined
 \Secref{one_slac}, Algorithm~\ref{alg_one_slack}. The inference algorithm $I$ is called
 in line~\ref{get_cutting_plane}. We investigate algorithms $I$ (often called separation
-oracles in the context) that will not yield the exact maximum here.
+oracles in the context) that do not yield the exact maximum here.
 There are two groups of inference procedures, as identified in
 \citet{finley2008training}: under-generating and over-generating approaches.
 An under-generating approach satisfies $I(x^i, y^i, \theta) \in
 \mathcal{Y}$, but does not guarantee maximality in line~\ref{get_cutting_plane}
 of Algorithm~\ref{alg_cutting_plane}. An over-generating approach on the other
-hand, will solve the loss-augmented prediction in line~\ref{get_cutting_plane}
+hand, does solve the loss-augmented prediction in line~\ref{get_cutting_plane}
 exactly, but for a larger set $\hat{\mathcal{Y}} \supset \mathcal{Y}$, meaning
 that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.
-%We will elaborate on
+%We elaborate on
 %the properties of under-generating and over-generating inference procedures in
 %Section~\ref{bounds}. %TODO Filler sentence? wat?
 
@@ -357,6 +357,48 @@ validation split.
     
 \end{table}
 
+%\begin{table}
+    %\begin{center}
+    %\begin{tabularx}{\linewidth}{lccccccccccccccccccccc@{\quad}cc}
+        %\toprule
+                    %& \rotatebox[origin=c]{90}{building}
+                    %& \rotatebox[origin=c]{90}{gras}
+                    %& \rotatebox[origin=c]{90}{tree}
+                    %& \rotatebox[origin=c]{90}{cow}
+                    %& \rotatebox[origin=c]{90}{sheep}
+                    %& \rotatebox[origin=c]{90}{sky}
+                    %& \rotatebox[origin=c]{90}{airplane}
+                    %& \rotatebox[origin=c]{90}{water}
+                    %& \rotatebox[origin=c]{90}{face}
+                    %& \rotatebox[origin=c]{90}{car}
+                    %& \rotatebox[origin=c]{90}{bicycle}
+                    %& \rotatebox[origin=c]{90}{flower}
+                    %& \rotatebox[origin=c]{90}{sign}
+                    %& \rotatebox[origin=c]{90}{bird}
+                    %& \rotatebox[origin=c]{90}{book}
+                    %& \rotatebox[origin=c]{90}{chair}
+                    %& \rotatebox[origin=c]{90}{road}
+                    %& \rotatebox[origin=c]{90}{cat}
+                    %& \rotatebox[origin=c]{90}{dog}
+                    %& \rotatebox[origin=c]{90}{body}
+                    %& \rotatebox[origin=c]{90}{boat}
+                    %& \rotatebox[origin=c]{90}{\textbf{Global}}
+                    %& \rotatebox[origin=c]{90}{\textbf{Average}}
+                    %\\
+        %\cmidrule{1-24}
+    %unary &  27 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11\\
+    %approx.& 30 & 11\\
+    %exact & 30 & 11\\
+        %\cmidrule{1-24}
+        %other\\
+    %\bottomrule
+    %\end{tabularx}
+    %\end{center}
+    %\caption{Accuracies on the MSRC-21 Dataset. We compare our approach
+    %against approaches using the same unary potentials.\label{msrc_detailed}}
+    
+%\end{table}
+
 
 \subsubsection{Pascal VOC 2010}
 For the Pascal VOC 2010 dataset, we follow the procedure from \citet{krahenbuhl2012efficient}
@@ -383,6 +425,48 @@ evaluate on the Pascal VOC 2010 ``test'' set.
     \caption{Objective function values on the MSRC-21 Dataset}
     \tablabel{msrc_objective}
 \end{table}
+
+%\begin{table}
+    %\begin{center}
+    %\begin{tabularx}{\linewidth}{lccccccccccccccccccccc@{\quad}cc}
+        %\toprule
+                    %& \rotatebox[origin=c]{90}{background}
+                    %& \rotatebox[origin=c]{90}{airplane}
+                    %& \rotatebox[origin=c]{90}{bicycle}
+                    %& \rotatebox[origin=c]{90}{bird}
+                    %& \rotatebox[origin=c]{90}{boat}
+                    %& \rotatebox[origin=c]{90}{bottle}
+                    %& \rotatebox[origin=c]{90}{bus}
+                    %& \rotatebox[origin=c]{90}{car}
+                    %& \rotatebox[origin=c]{90}{cat}
+                    %& \rotatebox[origin=c]{90}{chair}
+                    %& \rotatebox[origin=c]{90}{cow}
+                    %& \rotatebox[origin=c]{90}{dinning table}
+                    %& \rotatebox[origin=c]{90}{dog}
+                    %& \rotatebox[origin=c]{90}{horse}
+                    %& \rotatebox[origin=c]{90}{motorbike}
+                    %& \rotatebox[origin=c]{90}{person}
+                    %& \rotatebox[origin=c]{90}{potted plant}
+                    %& \rotatebox[origin=c]{90}{sheep}
+                    %& \rotatebox[origin=c]{90}{sofa}
+                    %& \rotatebox[origin=c]{90}{train}
+                    %& \rotatebox[origin=c]{90}{TV/monitor}
+                    %& \rotatebox[origin=c]{90}{\textbf{Average}}
+                    %\\
+        %\cmidrule{1-24}
+    %unary &  27 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11 & 11\\
+    %approx.& 30 & 11\\
+    %exact & 30 & 11\\
+        %\cmidrule{1-24}
+        %other \\
+    %\bottomrule
+    %\end{tabularx}
+    %\end{center}
+    %\caption{Accuracies on the Pascal VOC 2010 Dataset. We compare our approach
+    %against approaches using the same unary potentials.\label{pascal_detailed}}
+    
+%\end{table}
+
 
 \subsubsection{Results}
 We compare classification results using different inference schemes with

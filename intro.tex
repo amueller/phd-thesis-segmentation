@@ -1,15 +1,15 @@
 \chapter{Introduction}
-This thesis investigates the use of structured learning algorithms to the task of semantic image
-segmentation. Both topics have recieve much attention in the computer vision
-and machine learning communities lately. Unfortunately, learning structured
-prediction in computer vision applications is still little understood.
-We hoe this thesis will further the understanding of structured learning methods,
-give practical guidance and provide implementations to further the use of structured
-prediction methods in computer vision.
+This thesis investigates the use of structured learning algorithms to the task
+of semantic image segmentation. Both topics have recieve much attention in the
+computer vision and machine learning communities lately. Unfortunately,
+learning structured prediction in computer vision applications is still little
+understood.  We hoe this thesis will further the understanding of structured
+learning methods, give practical guidance and provide implementations to
+further the use of structured prediction methods in computer vision.
 
 The task of semantic segmentation is defined as predicting a semantic class label
 for each pixel in a natural image. Predicting semantic labels on such a fine scale
-provides ??? an important step towards general scene understanding.
+constitutes an important step towards general scene understanding.
 %
 Applications of scene understanding include automatic image interpretation for retrieval,
  autonomous driving and mobile robotics.
@@ -21,13 +21,14 @@ conditional random field / superpixel? kraehenbuehl?
 detector based
 sparse coding
 
-We will focus on the use of conditional random fields, which have shown very promising.
-Using the paradigm of structural support vector machines, it is possible to learn conditional
-random fields to directly minimize a loss of interest. In particular, conditional random fields allow
-to combine different cues, possibly produced by other approaches, in a principled manner.
+We will focus on the use of conditional random fields, which have shown very
+promising.  Using the paradigm of structural support vector machines, it is
+possible to learn conditional random fields to directly minimize a loss of
+interest. In particular, conditional random fields allow to combine different
+cues, possibly produced by other approaches, in a principled manner.
 %
-We use four different datasets to evaluate our approach: Graz02, Pascal VOC 2010, MSRC-21
-and NYU V2.
+We use four different datasets to evaluate our approach: Graz02, Pascal VOC
+2010, MSRC-21 and NYU V2.
 %
 Why semantic segmentation? Difference object / stuff centric? -> difference to Alex
 Structured approaches
@@ -43,26 +44,36 @@ Contributions:
 - shows importance of edge features.
 
 \section{Thesis Outline}
-We start by introducing a novel clustering algorithm in Chapter~\ref{ch:itm}, which is used as a building
-block in several places for our semantic segmentation algorithms.
-We will then introducing a mostly unstructured approach to semi-supervised learning for semantic segmentation in Chaper~\ref{ch:semi_supervised},
-investigating the problem of annotating training data for semantic segmentation.
-The central topic of this thesis is introduced in Chapter~\ref{ch:structured_pystruct}, which also introduces our software library
-for implementing structured learning and prediction algorithms.
-Chapter~\ref{ch:comparision} gives a quantitative comparison of the most widely used structured prediction algorithms, focusing on
-which algorithm is best to use in a given situation. In particular, we investigate learning behavior for semantic segmentation on several datasets.
+We start by introducing a novel clustering algorithm in Chapter~\ref{ch:itm},
+which is used as a building block in several places for our semantic
+segmentation algorithms.  We will then introducing a mostly unstructured
+approach to semi-supervised learning for semantic segmentation in
+Chaper~\ref{ch:semi_supervised}, investigating the problem of annotating
+training data for semantic segmentation.  The central topic of this thesis is
+introduced in Chapter~\ref{ch:structured_pystruct}, which also introduces our
+software library for implementing structured learning and prediction
+algorithms.
+Chapter~\ref{ch:comparision} gives a quantitative comparison of the most widely
+used structured prediction algorithms, focusing on which algorithm is best to
+use in a given situation. In particular, we investigate learning behavior for
+semantic segmentation on several datasets.
 
-The problem of learning with approximate inference is investigated in Chapter~\ref{ch:exact_learning}.
-We develop a strategy for efficient caching and a combination of inference algorithms that allows us to
-learn SSVMs for semantic image segmentation exactly, even though the involved factor graphs contain many loops.
+The problem of learning with approximate inference is investigated in
+Chapter~\ref{ch:exact_learning}.  We develop a strategy for efficient caching
+and a combination of inference algorithms that allows us to learn SSVMs for
+semantic image segmentation exactly, even though the involved factor graphs
+contain many loops.
 
-Finally, Chapter~\ref{ch:nyu} applies the methods developed in Chapters~\ref{ch:structurd_pystruct} and \ref{ch:exact_learning}
-to the problem of semantic annotation with structure classes in RGB-D data. We demonstrate that we are able to learn
-meaningful spacial relations, and improve upon the state of the art in the NYU V2 datasets that we consider.
+Finally, Chapter~\ref{ch:nyu} applies the methods developed in
+Chapter~\ref{ch:structurd_pystruct} and Chapter~\ref{ch:exact_learning} to the
+problem of semantic annotation with structure classes in RGB-D data. We
+demonstrate that we are able to learn meaningful spacial relations, and improve
+upon the state of the art in the NYU V2 datasets that we consider.
 
 \section{Publications}
-The main material of this thesis has either been published in conference proceedings or has been
-submitted to conferences or journals. We now list the relevant publications.
+The main material of this thesis has either been published in conference
+proceedings or has been submitted to conferences or journals. We now list the
+relevant publications.
 \begin{description}
     \item[Chapter 2] \emph{Information Theoretic Clustering using Minimum Spanning Trees} Andreas C. M\"uller, Sebastian Nowozin and Christoph H. Lampert. Published in the proceedings of the German Conference on Pattern Recognition.
     \item[Chapter 3] \emph{Multi-Instance Methods for Partially Supervised Image Segmentation} Andreas C. M\"uller and Sven Behnke. Published in the proceedings of the IARP Worshop on Partially Supervised Learning.
@@ -70,4 +81,3 @@ submitted to conferences or journals. We now list the relevant publications.
     \item[Chapter 5] \emph{Learning a Loopy Model for Semantic Segmentation Exactly}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Computer Vision Theory and Applications.
     \item[Chapter 6] \emph{Learning Depth-Sensitive Conditional Random Fields for Semantic Segmentation}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Robotics and Automation.
 \end{description}
-

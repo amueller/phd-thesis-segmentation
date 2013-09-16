@@ -1,7 +1,7 @@
 \chapter{Information Theoretic Clustering}
 
 Before we start our investigation of semantic segmentation and object class segmentation,
-we will look into a general purpose clustering algorithm.
+we look into a general purpose clustering algorithm.
 %
 In clustering, the goal is to divide data points into homogeneous subsets, called
 clusters.
@@ -123,7 +123,7 @@ approach requires tuning several constants by hand. More recently,
 \citet{grygorash2006minimum} proposed a hierarchical MST-based clustering
 approach that iteratively cuts edges, merges points in the resulting
 components, and rebuilds the spanning tree.
-We will limit our discussion to the most widely used algorithm from~\citep{gower1969minimum}.
+We limit our discussion to the most widely used algorithm from~\citep{gower1969minimum}.
 %
 \section{Clustering Using Nonparametric Entropy-Estimates}
 In general, the goal of clustering can be formulated as follows: 
@@ -305,7 +305,7 @@ minimum spanning tree of its nodes for all $y$.
 %
 We try to find a graph $G$ with $k$ components, such that $\hat{I}(G)$ is maximal. We can restrict
 ourself to optimizing over the set $\mathcal{F}$ of forests over $\mathbf{x}$ with $k$ components,
-as adding edges inside connected components will only decrease the objective.
+as adding edges inside connected components only decrease the objective.
 Thus we can formulate the clustering problem equivalently as
 \begin{equation}
     \max_{G \in \mathcal{F}} \hat{I}(G).
@@ -566,7 +566,7 @@ be overcome in practice by estimating the intrinsic dimensionality of the data.
 %for example by estimating the intrinsic dimensionality of the 
 %data~\citep{pettis1979intrinsic}.
 %
-%We will also investigate optimizations of the objective 
+%We also investigate optimizations of the objective 
 %\Eqref{graphobjective} that go beyond the proposed method. 
 %Move-making algorithms seem a promising way to refine solutions 
 %found by Algorithm~1. Branch and bound techniques could provide 

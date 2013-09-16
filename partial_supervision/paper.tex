@@ -2,18 +2,19 @@
 
 Most algorithms for semantic image segmentation and object-class segmentation
 work with strong supervision: a pixel-wise labeling of training images. In this
-chapter, we will investigate a method that works with annotation that is much
+chapter, we investigate a method that works with annotation that is much
 easier to obtain: whole image labels.
 While we do not reach the accuracy of competing fully supervised approaches,
 our efficient, semi-supervised method is potentially able to scale to much
 larger datasets, without the need of time-consuming manual annotation on
 pixel-level.
 
-Recently, several approaches have been proposed for semi-supervised semantic segmentation.
-While these are close to our work, there are several important distinctions.
-We address the task of object-class segmentation, that concerns object categories, while
-semantic segmentation approaches often focus on "stuff" categories like "sky" and "road" that
-are more easily detected using simple texture features.
+Recently, several approaches have been proposed for semi-supervised semantic
+segmentation.  While these are close to our work, there are several important
+distinctions.  We address the task of object-class segmentation, that concerns
+object categories, while semantic segmentation approaches often focus on
+"stuff" categories like "sky" and "road" that are more easily detected using
+simple texture features.
 Additionally, in contrast to \citet{vezhnevets2011weakly}, our approach is in
 principle applicable to large datasets, the regime where weak annotation is
 most useful.
@@ -61,16 +62,6 @@ To measure the performance of our algorithm, we use a dataset that not only cont
 image level annotation, but also pixel level annotation of object. This allows
 us to judge the succes of learning on instance level.
 
-%This chapter explores the 
-%application of multi-instance learning algorithms to the task of partially supervised image segmentation.
-%FIXME not here!
-% FIXME relate to alex here
-%To our knowledge, all previous methods in the field use strong
-%supervision, meaning manual pixel-wise annotation of training images. This
-%approach is problematic, as scaling to larger datasets is limited by the
-%effort to provide annotation, especially if one expects
-%consistency and quality in the segmentations.
-
 \section{Related Work}
 \subsection{Proposal Object Segments}\label{related_segments}
 Most work on multi-class segmentation focuses on strong supervision on
@@ -91,7 +82,7 @@ investigated by \citet{endres2010category}.
 Multi-instance learning was formally introduced in \citet{dietterich1997solving}.
 Since then, many algorithms were proposed to solve the multi-instance learning problem
 \citep{andrews2003support,gaertner2002multi,zhou2009multi,li2009convex,zhang2002dd,mangasarian2008multiple,leistner2010miforests,chen2006miles}.
-We will discuss only those that are relevant to the present treatment.
+We discuss only those that are relevant to the present treatment.
 
 \citet{gaertner2002multi} introduced the concept of a multi-instance
 kernel on bags, defined in terms of a kernel on instances. 
@@ -204,14 +195,14 @@ k_{MI}(X,X') := \sum_{x \in X, x' \in X'} k^p(x,x'),
 \end{equation}
 where $p \in \mathbb{N}$ is a free parameter~\citep{gaertner2002multi}. As we use
 the RBF-kernel $k_{rbf}$ as kernel on $\mathcal{X}$ and powers of RBF-kernels
-are again RBF-kernels, we will not consider $p$ explicitly in the following.
+are again RBF-kernels, we not consider $p$ explicitly in the following.
 
 We normalize the kernel $k_{MI}$ \citep{gaertner2002multi} using
 \begin{equation}
 k(X,X') := \frac{k_{MI}(X,X')}{\sqrt{k_{MI}(X,X)k_{MI}(X',X')}}.
 \end{equation}
 Training an SVM with this kernel produces a bag-level classifier for each
-class, which we will refer to as MIK\@.  This procedure is very efficient since
+class, which we refer to as MIK\@.  This procedure is very efficient since
 the resulting kernel matrix is of size number of bags, which is much smaller
 than a kernel matrix of size number of instances, as is commonly used in the
 literature~\citep{andrews2003support,nguyen2010new,zhang2008m3miml}.  Another
