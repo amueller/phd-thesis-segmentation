@@ -9,20 +9,15 @@ our efficient, semi-supervised method is potentially able to scale to much
 larger datasets, without the need of time-consuming manual annotation on
 pixel-level.
 
+Recently, several approaches have been proposed for semi-supervised semantic segmentation.
+While these are close to our work, there are several important distinctions.
+We address the task of object-class segmentation, that concerns object categories, while
+semantic segmentation approaches often focus on "stuff" categories like "sky" and "road" that
+are more easily detected using simple texture features.
+Additionally, in contrast to \citet{vezhnevets2011weakly}, our approach is in
+principle applicable to large datasets, the regime where weak annotation is
+most useful.
 
-% TODO contrast with Alex
-
-%The task of multi-class segmentation is often split up in a segmentation
-%and a recognition part. Random forest methods often classify each pixel
-%separately and segment using predicted classes~\citep{schroff2008object} while SVM-based methods often work on an
-%over-segmentation of the image, called superpixels~\citep{ladicky2009associative,gonfaus2010harmony}. Superpixels avoid the
-%computational burden of classifying each pixel separately, but have
-%two drawbacks:
-%\begin{enumerate}
-    %\item A single superpixel does not provide enough context for classification~\citep{fulkerson2009class}.
-    %\item Segment boundaries are decided on the lowest level by generating
-        %superpixels. This decision cannot be corrected afterwards~\citep{hanbury2008superpixels}.
-%\end{enumerate}
 In our approach, we work with a set of candidate segments, generated using
 constrained parametric min-cuts~\citep{carreira2010constrained}.  For each
 image, these segments are a set of overlapping, object-like regions, which
@@ -120,7 +115,7 @@ advantage of their algorithm over the MI-kernel of \citet{gaertner2002multi},
 so we use the MI-kernel for better scalability.
 
 \citet{liconvex2010} compute likelihood ratios for instances, giving a new
-convex formulation of the multi-instance problem.  Using these likelihood
+convex formulation of the multi-instance problem. Using these likelihood
 ratios, classification can be performed directly on the instances, provided an
 appropriate threshold for classifying instances as positive is known. We
 circumvent this problem by applying the same classifier to instances and bags,
@@ -129,7 +124,7 @@ thereby obtaining hard class decisions for each instance.
 %\subsection{Multi Instance Multi Label (MIML) Methods}
 %Zhou and Zhang~\citet{zhou2007multi} were some of the first to tackle the problem of multi-instance multi-label tasks.
 %They proposed two methods, MIMLBoost and MIMLSvm. MIMLBoost transforms a MIML task into
-%a multi-instance learning task by reformulating the problem of \eqref{miml} as
+%a multi-instance learning task by reformulating the problem of \Eqref{miml} as
 %\begin{equation} f_{MIL} \colon 2^\mathcal{X}\times \mathcal{Y} \rightarrow \{ -1, +1\}.\end{equation}
 %This corresponds to learning a single multi-instance classifier per class.
 %MIMLSvm, on the other hand, transforms a MIML task into a multi-label task by constructing a mapping
@@ -227,7 +222,7 @@ models~\citep{zha2008joint}.
 
 While using MIK has many advantages, it produces only an instance-level
 classifier. We propose to transform a bag-level classifier $f_{MI}$ as given by
-the SVM and \eqref{mi_kernel} into an instance-level classifier by setting
+the SVM and \Eqref{mi_kernel} into an instance-level classifier by setting
 $f_{I}(x):=f_{MI}(\{x\})$, in other words, by considering each instance as its own
 bag. 
 We extend the MIK SVM to the multi-class case using the one-vs-rest approach,
@@ -273,14 +268,14 @@ This simple heuristic yields good results in practice.
 
 \section{Experiments}
 
-\subsection{Instance-Level Predictions using Multi-Instance Kernels}
+\subsection{Instance-Level Predictions using MI-Kernel}
 
 To assess the validity of instance-level predictions using multi-instance
 kernels, we transform $f_{I}$ back to an instance-level classifier, using the
-multi-instance learning assumption (\eqref{multi_instance}). We refer to these
-instance-based MIK predictions as MIK-instance. In all experiments, the
+multi-instance learning assumption (\Eqref{multi_instance}). We refer to these
+instance-based MIK predictions as MIK-I. In all experiments, the
 parameters of the MI-Kernel and SVM are adjusted using MIK and then used with
-both MIK and MIK-instance.  This facilitates very fast parameter scans since
+both MIK and MIK-I.  This facilitates very fast parameter scans since
 MIK is very efficient to compute. Note that we cannot adjust parameters using
 instance prediction error, as we assume no instance labels to be known.
 
@@ -288,22 +283,22 @@ instance prediction error, as we assume no instance labels to be known.
     \centering
     \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lccccccc}
     \toprule
-        & SVM-SVR & EMDD & mi-SVM & MI-SVM & MICA & MIK & MIK-instance \\
+        & SVM-SVR & EMDD & mi-SVM & MI-SVM & MICA & MIK & MIK-I \\
     \cmidrule(rl){2-8}
     Musk1 & 87.9 &84.9 &  87.4 &  77.9     & 84.3 & 88.0& 88.0 \\
     Musk2 & 85.4 &84.8 &  83.6 &  84.3     & 90.5 & 89.3& 85.2 \\
     \bottomrule
     \end{tabularx}
     \caption{Bag level performance of various MIL algorithms on the standard Musk
-    datasets. All but MIK provide instance-level labeling. \tablabel{muskacc}}
+    datasets. All but MIK provide instance-level labeling.\tablabel{muskacc}}
     
 \end{table}
-We compared the performance of MIK, MIK-instance and state-of-the-art MI
+We compared the performance of MIK, MIK-I and state-of-the-art MI
 methods on the Musk benchmark datasets~\citep{dietterich1997solving}, see
 \Tabref{muskacc}. Results were obtained using 10-fold cross-validation. While
-the computational complexity of MIK-instance is very low compared to the other
+the computational complexity of MIK-I is very low compared to the other
 methods, it achieves competitive results.  Using instance-level labels results
-in a slight loss of accuracy of MIK-instances, compared to MIK\@. This small
+in a slight loss of accuracy of MIK-I, compared to MIK\@. This small
 degradation of performance is quite surprising, since the model was not trained
 to provide any instance-level labels.
 
@@ -311,9 +306,9 @@ For multi-class image segmentation, it is beneficial to have a low witness
 rate, that is only a few instances are assumed to be positive in a positive
 bag. Since an object might not be very prominent in an image, only a fraction
 of segments might correspond to the object.
-\Tabref{musk-witness} compares the witness rates of MIK-instance,
+\Tabref{musk-witness} compares the witness rates of MIK-I,
 miSVM~\citep{andrews2003support} and SVR-SVM~\citep{liconvex2010} on the Musk
-datasets. MIK-instance is able to achieve similar accuracy with much less
+datasets. MIK-I is able to achieve similar accuracy with much less
 witnesses than the other methods.  Note that Musk1 consists of very small bags
 while Musk2 contains significantly larger bags, more similar to the
 image/segment setup.
@@ -328,7 +323,7 @@ image/segment setup.
     \cmidrule(rl){4-5}
     mi-SVM      & 87.4          & 100\%               &  83.6          & 83.9\%\\
     SVM-SVR     & 87.9          & 100\%               &  85.4          & 89.5\%\\
-    MIK-instance& 88.0          & 99\%                &  85.2          & 62.3\%\\
+    MIK-I& 88.0          & 99\%                &  85.2          & 62.3\%\\
     \bottomrule
     \end{tabularx}
     \caption{MIL algorithms and the empirical witness rates of the
@@ -347,7 +342,7 @@ and used the training and test sets as given by the dataset.  It is
 straight-forward to extend the binary MIK method to the multi-class setting
 using a one-vs-all strategy.
 We train one multiple kernel learning (MKL) SVM per class using MIK and predict
-class labels on segment level using MIK-instance. If at least one SVM
+class labels on segment level using MIK-I. If at least one SVM
 classifies a segment as positive, it is associated with the most confident
 class. Otherwise, it is assigned ``background'' or no class.
 This yields a classification of each segment into one of four classes: car,
@@ -390,7 +385,7 @@ described in \Secref{combiningsegments}.
 \end{table}
 
 Per-class pixel accuracies are reported in \Tabref{tab:graz}; some qualitative
-results are shown in \figref{results}. The overall accuracy on images labels,
+results are shown in \Figref{results}. The overall accuracy on images labels,
 which is the task that was actually trained, is $90\%$.  While the performance
 of our multiple-instance based approach is far from current methods that use
 pixel-level annotations, whose pixel-level accuracy is around
