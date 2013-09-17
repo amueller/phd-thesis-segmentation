@@ -1,4 +1,5 @@
-\documentclass[12pt,toc=bibnumbered, a4paper,twoside,DIV=calc]{scrbook}
+\documentclass[12pt,toc=bibnumbered, a4paper,twoside,DIV=11]{scrbook}
+%\documentclass[12pt,toc=bibnumbered, a4paper,twoside]{book}
 
 \usepackage{hyperref}
 \usepackage{epsfig}
@@ -33,7 +34,7 @@
 %\usepackage[urw-garamond]{mathdesign}
 \usepackage{xspace}
 \onehalfspacing
-\KOMAoptions{DIV=last}
+%\KOMAoptions{DIV=last}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -87,20 +88,26 @@
 
 \begin{document}
 
-\begin{spacing}{1}
+\begin{spacing}{1.6}
 \begin{titlepage}
-\begin{center}
-\vspace*{1in}
-\textbf{{\LARGE Learning Structured Prediction For Semantic Image Segmentation}}
-\par
-\vspace{1.5in} {\large Andreas Christian M\"uller}
-\par \vspace{0.5in}
-Abteilung VI, Autonomie Intelligente Systeme \par
-Institut f\"ur Informatik
-\par \vspace{0.5in}
-Friedrich-Willhelm Universit\"at Bonn \par
-\vspace{0.5in} September 2013 \end{center}
 
+\begin{center}
+\Large\sffamily
+\vspace*{1cm}
+\textbf{{\huge Learning Structured Prediction For Semantic Image Segmentation}}\\[5mm]
+Dissertation\\%[3mm]
+zur\\%[3mm]
+Erlangung des Doktorgrades (Dr.\ rer.\ nat.)\\%[3mm]
+der\\%[3mm]
+Mathematisch-Naturwissenschaftlichen Fakult\"at\\%[3mm]
+der\\%[3mm]
+Rheinischen Friedrich-Wilhelm Universit\"at Bonn\\%[3mm]
+vorgelegt von\\%[5mm]
+{\LARGE Andreas Christian M\"uller}\\%[5mm]
+aus\\%[3mm]
+Offenbach am Main\\%[10mm]
+Bonn, September 2013
+\end{center}
 \end{titlepage}
 
 \pagenumbering{Roman}
