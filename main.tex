@@ -258,7 +258,16 @@ features are highly non-linear in the original input pixels.
 Kernelization of structural support vector machines is trivial in theory, but
 had only limited success in the context of CRFs for image
 segmentation~\citep{lucchi2012structured}.
-Other 
+Two major alternatives for non-linear CRFs were proposed in the literature,
+conditional neural fields~\citep{peng2009conditional} based on neural networks,
+and decision tree fields~\citep{nowozin2011decision}, based on decision trees.
+Conditional neural fields have only applied to sequence classification so far,
+and extending them to our setting of semantic image segmentation would be very
+interesting. Decision tree fields~(DTFs) on the other hand have been applied to loopy
+graphs for image processing, but not for higher level tasks such as semantic
+segmentation. If it is possible to include context in a meaningful way, it
+might be possible to solve even object-centric tasks such as object class
+segmentation with DTFs.
 
 \paragraph[Latent Variable Models]
 \paragraph[Feature Design]
