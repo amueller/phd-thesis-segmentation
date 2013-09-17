@@ -51,7 +51,7 @@ The linear approach leads to
     f(x) = \argmax_{y \in \mathcal{Y}}\  \theta^T \Phi(x, y).
 \end{equation}
 Here, $y$ is a \emph{structured} label, $\Phi$ is a joint feature function of
-$x$ and $y$, and $\theta$ are parameters of the model. \emph{Structured} means
+$x$ and $y$, and $\theta$ contains the parameters of the model. \emph{Structured} means
 that $y$ is more complicated than a single output class, for example a label
 for each word in a sentence or a label for each pixel in an image.
 Learning structured prediction means learning the parameters $\theta$ from
@@ -60,8 +60,8 @@ $\Phi(x, y)$, which manifests the relation between input $x$ and output $y$. As
 $\mathcal{Y}$ is typically very large, it is crucial to exploit the particular
 form of $\Phi(x, y)$ to solve the prediction problem of \Eqref{main_equation}.
 
-While $y$ could be a complicated like a parsing tree or the geometric
-configuration of a molecule, many setting, such as the image segmentation
+While $y$ could be complicated like a parsing tree or the geometric
+configuration of a molecule, many settings, such as the image segmentation
 setting we are interested in, can be reduced to the case where $y$ is a vector of
 discrete labels $\mathcal{Y} = \{1, \dotsc, k\}^n$.
 In the following, we only discuss this multivariate case. In general, $n$
@@ -92,16 +92,16 @@ directly in the log-domain with respect to the more standard product representat
 Here, $y_{N_F}$ denotes the entries of $y$ indexed by $N_F$.
 
 The benefit of using the factor graph representation is that it decomposes the
-function over subsets the variables of interest $y_i$. This allows us to apply
+function over subsets of the variables of interest $y_i$. This allows us to apply
 efficient optimization procedures for the prediction problem in
 \Eqref{main_equation} by exploiting the graph structure of the factor graph.
 %
-To obtain a linear function as in \Eqref{main_equation} from
-\Eqref{log_factor_graph}, we can simply let each $\psi$ be of the form
+To obtain a linear function from
+\Eqref{log_factor_graph} as in \Eqref{main_equation}, we can simply let each $\psi$ be of the form
 \begin{equation}\eqlabel{general_psi}
     \psi_F(x, y_{N_F}) = \theta_F^T \Phi_F(x, y_{N_F}).
 \end{equation}
-The by far most common form is 
+The most common form by far is 
 \begin{equation}\eqlabel{linear_psi}
     \psi_F(x, y_{N_F}) = \theta_{F, y_{N_F}}^T \phi_F(x),
 \end{equation}
@@ -114,18 +114,18 @@ linear form \Eqref{main_equation}. To see this, for \Eqref{general_psi} we simpl
 concatenate the individual components for all $f \in \mathcal{F}$:
 \begin{align}
     \theta &= \bigoplus_{F \in \mathcal{F}} \theta_F\\
-    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \Phi_F(x, y_{N_F})
+    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \Phi_F(x, y_{N_F}).
 \end{align}
 Writing down $\Phi$ and $\theta$ for the form \Eqref{linear_psi} is a little less compact:
 \begin{align}
     \theta &= \bigoplus_{F \in \mathcal{F}}\ \bigoplus_{y_{N_F} \in \mathcal{Y}_{N_F}} \theta_{F, y_{N_F}}\\
-    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \left (\phi_F(x) \otimes e_{y_{N_F}} \right )
+    \Phi(x, y) &= \bigoplus_{F \in \mathcal{F}} \left (\phi_F(x) \otimes e_{y_{N_F}} \right ),
 \end{align}
-where $e_{y_{N_F}} \in \mathbb{R}^{|\mathcal{Y}_{N_F}|}$ is the indicator for a
+Here $e_{y_{N_F}} \in \mathbb{R}^{|\mathcal{Y}_{N_F}|}$ is the indicator for a
 given variable setting $y_{N_F}$.
-In words, $\Phi_F$ is build simply by creating a vector of
+In words, $\Phi_F$ is built simply by creating a vector of
 $|\mathcal{Y}_{N_F}|$ times the size of $\phi_F$, which is zero everywhere,
-except for the place corresponding to $y_{N_F}$. %TODO unclear!
+except for the position corresponding to $y_{N_F}$. %TODO unclear!
 
 This approach to structured prediction is closely related to 
 approaches using \emph{probabilistic graphical models}.  Probabilistic graphical models are a
@@ -133,9 +133,9 @@ tool to express factorizations of probability distributions.  Similar to
 \Eqref{log_factor_graph}, the joint probability distribution over a
 multi-variate random variable $y$ can be expressed using a factor-graph:
 \begin{equation}\eqlabel{graphicalmodel}
-    p(y | x) = \frac{1}{Z_x}\prod_{F \in \mathcal{F}} \exp\left(\psi_F(x, y_{N_F})\right)
+    p(y | x) = \frac{1}{Z_x}\prod_{F \in \mathcal{F}} \exp\left(\psi_F(x, y_{N_F})\right).
 \end{equation}
-where
+Here
 \begin{equation}
     Z_x = \sum_{y' \in \mathcal{Y}} \prod_{F \in \mathcal{F}} \exp\left(\psi(x, y'_{N_F})\right)
 \end{equation}
@@ -172,7 +172,8 @@ There are several reasons for the popularity of linear maximum margin approaches
         specifies $g$, then learning is feasible as soon as the maximization
         over $y$ in \Eqref{main_equation} can be carried out.
     \item[Generalization] The maximum margin principle yields generalization
-        bounds using the effective complexity~\citep{taskar2003max}.
+        bounds using the effective complexity~\citep{taskar2003max}, that are generally
+        tighter than corresponding VC-theoretical bounds.
     \item[Strong Convexity] The resulting optimization problem is strongly
         convex, leading to efficient optimization and unique solutions.
 \end{description}
@@ -181,17 +182,16 @@ For learning, a dataset $(x\hoch{1}, y\hoch{1}),\dotsc,(x\hoch{k}, y\hoch{k})$ i
 \begin{equation}
     \Delta \colon \mathcal{Y} \times \mathcal{Y} \rightarrow \mathbb{R}.
 \end{equation}
-The parameters $\theta$ are learned by minimizing the loss based soft-margin
+The parameters $\theta$ are learned by minimizing the loss-based soft-margin
 objective
 \begin{equation}\eqlabel{learning_equation}
     \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  \ell(x\hoch{i}, y\hoch{i}, \theta)
 \end{equation}
-with regularization parameter $C$. Here $\ell$ is an hinge-loss like upper bound
+with regularization parameter $C$. Here, $\ell$ is a hinge-loss like upper bound
 on the empirical $\Delta$-risk:
 \begin{equation}\eqlabel{loss_augmentation}
-    \ell(x\hoch{i}, y\hoch{i}, \theta) = [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y) - \theta^T \phi(x\hoch{i}, y\hoch{i}]_+
+    \ell(x\hoch{i}, y\hoch{i}, \theta) = [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y) - \theta^T \phi(x\hoch{i}, y\hoch{i}]_+.
 \end{equation}
-
 This is an instance of regularized empirical risk minimization, with a
 piecewise linear, convex upper bound on the loss. 
 Finding the $y$ that corresponds to a maximum in \Eqref{loss_augmentation} is
@@ -217,14 +217,14 @@ one sample at a time, and adjust parameters incrementally.
 In image segmentation tasks, inference is often costly, making loss-augmented
 prediction the most expensive step in learning. This often leads to longer
 run-times for batch algorithms. On the other hand, loss-augmented prediction in
-batch algorithms is embarrassingly parallel, allowing the use of multiple
+batch algorithms is \emph{embarrassingly parallel}, allowing the use of multiple
 processors with almost linear speed improvements.
 
 \subsection{Stochastic Subgradient Descent}\seclabel{subgradient}
 
 Arguably the most straight-forward way to approach \Eqref{learning_equation} is
 using subgradient descent.  In light of the complexity of solving the
-loss-augmented prediction problem in \Eqref{loss_augmentation}, is is natural
+loss-augmented prediction problem in \Eqref{loss_augmentation}, it is natural
 to work in a stochastic setting (see \citet{ratliff2007online}).
 Given a model through $\phi$ and a set of parameters $\theta$, a subgradient
 considering a single training example $(x\hoch{i}, y\hoch{i})$
@@ -239,8 +239,8 @@ The most commonly used update has the simple form
 \end{equation}
 Where $\eta_t$ is a sequence of step sizes.
 %Theoretical convergence guarantees of \ldots can be given whenever \ldots,
-but in practice the choice of $\eta_t$ is often strongly influences the convergence behavior.
-Many practitioners adopted the sequence proposed for binary SVMs in the Pegasos algorithm~\citep{shalev2011pegasos}:
+In practice the choice of $\eta_t$ is often strongly influences the convergence behavior.
+Many practitioners adopt the sequence proposed for binary SVMs in the Pegasos algorithm~\citep{shalev2011pegasos}:
 \begin{equation}
     \eta_t = \frac{C}{t},
 \end{equation}
@@ -253,14 +253,14 @@ a rate of $O(\frac{1}{T})$ can be achieved using a novel averaging scheme:
 \end{equation}
 This $t$-weighted averaging can be computed on-the-fly as
 \begin{equation}\eqlabel{averaging}
-    \bar{\theta}_{t} = \frac{t}{t + 2} \bar{\theta}_t + \frac{2}{t+2} \theta_{t+1}
+    \bar{\theta}_{t} = \frac{t}{t + 2} \bar{\theta}_t + \frac{2}{t+2} \theta_{t+1}.
 \end{equation}
 
 Implementation of the stochastic subgradient algorithm (with or without
 averaging) is straight-forward, but unfortunately detecting convergence is
 often tricky.
 It is possible to use mini-batches instead of processing one sample at a time
-to make use of multiple processors for loss-augmented prediction. Unfortunately
+to make use of multiple processors for loss-augmented prediction. Unfortunately,
 this negatively affects the number of iterations needed, and did not provide a
 benefit in our experiments.
 
@@ -270,7 +270,7 @@ benefit in our experiments.
     \begin{algorithmic}[1]
         \Require training samples $\{ (x\hoch{1}, y\hoch{1}), \dots, (x\hoch{k}, y\hoch{k})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
         \Ensure parameters $\theta$, slack $(\xi_1, \dotsc, \xi_k)$
-        \State $\W_i \leftarrow \emptyset, \xi_i \leftarrow 0 \text{ for all } i=1,\dots,k$
+        \State $\W_i \leftarrow \emptyset, \xi_i \leftarrow 0 \text{ for } i=1,\dots,k$
         \Repeat
             \For {i=1, \dots, k}
                 \State
@@ -287,7 +287,7 @@ benefit in our experiments.
                 \EndIf
             \EndFor
             \vspace{-10mm}
-            \Until no $\W_i$ changes any more.
+            \Until no $\W_i$ changes anymore.
         \end{algorithmic}
     \end{doublespacing}
     \end{algorithm*}
@@ -308,7 +308,7 @@ is maintained, using the cutting plane method. The algorithm starts with an empt
 and repeatedly iterates over the training data. For each sample, the most
 violated constraint is added to $\W$, and the quadratic program is solved
 again, with the new set of constraints.
-The algorithm terminates when no constraint can be found that is more violated then $\epsilon$,
+The algorithm terminates when no constraint can be found that is violated more than $\epsilon$,
 which guarantees a suboptimality of at most $\epsilon$.
 %
 \citet{tsochantaridis2006large} showed a convergence rate of $O(\frac{1}{T^2})$
@@ -334,7 +334,7 @@ found that aggressively removing constraints that are inactive or contribute
 little to the solution often makes the difference between the algorithm being
 practical or not.  Another possible technique is to update the quadratic
 program only every $r$ samples, for some small integer $r$
-(\citet{joachims2009cutting} suggest 100). While this strategy on its own did
+(\citet{joachims2009cutting} suggest $r=100$). While this strategy on its own did
 not provide a large benefits in our experiments, it allows for parallel
 loss-augmented prediction on these mini-batches of size $r$.
 
@@ -380,11 +380,11 @@ interactions between variables corresponding to different data points, and
 then applying the $n$-slack algorithm with a single data point.
 A detailed description can be found in Algorithm~\ref{alg_one_slack}.
 %
-By construction only a single constraint is added in each iteration of
+By construction, only a single constraint is added in each iteration of
 Algorithm~\ref{alg_one_slack}, leading to very small working sets $\W$.
 This has the advantage of making the solution of the QP faster, as it contains far
 less variables than in the $n$-slack algorithm. The down-side of this is that
-the loss-augmented prediction problem has to be solve much more often until
+the loss-augmented prediction problem has to be solved much more often until
 convergence. This is reflected in a convergence rate of $O(\frac{1}{kT})$,
 which scales with the inverse of the dataset size.
 
@@ -402,7 +402,7 @@ to make the algorithm more efficient:
         To exploit this, we maintain a set $C^i$ of the last $r$ results of
         loss-augmented prediction for each training example $(x^i, y^i)$
         (line~\ref{get_cutting_plane} in Algorithm~\ref{alg_one_slack}).
-        For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$ we
+        For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$, we
         find
         \[ \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n
             \Delta(y^i, \hat{y}) - \theta^T \sum_{i=1}^n [\Phi(x^i, y^i) -
