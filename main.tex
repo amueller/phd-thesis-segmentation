@@ -1,4 +1,4 @@
-\documentclass[12pt,toc=bibnumbered, a4paper,twoside,DIV=11]{scrbook}
+\documentclass[12pt,toc=bibnumbered, a4paper,twoside,DIV=11,BCOR=.5cm]{scrbook}
 %\documentclass[12pt,toc=bibnumbered, a4paper,twoside]{book}
 
 \usepackage{hyperref}
@@ -110,7 +110,7 @@ Bonn, September 2013
 \end{center}
 \end{titlepage}
 %
-\pagenumbering{Roman}
+\thispagestyle{empty}
 \vspace*{5cm}
 \Large\sffamily
 \begin{center}
@@ -123,6 +123,7 @@ der Rheinischen Friedrich-Wilhelms-Universit\"at Bonn\\
 Tag der Promotion:\\
 Erscheinungsjahr: 2013\\
 \end{spacing}
+\pagenumbering{Roman}
 \tableofcontents
 %\listoffigures
 %\listoftables
@@ -210,7 +211,71 @@ endeavour.
 
 \include{nyu/paper}
 
-\chapter{Conclusion}
+\chapter{Conclusion and Future Direction}
+Current progress in computer vision \dots at an incredible speed,
+with new methods and applications emerging constantly.
+Still, there are large differences in the paradigms employed by different researchers.
+While it is generally aknowledged that context is one of the most important cues
+in recognizing objects and interpreting scence, there is little consensus on how
+contextual information should be modelled, or even learned.
+The structured prediction paradigm allows a principled approach to incoporating
+predictions within an image, and to include context information.
+We investigated the potential of structural methods for the application of semantic image segmentation
+and object recognition, appications to which structured methods have been applied successfully before.
+We focus on \emph{learning} of structural models and the interaction of inference and learning
+in the neighborhood models typically employed for semantic segmentation.
+The thesis presents a software implementation of a variety of popular learning algorithms for structural
+support vector machines, together with a thorough evaluation of their properties in the presence
+of approximate inference.
+We demonstated that exact learning is possible, even in the presence of loops in the
+\dots factor graph. We also demonstrate the power of conditioning interactions
+on data, learning spacial interactions in a RGB-D setting.
+
+There are several directions for future research that we think would be interesting to pursue as an extention
+of the presented results: 
+\paragraph[Inference Machines]
+Recently \citet{stoyanov2011empirical} started a new trend in structured
+prediction, which is sometimes called ``inference machines''. The basic
+principle is simple: view the process of prediction with a given inference
+procedure as a prediction method and optimize parameters of this method using
+empirical risk minimization.  The work of \citet{stoyanov2011empirical}, used
+loopy belief propagation as their inference algorithm and the optimization is
+carried out simply using gradient descent on the non-convex but differentiable
+loss function.  Other recent work in this direction includes
+\citet{krahenbuhlparameter}, who used mean-field inference in a fully connected
+conditional random field and \citet{jancsarylearning}, who used closed form
+inference in a Gaussian CRF\@.
+While these algorithms show great promise, their relation to the traditional
+approach of structured prediction used in this work is mostly unclear. In particular,
+if exact traditional learning is possible in a model, it is unclear how much
+can be gained by direct empirical risk minimization.
+Little empirical comparision was performed, and we are not aware of theoretical
+work in this direction, leaving much room for future investigation of this
+direction.
+\paragraph[Non-Linear Models]
+In this work, we only considered models that are linear in the input features--though
+features are highly non-linear in the original input pixels.
+Kernelization of structural support vector machines is trivial in theory, but
+had only limited success in the context of CRFs for image
+segmentation~\citep{lucchi2012structured}.
+Other 
+
+\paragraph[Latent Variable Models]
+\paragraph[Feature Design]
+    
+
+%Vision is challenging
+%context matters
+%structured prediction allows modeling and learning of context and relations
+%thesis gives insight into some relations of approximate inference and learning
+%gives framework for evaluation
+%comparison of methods
+
+which low-level cues?
+superpixels?
+non-linear models?
+latent variables?
+inference engines
 
 \bibliographystyle{plainnat}
 \bibliography{main}
