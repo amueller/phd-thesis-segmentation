@@ -27,6 +27,7 @@
 \usepackage{setspace}
 \usepackage{color}
 \usepackage{minted}
+\usepackage[german,english]{babel}
 
 %\usepackage{tgpagella}
 %\usepackage[T1]{fontenc}
@@ -59,12 +60,6 @@
 \algrenewcommand{\algorithmicrequire}{\textbf{Input:}}
 \algrenewcommand{\algorithmicensure}{\textbf{Output:}}
 
-%\newtheorem{corollary}{Corollary}
-%\newtheorem{corollarya}{Corollary}
-%\newtheorem{lemma}{Lemma}
-%\newtheorem{theorem}{Theorem}
-%\newtheorem{theorema}{Theorem}
-
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \newcolumntype{C}{>{\centered\arraybackslash}X}
 
@@ -95,18 +90,18 @@
 \begin{center}
 \Large\sffamily
 \vspace*{1cm}
-\textbf{{\huge Learning Structured Prediction For Semantic Image Segmentation}}\\[5mm]
-Dissertation\\%[3mm]
-zur\\%[3mm]
-Erlangung des Doktorgrades (Dr.\ rer.\ nat.)\\%[3mm]
-der\\%[3mm]
-Mathematisch-Naturwissenschaftlichen Fakult\"at\\%[3mm]
-der\\%[3mm]
-Rheinischen Friedrich-Wilhelm Universit\"at Bonn\\%[3mm]
-vorgelegt von\\%[5mm]
-{\LARGE Andreas Christian M\"uller}\\%[5mm]
-aus\\%[3mm]
-Offenbach am Main\\%[10mm]
+\textbf{{\huge Learning Structured Prediction for Semantic Image Segmentation}}\\[5mm]
+Dissertation\\
+zur\\
+Erlangung des Doktorgrades (Dr.\ rer.\ nat.)\\
+der\\
+Mathematisch-Naturwissenschaftlichen Fakult\"at\\
+der\\
+Rheinischen Friedrich-Wilhelm Universit\"at Bonn\\
+vorgelegt von\\
+{\LARGE Andreas Christian M\"uller}\\
+aus\\
+Offenbach am Main\\
 Bonn, September 2013
 \end{center}
 \end{titlepage}
@@ -132,9 +127,10 @@ Erscheinungsjahr: 2013\\
 %\listoftables
 \chapter*{Zusammenfassung}
 \enlargethispage{10mm}
+\selectlanguage{german}
 Automatische Segmentierung und Erkennung von semantischen Klassen in
-nat\"urlichen Bildern ist ein wichtiges offenes Problem des machinellen Sehens.
-Diese Arbeit untersucht drei m\"oglichen Ansi\"atzen der Erkennung:
+nat\"urlichen Bildern ist ein wichtiges offenes Problem des maschinellen Sehens.
+Diese Arbeit untersucht drei m\"oglichen Ans\"atzen der Erkennung:
 ohne \"Uberwachung, mit \"Uberwachung auf Ebene von Bildern und mit \"Uberwachung auf Ebene
 von Pixeln. Diese Arbeit setzt sich aus drei Teilen zusammen.
 
@@ -142,18 +138,18 @@ Im ersten Teil der Arbeit schlagen wir einen Clustering-Algorithmus vor,
 der eine neuartige, informationstheoretische Zielfunktion optimiert. Wir zeigen, dass
 der vorgestellte Algorithmus \"ublichen Standardverfahren aus der Literatur gegen\"uber
 klare Vorteile auf vielen verschiedenen Datens\"atzen hat. Clustering ist ein wichtiger
-Baustein in vielen Applikationen des Machinellen Sehens, insbesondere in der
+Baustein in vielen Applikationen des machinellen Sehens, insbesondere in der
 automatischen Segmentierung.
 
 Der zweite Teil dieser Arbeit stellt ein Verfahren zur automatischen
 Segmentierung und Erkennung von Objektklassen in nat\"urlichen Bildern vor, der
-mit Hilfe von Supervision in Form von Klassen-Pr\"asenz auf Bildern in der Lage
+mit Hilfe von Supervision in Form von Klassen-Vorkommen auf Bildern in der Lage
 ist ein Segmentierungsmodell zu Lernen. Nach unserem Wissen ist dies der erste
 Ansatz dieser Art, der sich speziell auf komplexe Objektklassen bezieht.
 
-Der dritte und letzte Teil er Arbeit untersucht einen der am weitest
+Der dritte und letzte Teil der Arbeit untersucht einen der am weitesten
 verbreiteten Ans\"atze zu semantischen Segmentierung und
-Objektklassensegmentierung, n\"amlich Conditional Random Fields verbunden mit Verfahren
+Objektklassensegmentierung, Conditional Random Fields, verbunden mit Verfahren
 der strukturierten Vorhersage.
 %Die Vorhersage f\"ur Modelle zur Bild-Markierung
 %mittels Conditional Random Fields ist f\"ur gew\"ohnlich nur approiximativ
@@ -165,17 +161,18 @@ der strukturierten Vorhersage.
 Wir untersuchen verschiedene Lernalgorithmen des struktuierten Lernens, insbesondere
 im Zusammenhang mit approximativer Inferenz. Wir zeigen, dass es m\"oglich ist trotz des Vorhandenseins von
 Kreisen in den Nachbarschaftsgraphen exakte strukturierte Modelle zur Bildsegmentierung zu lernen.
-Mit den vorgestellten Methoden bringen den Stand der Kunst auf
+Mit den vorgestellten Methoden bringen den Stand der Kunst
 auf zwei komplexen Datens\"atzen zur semantischen Segmentierung voran, dem MSRC-21 Datensatz
 von RGB-Bildern und dem NYU V2 Datensatz von RGB-D Bildern von Innenraum-Szenen.
 
-Wir stellen ausserdem eine Software-Bibliothek vor, die es erlaubt einen
+Wir stellen au{\ss}erdem eine Software-Bibliothek vor, die es erlaubt einen
 weitreichenden Vergleich der besten Lernverfahren f\"ur strukturiertes Lernen
 durchzuf\"uhren.
-Unsere Studie erlaubt uns eine Charakterisation der betrachteten Algorithmen
+Unsere Studie erlaubt uns eine Charakterisierung der betrachteten Algorithmen
 in einer Reihe von Anwendungen, insbesondere der semantischen Segmentierung und
 Objektklassensegmentierung.
 
+\selectlanguage{english}
 \chapter*{Abstract}
 Automatic segmentation and recognition of semantic classes in natural images is
 an important open problem in computer vision.

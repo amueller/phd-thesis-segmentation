@@ -1,4 +1,4 @@
-\chapter{Weakly Supervised Object Segmentation}
+\chapter{Weakly Supervised Object Segmentation}\label{ch:semi_supervised}
 
 Most algorithms for semantic image segmentation and object-class segmentation
 work with strong supervision: a pixel-wise labeling of training images. In this
@@ -63,7 +63,7 @@ image level annotation, but also pixel level annotation of object. This allows
 us to judge the succes of learning on instance level.
 
 \section{Related Work}
-\subsection{Proposal Object Segments}\label{related_segments}
+\subsection{Object Segment Proposals}\label{related_segments}
 Most work on multi-class segmentation focuses on strong supervision on
 superpixel level. There is still little work on using candidate segments.  The
 method we use for generating candidate segments is Constraint Parametric
@@ -165,9 +165,9 @@ recognition than these patch-based or superpixel-based approaches.
 
 
 \section{Multi-Instance Kernels for Image Segmentation}
-\subsection{Constraint Parametric Min Cuts (CPMC)}
+\subsection{Constraint Parametric Min-Cuts (CPMC)}
 % Repetition?
-To generate proposal segments, we use the Constraint Parametric Min Cut (CPCM)
+To generate proposal segments, we use the Constraint Parametric Min-Cuts (CPCM)
 method from \citet{carreira2010constrained}. In CPMC, initial segments are
 constructed using graph cuts on the pixel grid. The energy function for these cuts
 uses pixel color and the response of the global probability of boundary (gPb)

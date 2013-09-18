@@ -1,11 +1,48 @@
 \chapter{Introduction}
-The task of semantic segmentation is defined as predicting a semantic class label
-for each pixel in a natural image. Predicting semantic labels on such a fine scale
-constitutes an important step towards general scene understanding.
+\vspace{1cm}
+\hfill%
+\begin{minipage}{.4\linewidth}
+\includegraphics[width=\linewidth]{python_soul}%
+\flushright%
+Randall Munroe, \emph{xkcd.com}
+\end{minipage}%
+\\[2cm]
+In computer vision research, the goal is to automatically extract information from an image.
+In particular discerning semantic information, that is interpreting an image, is a prominent
+research topic.
+While much process has been made in recent years, computer vision systems still lack behind
+humans in most tasks that require semantic information. Many semantic tasks can be formulated
+in terms of \emph{semantic classes}, that is categories of parts, objects or scenes.
+Examples include answering questions such as ``Is this a picture of a beach?'', ``How many
+cars are in this image'' or even ``What objects lie on the table?''.
+These questions illustrate a range of possible tasks involving semantic categories,
+from classifying images of single objects, over localization and counting of object classes,
+to parsing a scene fully into objects and object classes, together with their relations.
 %
-Applications of scene understanding include automatic image interpretation for retrieval,
-autonomous driving and mobile robotics.
+While humans can distinguish tens of thousands of object classes, and have little trouble
+in interpreting complex scenes, current methods are often restricted to a much smaller number
+of classes. While some recent approaches are able to classify images into a thousand 
+or even ten thousand classes, results are still somewhat mixed.
+In particular, when refining the task to localization, and allowing multiple objects within
+a scene, few approaches have been evaluated on more than about twenty classes.
+
+In this work, we will investigate the tasks of semantic segmentation and object
+class segmentation.  These ask for a semantic annotation of each pixel with one
+of a set of known classes. We choose this task in particular for several reasons:
+\begin{itemize}
+    \item Pixel-level annotation provides highly detailed information about the scene.
+    \item Joint estimation of multiple classes allows for the use of \emph{context}.
+    \item In contrast to category-agnostic segmentation approaches, object class segmentation
+        has an unambiguous true labeling.
+    \item A variety of annotated datasets is publicly available.
+\end{itemize}
 %
+Applications of semantic segmentation and scene understanding include automatic
+image interpretation for retrieval, autonomous driving and mobile robotics.
+While these are already important applications, we expect that with the
+abundance of camera data, and the proliferation of mobile computing, even
+more applications will gain importance soon.
+
 We will in the following distinguish between the task of semantic segmentation,
 which is usually distinguishing unstructured ``stuff'' classes such as road and
 grass, and object class segmentation, which denotes the segmentation of very
@@ -16,16 +53,59 @@ and NYU V2.
 %
 Both tasks have the same ultimate goal of parsing, and therefore understanding, images
 in terms of semantic classes, but usually employ  different mechanisms to represent the input.
-%
-%The main part of this thesis investigates the tasks of semantic segmentation and object class segmentation in natural images.
+
+
+One of the bottlenecks in learning object class segmentation and semantic
+segmentation is the availability of training data.  While unlabeled image data,
+and even data with semantic
+``tags'' is available in practically unlimited quantities, semantic annotation
+on pixel level is only available through laborious manual annotation. 
+Chapter %FIXME
+introduces an approach to cope with this shortcoming of object class segmentation approaches
+by introducing a method to find segmentations automatically from image level annotations.
+
 The main part of this thesis investigates the use of structured learning
 algorithms to the task of semantic image segmentation. Both topics have receive
 much attention in the computer vision and machine learning communities lately.
 Unfortunately, learning structured prediction in computer vision applications
-is still little understood.  We hoe this thesis will further the understanding
-of structured learning methods, give practical guidance and provide
-implementations to further the use of structured prediction methods in computer
-vision.
+is still little understood.
+
+We will focus on the use of conditional random fields~(CRFs), which have shown
+great promise for computer vision applications. Using the paradigm of
+structural support vector machines, it is possible to learn conditional random
+fields to directly minimize a loss of interest. In particular, conditional
+random fields allow to combine different cues, possibly produced by other
+approaches, in a principled manner.
+
+There have been several previous studies on learning structural support vector machines,
+and learning for conditional random fields. The impact of approximate inference was first
+investigated by \citet{finley2008training}, applying structural support vector machines
+to multi-label data. Later, different works investigated how to combine approximate inference and
+learning in a single framework. \citet{meshi2010learning, komodakis2011efficient}, and \citet{hazan2010primal} approached
+the problem using duality, and formulate learning and inference as a joint optimization problem.
+\citet{stoyanov2011empirical}, and later \citet{jancsarylearning} and  \citet{krahenbuhlparameter} formulate learning
+structured prediction as optimizing an \emph{prediction engine}, that takes into account all aspects
+of the model, in particular the inference algorithm used.
+In this work, on the other hand, we follow the well-established algorithms for learning structural
+support vector machines, and investigate how we can use the available inference algorithms to
+obtain good results within a reasonable time-frame.
+
+\citet{nowozin2010parameter} provide a detailed evaluation of different aspects of learning object class
+segmentation, that is somewhat orthogonal to this work. Their work considers the choice of features,
+number superpixels and pairwise potentials for conditional maximum likelihood learning of tree-structured CRFs.
+\citet{nowozin2010parameter} also compare conditional maximum likelihood learning with maximum margin learning,
+finding little difference in accuracy.
+We focus our work on the more popular neighborhood graphs, which do not allow for easy inference.
+Therefore, conditional maximum likelihood learning would be much harder in our setting. For our studies,
+we fix the considered feature set, and vary the maximum margin learning algorithm. Despite
+this seemingly limited setup, we can make out large differences in the applicability of
+some of the commonly used methods. For comparison, we also evaluate the learning algorithms
+on chain CRFs, where inference is simple.
+
+%We hoe this thesis will further the understanding
+%of structured learning methods, give practical guidance and provide
+%implementations to further the use of structured prediction methods in computer
+%vision.
 
 %related work?? here again?
 %Current systems for semantic segmentation emply a wealth of different paradigms, most notably:
@@ -34,17 +114,12 @@ vision.
 %detector based
 %sparse coding
 
-We will focus on the use of conditional random fields, which have shown very
-promising.  Using the paradigm of structural support vector machines, it is
-possible to learn conditional random fields to directly minimize a loss of
-interest. In particular, conditional random fields allow to combine different
-cues, possibly produced by other approaches, in a principled manner.
 %
-Why semantic segmentation? Difference object / stuff centric? -> difference to Alex
-Structured approaches
+%Structured approaches
 %
 
 \section{List of Contributions}
+This thesis contains the following contributions:
 \begin{itemize}
 \item Introduction of general clustering algorithm that improves upon widely used
     approaches from the literature.
@@ -63,7 +138,7 @@ segmentation into superpixels, and in the creation of visual words.
 
 We will then introducing a mostly unstructured
 approach to semi-supervised learning for object class segmentation in
-Chaper~\ref{ch:semi_supervised}, investigating the problem of annotating
+Chapter~\ref{ch:semi_supervised}, investigating the problem of annotating
 training data for semantic segmentation. The central topic of this thesis is
 introduced in Chapter~\ref{ch:structured_pystruct}, which also introduces our
 software library for implementing structured learning and prediction
@@ -81,7 +156,7 @@ contain many loops. We demonstrate our algorithm on the Pascal VOC 2010 and MSRC
 and provide state-of-the-art results on the MSRC-21 dataset.
 
 Finally, Chapter~\ref{ch:nyu} applies the methods developed in
-Chapter~\ref{ch:structurd_pystruct} and Chapter~\ref{ch:exact_learning} to the
+Chapter~\ref{ch:structured_pystruct} and Chapter~\ref{ch:exact_learning} to the
 problem of semantic annotation with structure classes in RGB-D data. We
 demonstrate that we are able to learn meaningful spacial relations, and improve
 upon the state-of-the-art in the NYU V2 datasets that we consider.
@@ -91,9 +166,9 @@ The main material of this thesis has either been published in conference
 proceedings or has been submitted to conferences or journals. We now list the
 relevant publications.
 \begin{description}
-    \item[Chapter 2] \emph{Information Theoretic Clustering using Minimum Spanning Trees} Andreas C. M\"uller, Sebastian Nowozin and Christoph H. Lampert. Published in the proceedings of the German Conference on Pattern Recognition.
-    \item[Chapter 3] \emph{Multi-Instance Methods for Partially Supervised Image Segmentation} Andreas C. M\"uller and Sven Behnke. Published in the proceedings of the IARP Worshop on Partially Supervised Learning.
-    \item[Chapter 4] \emph{PyStruct - Structured Prediction in Python} Andreas C. M\"uller and Sven Behnke. Submitted to the Journal of Machine Learning Research, Open Source Software track.
-    \item[Chapter 5] \emph{Learning a Loopy Model for Semantic Segmentation Exactly}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Computer Vision Theory and Applications.
-    \item[Chapter 6] \emph{Learning Depth-Sensitive Conditional Random Fields for Semantic Segmentation}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Robotics and Automation.
+    \item[Chapter~\ref{ch:itm}] \emph{Information Theoretic Clustering using Minimum Spanning Trees} Andreas C. M\"uller, Sebastian Nowozin and Christoph H. Lampert. Published in the proceedings of the German Conference on Pattern Recognition.
+    \item[Chapter~\ref{ch:semi_supervised}] \emph{Multi-Instance Methods for Partially Supervised Image Segmentation} Andreas C. M\"uller and Sven Behnke. Published in the proceedings of the IARP Worshop on Partially Supervised Learning.
+    \item[Chapter~\ref{ch:structured_pystruct}] \emph{PyStruct - Structured Prediction in Python} Andreas C. M\"uller and Sven Behnke. Submitted to the Journal of Machine Learning Research, Open Source Software track.
+    \item[Chapter~\ref{ch:exact_learning}] \emph{Learning a Loopy Model for Semantic Segmentation Exactly}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Computer Vision Theory and Applications.
+    \item[Chapter~\ref{ch:nyu}] \emph{Learning Depth-Sensitive Conditional Random Fields for Semantic Segmentation}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Robotics and Automation.
 \end{description}

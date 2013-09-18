@@ -266,7 +266,7 @@ this negatively affects the number of iterations needed, and did not provide a
 benefit in our experiments.
 
 \begin{algorithm*}[t]
-    \caption{N-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
+    \caption{$n$-Slack Cutting Plane Training of Structural SVMs \label{alg_n_slack}}
     \begin{doublespacing}
     \begin{algorithmic}[1]
         \Require training samples $\{ (x\hoch{1}, y\hoch{1}), \dots, (x\hoch{k}, y\hoch{k})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
@@ -293,7 +293,7 @@ benefit in our experiments.
     \end{doublespacing}
     \end{algorithm*}
 
-\subsection{The N-Slack Cutting Plane Method}\seclabel{n_slack}
+\subsection{The $n$-Slack Cutting Plane Method}\seclabel{n_slack}
 
 The $n$-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
 into a quadratic objective with a combinatorial number of constraints:
@@ -417,7 +417,7 @@ to make the algorithm more efficient:
 
 %TODO BMRM?
  
-\subsection{The SZLJSP algorithm}\seclabel{dual_coordinate_descent}
+\subsection{The SZLJSP Algorithm}\seclabel{dual_coordinate_descent}
 \begin{algorithm*}[t]
     \caption{Shalev-Shwartz Zhang Lacoste-Julien Jaggi Schmidt Pletscher\label{alg_szljsp}}
     \begin{doublespacing}

@@ -27,7 +27,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Learning Depth-Sensitive Conditional Random Fields}
+\chapter{Learning Depth-Sensitive Conditional Random Fields}\label{ch:nyu}
 
 %\section{Introduction}
 For robots to perform varied tasks in unstructured environments, understanding their
@@ -73,7 +73,7 @@ particular the loss-based learning are integral ingredients of the success of ou
 \end{figure}
 
 
-\section{Related work}
+\section{Related Work}
 The task of dense semantic annotation of 3D maps has seen an increased interest
 in recent years.  Early work includes \citet{nuchter2008towards}, who combine
 6D SLAM, surface annotation, and object recognition to build semantically
@@ -155,7 +155,7 @@ that fully learns their potentials.
 
 
 
-\section{Learning depth-sensitve conditional random fields}\seclabel{learning}
+\section{Learning Depth-Sensitve Conditional Random Fields}\seclabel{learning}
 We take a CRF approach, whose nodes represent a labeling of
 superpixels.  We use an energy consisting of first and second order factors
 (also called unary and pairwise potentials), with learned potential functions.
@@ -353,7 +353,6 @@ using grid-search.
 We found 500 superpixels per image to work best, which allow for a maximum
 possible performance of 95\% average class accuracy on the validation set.
 
-\subsection{Results}\seclabel{results}
 \Tabref{results} compares different components of our approach with the literature.
 Please note that we \emph{first} designed our final model, using only the
 validation data. We now report accuracies of simpler models for reference,
@@ -403,7 +402,7 @@ crowded scenes, the CRF has little chance to recover.
         Visualization of some of the learned potentials. The right potential is
         applied to relative depth between superpixels, the second on the
         feature encoding whether one superpixel is above the other in the
-        image. See \secref{results} for details.
+        image. See \secref{experiments} for details.
     \figlabel{weights}}
 \end{figure}
 
@@ -476,7 +475,7 @@ are excluded from the evaluation. See the \secref{results} for details.
 \figlabel{comparison}}
 \end{figure*}
 
-\section{Summary and discussion}
+\section{Summary and Discussion}
 We introduce a CRF formulation for semantic segmentation
 of structure classes in RGB-D images. We base our model in the output of an efficient GPU implementation
 of random forest, and model spatial neighborhood using a superpixel-based approach.
