@@ -131,7 +131,8 @@ Erscheinungsjahr: 2013\\
 %\listoffigures
 %\listoftables
 \chapter*{Zusammenfassung}
-Automatische Segementierung und Erkennung von semantischen Klassen in
+\enlargethispage{10mm}
+Automatische Segmentierung und Erkennung von semantischen Klassen in
 nat\"urlichen Bildern ist ein wichtiges offenes Problem des machinellen Sehens.
 Diese Arbeit untersucht drei m\"oglichen Ansi\"atzen der Erkennung:
 ohne \"Uberwachung, mit \"Uberwachung auf Ebene von Bildern und mit \"Uberwachung auf Ebene
@@ -140,7 +141,9 @@ von Pixeln. Diese Arbeit setzt sich aus drei Teilen zusammen.
 Im ersten Teil der Arbeit schlagen wir einen Clustering-Algorithmus vor,
 der eine neuartige, informationstheoretische Zielfunktion optimiert. Wir zeigen, dass
 der vorgestellte Algorithmus \"ublichen Standardverfahren aus der Literatur gegen\"uber
-klare Vorteile auf vielen verschiedenen Datens\"atzen hat.
+klare Vorteile auf vielen verschiedenen Datens\"atzen hat. Clustering ist ein wichtiger
+Baustein in vielen Applikationen des Machinellen Sehens, insbesondere in der
+automatischen Segmentierung.
 
 Der zweite Teil dieser Arbeit stellt ein Verfahren zur automatischen
 Segmentierung und Erkennung von Objektklassen in nat\"urlichen Bildern vor, der
@@ -162,6 +165,10 @@ der strukturierten Vorhersage.
 Wir untersuchen verschiedene Lernalgorithmen des struktuierten Lernens, insbesondere
 im Zusammenhang mit approximativer Inferenz. Wir zeigen, dass es m\"oglich ist trotz des Vorhandenseins von
 Kreisen in den Nachbarschaftsgraphen exakte strukturierte Modelle zur Bildsegmentierung zu lernen.
+Mit den vorgestellten Methoden bringen den Stand der Kunst auf
+auf zwei komplexen Datens\"atzen zur semantischen Segmentierung voran, dem MSRC-21 Datensatz
+von RGB-Bildern und dem NYU V2 Datensatz von RGB-D Bildern von Innenraum-Szenen.
+
 Wir stellen ausserdem eine Software-Bibliothek vor, die es erlaubt einen
 weitreichenden Vergleich der besten Lernverfahren f\"ur strukturiertes Lernen
 durchzuf\"uhren.
@@ -178,12 +185,14 @@ The thesis comprises three parts.
 
 The first part introduces a clustering algorithm, that optimizes a novel information-theoretic
 objective function. We show that the proposed algorithm has clear advantages over standard algorithm
-from the Literature on a wide array of datasets.
+from the Literature on a wide array of datasets. Clustering algorithms are an important building block
+for higher level computer vision applications, in particular for semantic segmentation.
 
 The second part of this work proposes an algorithm for automatic segmentation
-and recognition of object classes in natural images, that learns a segmentation model solely from
-annotation in form of presence and absence of object classes in images. To the best of our knowledge,
-this is the first algorithm of this kind, that explicitly addresses complex object classes.
+and recognition of object classes in natural images, that learns a segmentation
+model solely from annotation in form of presence and absence of object classes
+in images. To the best of our knowledge, this is the first algorithm of this
+kind, that explicitly addresses complex object classes.
 
 The third and last part of this work investigates one of the most popular
 approaches to the task of object class segmentation and semantic segmentation,
@@ -197,11 +206,15 @@ based on conditional random fields and structured prediction.
 We investigate several learning algorithms, in particular in combination with
 approximate inference procedures. We show how structured models for image
 segmentation can be learned exactly in practical settings, even in the presence
-of many loops in the underlying neighborhood graphs.  We introduce a software
-library that allows us to perform extensive empirical comparisons of
-state-of-the-art structured learning approaches. This allows us to characterize
-their practical properties in a range of applications, in particular for
-semantic segmentation and object class segmentation.
+of many loops in the underlying neighborhood graphs.
+The introduced methods provide results advancing the state-of-the art on two complex benchmark datasets
+for semantic segmention, the MSRC-21 Dataset of RGB images and the NYU V2 Dataset or RGB-D
+images of indoor scenes.
+
+We also introduce a software library that allows us to perform extensive empirical
+comparisons of state-of-the-art structured learning approaches. This allows us
+to characterize their practical properties in a range of applications, in
+particular for semantic segmentation and object class segmentation.
 
 
 \chapter*{Acknowledgements}
@@ -224,12 +237,12 @@ I have been lucky to be a part of the scikit-learn community, whose developers
 have been a constant source of encouragement and inspiration to me. My
 understanding of machine learning as well as software engineering has been
 greatly affected by the continuing exchange with Olivier Grisel, Lars Buitinck,
-Gael Varoquax, Vlad Niculae, Mathieu Blondel, Gilles Louppe, Arnaud Joly and
+Ga\"el Varoquax, Vlad Niculae, Mathieu Blondel, Gilles Louppe, Arnaud Joly and
 others.
 
 I also thank my parents and my sister for their support.
 
-Last but not least I am greateful to Anna M\"uller for her support,
+Last but not least I am grateful to Anna M\"uller for her support,
 encouragement and company. Thank you for giving me the strength needed for this
 endeavour.
 \cleardoublepage
@@ -238,9 +251,9 @@ endeavour.
 
 %\include{datasets/paper}
 
-%\include{itm/paper}
+\include{itm/paper}
 
-%\include{partial_supervision/paper}
+\include{partial_supervision/paper}
 
 \include{structured_prediction/paper}
 \include{pystruct/paper}
@@ -271,6 +284,7 @@ evaluation of their properties in the presence of approximate inference.
 We demonstrate that exact learning is possible, even in the presence of loops in the
 underlying factor graph. We also demonstrate the power of conditioning interactions
 on data, learning spacial interactions in a RGB-D setting.
+%TODO STATE OF THE F*ING ART!
 
 There are several directions for future research that we think would be
 interesting to pursue as an extension of the presented results, in particular in
