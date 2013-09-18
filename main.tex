@@ -1,4 +1,5 @@
 \documentclass[12pt,toc=bibnumbered, a4paper,twoside,DIV=11,BCOR=.5cm]{scrbook}
+%\documentclass[12pt,toc=bibnumbered, a4paper,twoside,DIV=calc]{scrbook}
 %\documentclass[12pt,toc=bibnumbered, a4paper,twoside]{book}
 
 \usepackage{hyperref}
@@ -34,7 +35,7 @@
 %\usepackage[urw-garamond]{mathdesign}
 \usepackage{xspace}
 \onehalfspacing
-%\KOMAoptions{DIV=last}
+\KOMAoptions{DIV=last}
 
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator*{\argmin}{argmin}
@@ -110,7 +111,10 @@ Bonn, September 2013
 \end{center}
 \end{titlepage}
 %
-\thispagestyle{empty}
+%\thispagestyle{empty}
+\clearpage
+\pagenumbering{Roman}
+\setcounter{page}{2}
 \vspace*{5cm}
 \Large\sffamily
 \begin{center}
@@ -123,7 +127,6 @@ der Rheinischen Friedrich-Wilhelms-Universit\"at Bonn\\
 Tag der Promotion:\\
 Erscheinungsjahr: 2013\\
 \end{spacing}
-\pagenumbering{Roman}
 \tableofcontents
 %\listoffigures
 %\listoftables
@@ -194,7 +197,8 @@ I also thank my parents and my sister for their support.
 Last but not least I am greatful to Anna M\"uller for her support,
 encouragement and company. Thank you for giving me the strength needed for this
 endeavour.
-
+\cleardoublepage
+\pagenumbering{arabic}
 \include{intro}
 
 %\include{datasets/paper}
