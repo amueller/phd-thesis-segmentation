@@ -130,7 +130,7 @@ Erscheinungsjahr: 2013\\
 \selectlanguage{german}
 Automatische Segmentierung und Erkennung von semantischen Klassen in
 nat\"urlichen Bildern ist ein wichtiges offenes Problem des maschinellen Sehens.
-Diese Arbeit untersucht drei m\"oglichen Ans\"atzen der Erkennung:
+In dieser Arbeit untersuchen wir drei m\"oglichen Ans\"atzen der Erkennung:
 ohne \"Uberwachung, mit \"Uberwachung auf Ebene von Bildern und mit \"Uberwachung auf Ebene
 von Pixeln. Diese Arbeit setzt sich aus drei Teilen zusammen.
 
@@ -176,20 +176,22 @@ Objektklassensegmentierung.
 \chapter*{Abstract}
 Automatic segmentation and recognition of semantic classes in natural images is
 an important open problem in computer vision.
-This work investigates three different approaches to recognition: without supervision,
+In this work, we investigates three different approaches to recognition: without supervision,
 with supervision on level of images, and with supervision on the level of pixels.
 The thesis comprises three parts.
 
-The first part introduces a clustering algorithm, that optimizes a novel information-theoretic
-objective function. We show that the proposed algorithm has clear advantages over standard algorithm
-from the Literature on a wide array of datasets. Clustering algorithms are an important building block
-for higher level computer vision applications, in particular for semantic segmentation.
+The first part introduces a clustering algorithm that optimizes a novel
+information-theoretic objective function. We show that the proposed algorithm
+has clear advantages over standard algorithm from the literature on a wide
+array of datasets. Clustering algorithms are an important building block for
+higher level computer vision applications, in particular for semantic
+segmentation.
 
 The second part of this work proposes an algorithm for automatic segmentation
 and recognition of object classes in natural images, that learns a segmentation
 model solely from annotation in form of presence and absence of object classes
-in images. To the best of our knowledge, this is the first algorithm of this
-kind, that explicitly addresses complex object classes.
+in images. To the best of our knowledge, this is the first algorithm that is
+also able to addresses complex object classes.
 
 The third and last part of this work investigates one of the most popular
 approaches to the task of object class segmentation and semantic segmentation,
@@ -204,11 +206,11 @@ We investigate several learning algorithms, in particular in combination with
 approximate inference procedures. We show how structured models for image
 segmentation can be learned exactly in practical settings, even in the presence
 of many loops in the underlying neighborhood graphs.
-The introduced methods provide results advancing the state-of-the art on two complex benchmark datasets
-for semantic segmention, the MSRC-21 Dataset of RGB images and the NYU V2 Dataset or RGB-D
-images of indoor scenes.
+The introduced methods provide results advancing the state-of-the art on two
+complex benchmark datasets for semantic segmention, the MSRC-21 Dataset of RGB
+images and the NYU V2 Dataset or RGB-D images of indoor scenes.
 
-We also introduce a software library that allows us to perform extensive empirical
+Finally, we introduce a software library that allows us to perform extensive empirical
 comparisons of state-of-the-art structured learning approaches. This allows us
 to characterize their practical properties in a range of applications, in
 particular for semantic segmentation and object class segmentation.
