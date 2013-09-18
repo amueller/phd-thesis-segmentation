@@ -139,12 +139,14 @@ thereby obtaining hard class decisions for each instance.
 %In our work, we demonstrate how a computationally efficient algorithm combined with strong object segmentation hypotheses can efficiently solve MIML
 %tasks as they occur in weakly supervised multi-class image segmentation, using only a single convex optimization.
 
-\subsection{Semantic Scene Segmentation using Weak Annotation }
-Recently, several methods have been proposed to obtain semantic segmentations
-of images using only image-level
-supervision~\citep{vezhnevets2011weakly,verbeek2007region,vezhnevets2010towards}.
-\citet{vezhnevets2011weakly}, for example, report impressive results on the
-MSRC dataset.
+\subsection{Semantic Scene Segmentation using Weak Annotation}
+Learning semantic segmentation from image-level annotation was first investigated in \citet{verbeek2007region},
+using a semi-supervised conditional random field on patches. \citet{verbeek2007region} evaluated their approach
+on the MSRC-9 datasets.
+More recently, simliar approaches were proposed by
+\citet{vvezhnevets2011weakly} and \citet{vezhnevets2010towards}.
+\citet{vezhnevets2011weakly} independently developed a multiple-instance based
+approach to segmentation, and report impressinve results on the MSRC-21 dataset.
 
 While semantic segmentation is closely related to multi-class image
 segmentation, there are important distinctions: In semantic segmentation, each
