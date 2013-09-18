@@ -132,19 +132,36 @@ Erscheinungsjahr: 2013\\
 %\listoftables
 \chapter*{Zusammenfassung}
 Automatische Segementierung und Erkennung von semantischen Klassen in
-natuerlichen Bildern ist ein wichtiges offenes Problem des machinellen Sehens.
-Einer der am weitest verbreiteten Ans\"atze zu dieser Aufgabe basiert auf
-Conditional Random Fields und Verfahren der strukturierten Vorhersage. Die
-Vorhersage f\"ur Modelle zur Bild-Markierung mittels Conditional Random Fields
-ist f\"ur gew\"ohnlich nur approiximativ moeglich, bedingt d\"urch das
-Vorhandensein von Kreisen in den zugrunde liegenden Nachbarschaftsgraphen.
-Aus diesem Grund, und trotz der Beliebtheit von Conditional Random Field
-Verfahren, ist das strukturierte Lernen f\"ur solche Anwendungen schlecht
-verstanden.
+nat\"urlichen Bildern ist ein wichtiges offenes Problem des machinellen Sehens.
+Diese Arbeit untersucht drei m\"oglichen Ansi\"atzen der Erkennung:
+ohne \"Uberwachung, mit \"Uberwachung auf Ebene von Bildern und mit \"Uberwachung auf Ebene
+von Pixeln. Diese Arbeit setzt sich aus drei Teilen zusammen.
+
+Im ersten Teil der Arbeit schlagen wir einen Clustering-Algorithmus vor,
+der eine neuartige, informationstheoretische Zielfunktion optimiert. Wir zeigen, dass
+der vorgestellte Algorithmus \"ublichen Standardverfahren aus der Literatur gegen\"uber
+klare Vorteile auf vielen verschiedenen Datens\"atzen hat.
+
+Der zweite Teil dieser Arbeit stellt ein Verfahren zur automatischen
+Segmentierung und Erkennung von Objektklassen in nat\"urlichen Bildern vor, der
+mit Hilfe von Supervision in Form von Klassen-Pr\"asenz auf Bildern in der Lage
+ist ein Segmentierungsmodell zu Lernen. Nach unserem Wissen ist dies der erste
+Ansatz dieser Art, der sich speziell auf komplexe Objektklassen bezieht.
+
+Der dritte und letzte Teil er Arbeit untersucht einen der am weitest
+verbreiteten Ans\"atze zu semantischen Segmentierung und
+Objektklassensegmentierung, n\"amlich Conditional Random Fields verbunden mit Verfahren
+der strukturierten Vorhersage.
+%Die Vorhersage f\"ur Modelle zur Bild-Markierung
+%mittels Conditional Random Fields ist f\"ur gew\"ohnlich nur approiximativ
+%moeglich, bedingt d\"urch das Vorhandensein von Kreisen in den zugrunde
+%liegenden Nachbarschaftsgraphen.  Aus diesem Grund, und trotz der Beliebtheit
+%von Conditional Random Field Verfahren, ist das strukturierte Lernen f\"ur
+%solche Anwendungen schlecht verstanden.
 %
-Wir untersuchen verschiedene Lernalgorithmen in diesem
-Zusammenhang. Wir zeigen, dass es m\"oglich ist trotz des Vorhandenseins von
-Kreisen in den Nachbarschaftsgraphen exakte strukturierte Modelle zu lernen.
+Wir untersuchen verschiedene Lernalgorithmen des struktuierten Lernens, insbesondere
+im Zusammenhang mit approximativer Inferenz. Wir zeigen, dass es m\"oglich ist trotz des Vorhandenseins von
+Kreisen in den Nachbarschaftsgraphen exakte strukturierte Modelle zur Bildsegmentierung zu lernen.
 Wir stellen ausserdem eine Software-Bibliothek vor, die es erlaubt einen
 weitreichenden Vergleich der besten Lernverfahren f\"ur strukturiertes Lernen
 durchzuf\"uhren.
@@ -153,20 +170,38 @@ in einer Reihe von Anwendungen, insbesondere der semantischen Segmentierung und
 Objektklassensegmentierung.
 
 \chapter*{Abstract}
-Automatic segmentation and recognition of semantic classes in natural images is an important open problem in computer vision.
-One of the most popular approaches to this task is based on conditional random fields and structured prediction.
-For image labeling tasks, prediction using conditional random fields is usually only approximate, because of the presence
-of loops of the neighborhood graph in the the image. Consequently, learning in
-this setting is still little understood, despite the popularity of these
-methods.
+Automatic segmentation and recognition of semantic classes in natural images is
+an important open problem in computer vision.
+This work investigates three different approaches to recognition: without supervision,
+with supervision on level of images, and with supervision on the level of pixels.
+The thesis comprises three parts.
+
+The first part introduces a clustering algorithm, that optimizes a novel information-theoretic
+objective function. We show that the proposed algorithm has clear advantages over standard algorithm
+from the Literature on a wide array of datasets.
+
+The second part of this work proposes an algorithm for automatic segmentation
+and recognition of object classes in natural images, that learns a segmentation model solely from
+annotation in form of presence and absence of object classes in images. To the best of our knowledge,
+this is the first algorithm of this kind, that explicitly addresses complex object classes.
+
+The third and last part of this work investigates one of the most popular
+approaches to the task of object class segmentation and semantic segmentation,
+based on conditional random fields and structured prediction.
 %
-We investigate several learning algorithms in this setting. We show
-how structured models can be learned exactly in practical settings, even in the
-presence of many loops in the underlying neighborhood graphs.  We introduce a
-software library that allows us to perform extensive empirical comparisons of
+%For image labeling tasks, prediction using conditional random fields is usually
+%only approximate, because of the presence of loops of the neighborhood graph in
+%the the image. Consequently, learning in this setting is still little
+%understood, despite the popularity of these methods.
+%
+We investigate several learning algorithms, in particular in combination with
+approximate inference procedures. We show how structured models for image
+segmentation can be learned exactly in practical settings, even in the presence
+of many loops in the underlying neighborhood graphs.  We introduce a software
+library that allows us to perform extensive empirical comparisons of
 state-of-the-art structured learning approaches. This allows us to characterize
-their practical properties in a range of applications, in particular for semantic segmentation
-and object class segmentation.
+their practical properties in a range of applications, in particular for
+semantic segmentation and object class segmentation.
 
 
 \chapter*{Acknowledgements}
@@ -194,7 +229,7 @@ others.
 
 I also thank my parents and my sister for their support.
 
-Last but not least I am greatful to Anna M\"uller for her support,
+Last but not least I am greateful to Anna M\"uller for her support,
 encouragement and company. Thank you for giving me the strength needed for this
 endeavour.
 \cleardoublepage
@@ -203,9 +238,9 @@ endeavour.
 
 %\include{datasets/paper}
 
-\include{itm/paper}
+%\include{itm/paper}
 
-\include{partial_supervision/paper}
+%\include{partial_supervision/paper}
 
 \include{structured_prediction/paper}
 \include{pystruct/paper}
@@ -216,27 +251,32 @@ endeavour.
 \include{nyu/paper}
 
 \chapter{Conclusion and Future Direction}
-Current progress in computer vision \dots at an incredible speed,
-with new methods and applications emerging constantly.
-Still, there are large differences in the paradigms employed by different researchers.
-While it is generally aknowledged that context is one of the most important cues
-in recognizing objects and interpreting scence, there is little consensus on how
+Current research in computer vision progresses at an incredible speed, with new
+methods and applications emerging constantly.  Still, there are large
+differences in the paradigms employed by different researchers.  While it is
+generally acknowledged that context is one of the most important cues in
+recognizing objects and interpreting scenes, there is little consensus on how
 contextual information should be modelled, or even learned.
-The structured prediction paradigm allows a principled approach to incoporating
-predictions within an image, and to include context information.
-We investigated the potential of structural methods for the application of semantic image segmentation
-and object recognition, appications to which structured methods have been applied successfully before.
-We focus on \emph{learning} of structural models and the interaction of inference and learning
-in the neighborhood models typically employed for semantic segmentation.
-The thesis presents a software implementation of a variety of popular learning algorithms for structural
-support vector machines, together with a thorough evaluation of their properties in the presence
-of approximate inference.
-We demonstated that exact learning is possible, even in the presence of loops in the
-\dots factor graph. We also demonstrate the power of conditioning interactions
+The structured prediction paradigm allows a principled approach to
+incorporating predictions within an image, and to include context information.
+We investigated the potential of structural methods for the application of
+semantic image segmentation and object recognition, applications to which
+structured methods have been applied successfully before.  We focus on
+\emph{learning} of structural models and the interaction of inference and
+learning in the neighborhood models typically employed for semantic
+segmentation.
+The thesis presents a software implementation of a variety of popular learning
+algorithms for structural support vector machines, together with a thorough
+evaluation of their properties in the presence of approximate inference.
+We demonstrate that exact learning is possible, even in the presence of loops in the
+underlying factor graph. We also demonstrate the power of conditioning interactions
 on data, learning spacial interactions in a RGB-D setting.
 
-There are several directions for future research that we think would be interesting to pursue as an extention
-of the presented results: 
+There are several directions for future research that we think would be
+interesting to pursue as an extension of the presented results, in particular in
+extending the second and third part:
+\paragraph[Large-Scale Weakly Supervised Object Class Segmentation]
+google
 \paragraph[Inference Machines]
 Recently \citet{stoyanov2011empirical} started a new trend in structured
 prediction, which is sometimes called ``inference machines''. The basic
@@ -253,7 +293,7 @@ While these algorithms show great promise, their relation to the traditional
 approach of structured prediction used in this work is mostly unclear. In particular,
 if exact traditional learning is possible in a model, it is unclear how much
 can be gained by direct empirical risk minimization.
-Little empirical comparision was performed, and we are not aware of theoretical
+Little empirical comparison was performed, and we are not aware of theoretical
 work in this direction, leaving much room for future investigation of this
 direction.
 \paragraph[Non-Linear Models]
