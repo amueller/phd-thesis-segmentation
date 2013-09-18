@@ -9,16 +9,19 @@ Many different formulations of the clustering problem are given in the literatur
 %
 In the context of this work, clustering plays an important role in many respects:
 \begin{itemize}
-    \item Clustering, as a purely unsupervised methods is on one end of the spectrum of algorithms we investigate.
-        When using per-image or per-pixel supervision as in the later chapters, we can use clustering to calibrate our
-        expecation of what semisupervised and supervised algorithms should be able to achieve.
+    \item Clustering, as a purely unsupervised methods is on one end of the
+        spectrum of algorithms we investigate.  When using per-image or
+        per-pixel supervision as in the later chapters, we can use clustering
+        to calibrate our expecation of what semisupervised and supervised
+        algorithms should be able to achieve.
+
+    \item Clustering algorithms build the basis of most superpixel algorithms, and
+        better clustering algorithms can lead to better superpixel algorithms.
+
     \item As many other computer vision algorithms, our segmentation methods
-        with critically depend on bag-of-feature representations of segments or
-        images. These are build using a vocabulary of visual words, that is
-        usually created via clustering.
-    \item When discussing latent variable models in chapter~\ref{ch:latent}, we need to initialize our
-        model to overcome the inherant symmetries. Clustering methods are a
-        straight forward solution to this problem.
+        depends on bag-of-feature representations of segments or images. These
+        are build using a vocabulary of visual words that is usually created
+        via clustering.
 \end{itemize}
 
 So not only is clustering one of the fundamental problems in machine learning, it is also
