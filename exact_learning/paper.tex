@@ -87,19 +87,44 @@ not relate their results back to the original SSVM objective they approximate.
 It is unclear how they compare to standard structured prediction approaches
 on real-world applications.
 
+\begin{algorithm*}[t]
+    \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack_again}}
+    \begin{algorithmic}[1]
+        \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
+        \Ensure parameters $\theta$, slack $\xi$
+        \State $\W \leftarrow \emptyset$
+        \Repeat
+            \State \label{line_restricted}
+            \vspace{-5mm}
+            \begin{align*}
+                (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi\\
+            &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
+            &\theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
+            \end{align*}
+            \For {i=1, \dots, k}
+                \State
+                $\hat{y}\hoch{i} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
+            \EndFor
+            \State $\W \leftarrow \W \cup \{ (\hat{y}\hoch{i}, \dots, \hat{y}\hoch{i}) \} $
+            \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] $
+        \Until $\xi' - \xi < \epsilon$ \label{convergence_check}
+    \end{algorithmic}
+\end{algorithm*}
 
 \section{Learning SSVMs with Approximate Inference}
 In this chapter, we use the 1-slack cutting plane algorithm, as we found this
-algorithm to be most suitable for out approach. For reference, the algorithm is outlined
-\Secref{one_slac}, Algorithm~\ref{alg_one_slack}. The inference algorithm $I$ is called
-in line~\ref{get_cutting_plane}. We investigate algorithms $I$ (often called separation
+algorithm to be most suitable for out approach. For reference, the algorithm described in
+\Secref{one_slack}, Algorithm~\ref{alg_one_slack_again} is reproduced as
+Algorithm~\ref{alg_one_slack_again}. The inference algorithm $I$ is called in
+line~\ref{get_cutting_plane_again}. We investigate algorithms $I$ (often called
+separation
 oracles in the context) that do not yield the exact maximum here.
 There are two groups of inference procedures, as identified in
 \citet{finley2008training}: under-generating and over-generating approaches.
 An under-generating approach satisfies $I(x^i, y^i, \theta) \in
-\mathcal{Y}$, but does not guarantee maximality in line~\ref{get_cutting_plane}
-of Algorithm~\ref{alg_cutting_plane}. An over-generating approach on the other
-hand, does solve the loss-augmented prediction in line~\ref{get_cutting_plane}
+\mathcal{Y}$, but does not guarantee maximality in line~\ref{get_cutting_plane_again}
+of Algorithm~\ref{alg_one_slack_again}. An over-generating approach on the other
+hand, does solve the loss-augmented prediction in line~\ref{get_cutting_plane_again}
 exactly, but for a larger set $\hat{\mathcal{Y}} \supset \mathcal{Y}$, meaning
 that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.
 %We elaborate on
@@ -108,12 +133,12 @@ that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.
 
 \subsection{Bounding the Objective}\seclabel{bounds}
 Even using approximate inference procedures, several statements
-about the original exact objective (\eqref{mainequation}) can be
+about the original exact objective (\Eqref{mainequation}) can be
 obtained.
 
-Let $o_{\W}(\theta)$ denote objective \eqref{oneslack} with
+Let $o_{\W}(\theta)$ denote objective \Eqref{oneslack} with
 given parameters $\theta$ restricted to a working set $\W$, as computed in
-line~\ref{restricted} of Algorithm~\ref{alg_cutting_plane} and  let
+line~\ref{line_restricted} of Algorithm~\ref{alg_one_slack_again} and  let
 \[
     o^I(\theta) = C\xi' + \frac{||\theta||}{2}^2
 \]
@@ -143,7 +168,7 @@ both speed up and improve learning.
 \section{Efficient Exact Cutting Plane Training of SSVMs}\seclabel{learning}
 
 \subsection{Combining Inference Procedures}\seclabel{combining}
-The cutting plane method described in \Secref{cutting_plane} relies only
+The cutting plane method described in \Secref{one_slack} relies only
 on some separation oracle $I$ that produces violated constraints when
 performing loss-augmented prediction.
 
@@ -179,7 +204,7 @@ the fusion move algorithm is replaced by AD$^3$ with branch and bound.
 While using more different oracles is certainly possible, we found
 that using just these three methods performed very well in practice.  This
 combination allows us to make fast progress initially and guarantee optimality
-in the end. Our strategy is visualized in \figref{scheme_inference_algs}
+in the end. Our strategy is visualized in \Figref{scheme_inference_algs}
 Notably, it is not necessary for an algorithm used as 3) to always produce
 exact results. For guaranteeing optimality of the model, it is sufficient that
 we obtain a certificate of optimality when learning stops.
@@ -200,9 +225,9 @@ trust a separation oracle as long as the current primal objective did not move
 far from the primal objective as computed with the stronger inference
 procedure.
 
-%More precisely, let $o_{\W}(\theta)$ denote objective \eqref{oneslack} with
+%More precisely, let $o_{\W}(\theta)$ denote objective \Eqref{oneslack} with
 %given parameters $\theta$ restricted to a working set $\W$, as computed in
-%line~\ref{restricted} of Algorithm~\ref{alg_cutting_plane} and  let
+%line~\ref{restricted} of Algorithm~\ref{alg_one_slack} and  let
 %\[
     %o^I(\theta) = C\xi' + \frac{||\theta||}{2}^2
     %\]
@@ -219,7 +244,7 @@ we solve the QP once with a constraint from the cache. If the resulting $o^C$ ve
     o^C - o^Q < \frac{1}{2} (o^Q - o_{\W})
 \end{equation}
 we continue using the caching oracle. Otherwise we run the inference algorithm again.
-For testing \eqref{cache_test}, the last known value of $o^Q$ is used, as recomputing it would defy
+For testing \Eqref{cache_test}, the last known value of $o^Q$ is used, as recomputing it would defy
 the purpose of the cache.
 
 It is easy to see that our heuristic runs inference only $O(\log(o^Q -
