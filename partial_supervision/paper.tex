@@ -62,7 +62,7 @@ able to predict for individual segments whether they contain the object class
 of interest, thereby obtaining a segmentation of the object.
 To measure the performance of our algorithm, we use a dataset that not only contains
 image level annotation, but also pixel level annotation of object. This allows
-us to judge the succes of learning on instance level.
+us to judge the success of learning on instance level.
 
 \section{Related Work}
 \subsection{Object Segment Proposals}\label{related_segments}
@@ -147,10 +147,10 @@ thereby obtaining hard class decisions for each instance.
 Learning semantic segmentation from image-level annotation was first investigated in \citet{verbeek2007region},
 using a semi-supervised conditional random field on patches. \citet{verbeek2007region} evaluated their approach
 on the MSRC-9 datasets.
-More recently, simliar approaches were proposed by
+More recently, similar approaches were proposed by
 \citet{vezhnevets2011weakly} and \citet{vezhnevets2010towards}.
 \citet{vezhnevets2011weakly} independently developed a multiple-instance based
-approach to segmentation, and report impressinve results on the MSRC-21 dataset.
+approach to segmentation, and report impressive results on the MSRC-21 dataset.
 
 While semantic segmentation is closely related to the task of multi-class image
 segmentation that we are considering in this chapter, there are important
@@ -162,7 +162,7 @@ The unspecific background class contains much more clutter than for example
 ``grass'' and is therefore much harder to model. Additionally, object classes
 themselves are much harder to capture using low-level textural information
 only.  This makes disseminating the distinctive features in multi-class object
-recognition much more challenging, and requires a more holistic apporach to
+recognition much more challenging, and requires a more holistic approach to
 recognition than these patch-based or superpixel-based approaches.
 
 
@@ -295,7 +295,7 @@ the computational complexity of MIK-I is very low compared to the other
 methods, it achieves competitive results.  Using instance-level labels results
 in a slight loss of accuracy of MIK-I, compared to MIK\@. Interestingly, even
 though the model was not trained to provide any instance-level labels, the
-performance is still competative.
+performance is still competitive.
 
 For multi-class image segmentation, it is beneficial to have a low witness
 rate, that is only a few instances are assumed to be positive in a positive
