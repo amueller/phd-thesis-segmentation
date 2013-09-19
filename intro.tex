@@ -20,11 +20,11 @@ Essentially, all models are wrong, but some are useful.
 In computer vision research, the goal is to automatically extract information from an image.
 In particular discerning semantic information, that is interpreting an image, is a prominent
 research topic.
-While much process has been made in recent years, computer vision systems still lag behind
+While much progress has been made in recent years, computer vision systems still lag behind
 humans in most tasks that require semantic information. Often these tasks can be formulated
 in terms of \emph{semantic classes}, meaning categories of parts, objects or scenes.
 Examples include answering questions such as ``Is this a picture of a beach?'', ``How many
-cars are in this image?'' or even ``What objects lie on the table?''.
+cars are there in this image?'' or even ``What objects lie on the table?''.
 These questions illustrate a range of possible tasks involving semantic categories,
 from classifying images of single objects, over localization and counting of object classes,
 to parsing a scene fully into objects and object classes, together with their relations.
@@ -77,7 +77,7 @@ shortcoming of object class segmentation approaches by introducing a method to
 find segmentations automatically from image level annotations.
 
 The main part of this thesis investigates the use of structured learning~\citep{taskar2003max, tsochantaridis2006large}
-algorithms to the task of semantic image segmentation. Both topics have receive
+algorithms to the task of semantic image segmentation. Both topics have received
 much attention in the computer vision and machine learning communities
 lately~\citep{ladicky2009associative, krahenbuhl2012efficient,
 branson2013efficient, blake2011markov}.
@@ -89,7 +89,7 @@ support vector machines, it is possible to learn conditional random fields to
 directly minimize a loss of interest. In particular, conditional random fields
 allow to combine different cues, possibly produced by other approaches, in a
 principled manner. One of the main difficulties with CRF approaches to computer
-vision problems is, that context in images is usually represented as a
+vision problems is that context in images is usually represented as a
 neighborhood graph.  These graphs, by nature, contain many cycles, making
 inference intractable in general. Consequently, learning algorithms have to
 rely on approximate inference, with often unknown consequences to learning.
@@ -104,7 +104,7 @@ framework. \citet{meshi2010learning, komodakis2011efficient}, and
 learning and inference as a joint optimization problem.
 \citet{stoyanov2011empirical}, and later \citet{jancsarylearning} and
 \citet{krahenbuhlparameter} formulate learning structured prediction as
-optimizing an \emph{prediction engine}, that takes into account all aspects of
+optimizing a \emph{prediction engine}, that takes into account all aspects of
 the model, in particular the inference algorithm used.
 In this work, on the other hand, we follow the well-established algorithms for
 learning structural support vector machines, and investigate how we can use the
@@ -150,12 +150,12 @@ Before we delve into semantic segmentation and object class recognition, we
 first investigate a general clustering algorithm in Chapter~\ref{ch:itm}.
 Clustering is an important step in most semantic segmentation pipelines, in at
 least two places: bottom-up segmentation and creation of dictionaries for
-feature learning. We introduce a novel, information theoretic algorithm that
+feature learning. We introduce a novel information theoretic algorithm that
 compares favourably with algorithms from the literature.  While we do not apply
 our algorithm to the task of bottom-up segmentation, this is a promising avenue
 for future research.
 
-We introducing an algorithm for  semi-supervised learning of object class
+We introduce an algorithm for  semi-supervised learning of object class
 segmentation in Chapter~\ref{ch:semi_supervised}, motivated by the problem of
 annotating training data for semantic segmentation.
 
