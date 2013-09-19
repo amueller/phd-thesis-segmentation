@@ -194,15 +194,10 @@ model solely from annotation in form of presence and absence of object classes
 in images. To the best of our knowledge, this is the first algorithm that is
 also able to addresses complex object classes.
 
-The third and last part of this work investigates one of the most popular
+The third and main part of this work investigates one of the most popular
 approaches to the task of object class segmentation and semantic segmentation,
 based on conditional random fields and structured prediction.
-%
-%For image labeling tasks, prediction using conditional random fields is usually
-%only approximate, because of the presence of loops of the neighborhood graph in
-%the the image. Consequently, learning in this setting is still little
-%understood, despite the popularity of these methods.
-%
+
 We investigate several learning algorithms, in particular in combination with
 approximate inference procedures. We show how structured models for image
 segmentation can be learned exactly in practical settings, even in the presence
@@ -289,9 +284,9 @@ on data, learning spacial interactions in a RGB-D setting.
 There are several directions for future research that we think would be
 interesting to pursue as an extension of the presented results, in particular in
 extending the second and third part:
-\paragraph[Large-Scale Weakly Supervised Object Class Segmentation]
+\paragraph{Large-Scale Weakly Supervised Object Class Segmentation}
 google
-\paragraph[Inference Machines]
+\paragraph{Inference Machines}
 Recently \citet{stoyanov2011empirical} started a new trend in structured
 prediction, which is sometimes called ``inference machines''. The basic
 principle is simple: view the process of prediction with a given inference
@@ -310,7 +305,7 @@ can be gained by direct empirical risk minimization.
 Little empirical comparison was performed, and we are not aware of theoretical
 work in this direction, leaving much room for future investigation of this
 direction.
-\paragraph[Non-Linear Models]
+\paragraph{Non-Linear Models}
 In this work, we only considered models that are linear in the input features--though
 features are highly non-linear in the original input pixels.
 Kernelization of structural support vector machines is trivial in theory, but
@@ -327,9 +322,9 @@ segmentation. If it is possible to include context in a meaningful way, it
 might be possible to solve even object-centric tasks such as object class
 segmentation with DTFs.
 
-\paragraph[Latent Variable Models]
+\paragraph{Latent Variable Models}
 Something latent
-\paragraph[Feature Design]
+\paragraph{Feature Design}
 features are important
 which low-level cues?
 superpixels?

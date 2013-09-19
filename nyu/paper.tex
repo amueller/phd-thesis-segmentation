@@ -257,11 +257,11 @@ little use in scenes without horizontal surfaces.
 \subsection{Pairwise Depth-Sensitive Features}
 There are five different features used to build pairwise potentials in our model:
 
-\emph{Constant}
+\paragraph{Constant}
     A constant feature allows to model general neighborhood relations.
 
 
-\emph{Color Contrast}
+\paragraph{Color Contrast}
     We employ a non-linear color contrast, as is common in the computer
     vision literature, between the superpixel mean colors $c_i$ and $c_j$:
     \[
@@ -269,19 +269,19 @@ There are five different features used to build pairwise potentials in our model
      \]
 
 
-\emph{Vertical Alignment}
+\paragraph{Vertical Alignment}
     We model the directed angle between superpixel centers in the 2D image
     plane.  This allows the  model to learn that ``structure'' is above
     ``floor'', but not the other way around.
 
 
-\emph{Depth Difference}
+\paragraph{Depth Difference}
     We include the signed depth difference between superpixels, which
     allows the model to detect depth discontinuities that are not
     represented in the 2D neighborhood graph of the superpixels.
 
 
-\emph{Normal Orientations}
+\paragraph{Normal Orientations}
     Differences in normal vector orientation are a strong clue on
     whether two superpixels belong to the same surface, and therefore the
     same structural class.

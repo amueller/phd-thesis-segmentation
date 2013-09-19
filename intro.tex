@@ -21,24 +21,22 @@ In computer vision research, the goal is to automatically extract information fr
 In particular discerning semantic information, that is interpreting an image, is a prominent
 research topic.
 While much process has been made in recent years, computer vision systems still lack behind
-humans in most tasks that require semantic information. Many semantic tasks can be formulated
+humans in most tasks that require semantic information. Often these tasks can be formulated
 in terms of \emph{semantic classes}, that is categories of parts, objects or scenes.
 Examples include answering questions such as ``Is this a picture of a beach?'', ``How many
-cars are in this image'' or even ``What objects lie on the table?''.
+cars are in this image?'' or even ``What objects lie on the table?''.
 These questions illustrate a range of possible tasks involving semantic categories,
 from classifying images of single objects, over localization and counting of object classes,
 to parsing a scene fully into objects and object classes, together with their relations.
 %
 While humans can distinguish tens of thousands of object classes, and have little trouble
 in interpreting complex scenes, current methods are often restricted to a much smaller number
-of classes. While some recent approaches are able to classify images into a thousand 
-or even ten thousand classes, results are still somewhat mixed.
-In particular, when refining the task to localization, and allowing multiple objects within
-a scene, few approaches have been evaluated on more than about twenty classes.
-
-In this work, we will investigate the tasks of semantic segmentation and object
-class segmentation.  These ask for a semantic annotation of each pixel with one
-of a set of known classes.
+of classes, and only have limited capabilities to model interactions or relations.
+We believe that context is one of the most important cues when it comes to classifying objects,
+and therefore understanding scenes. Consequently, we target dense labeling of scenes on a fine-grained level.
+The task of densely labeling image pixels into classes is called object class segmentation
+or semantic segmentation.
+\pagebreak
 
 We choose this task in particular for several reasons:
 \begin{itemize}
@@ -46,14 +44,14 @@ We choose this task in particular for several reasons:
     \item Joint estimation of multiple classes allows for the use of \emph{context}.
     \item In contrast to category-agnostic segmentation approaches, object class segmentation
         has an unambiguous true labeling.
-    \item A variety of annotated datasets is publicly available.
+    \item A variety of manually annotated datasets is publicly available.
 \end{itemize}
 %
 Applications of semantic segmentation and scene understanding include automatic
 image interpretation for retrieval, autonomous driving and mobile robotics.
 While these are already important applications, we expect that with the
 abundance of camera data, and the proliferation of mobile computing, even
-more applications will gain importance soon.
+more applications will emerge soon.
 
 We will in the following distinguish between the task of semantic segmentation,
 which is usually distinguishing unstructured ``stuff'' classes such as road and
@@ -64,16 +62,25 @@ datasets Graz02 and Pascal VOC 2010, and the semantic segmentation datasets MSRC
 and NYU V2.
 %
 Both tasks have the same ultimate goal of parsing, and therefore understanding, images
-in terms of semantic classes, but usually employ  different mechanisms to represent the input.
+in terms of semantic classes, but usually employ  different mechanisms to represent and process.
+
+Before we delve into semantic segmentation and object class recognition, we
+will first investigate general grouping mechanisms in Chapter~\ref{ch:itm}.
+Clustering is an important step in most semantic segmentation pipelines, in at
+least two places: bottom-up segmentation and creation of dictionaries for
+feature learning. Chapter~\ref{ch:itm} introduces a novel, information theoretic
+algorithm that compares favourably with algorithms from the literature.
+While we do not apply our algorithm to the task of bottom-up segmentation,
+this is a promising avenue for future research.
 
 One of the bottlenecks in learning object class segmentation and semantic
 segmentation is the availability of training data.  While unlabeled image data,
 and even data with semantic
 ``tags'' is available in practically unlimited quantities, semantic annotation
 on pixel level is only available through laborious manual annotation. 
-Chapter %FIXME
-introduces an approach to cope with this shortcoming of object class segmentation approaches
-by introducing a method to find segmentations automatically from image level annotations.
+Chapter~\ref{ch:semi_supervised} introduces an approach to cope with this
+shortcoming of object class segmentation approaches by introducing a method to
+find segmentations automatically from image level annotations.
 
 The main part of this thesis investigates the use of structured learning
 algorithms to the task of semantic image segmentation. Both topics have receive
@@ -115,18 +122,13 @@ we fix the considered feature set, and vary the maximum margin learning algorith
 this seemingly limited setup, we can make out large differences in the applicability of
 some of the commonly used methods. For comparison, we also evaluate the learning algorithms
 on chain CRFs, where inference is simple.
+More recently, \citet{lucchi2013learning} proposed a novel algorithm for
+efficiently learning structured prediction for semantic segmentation, using
+approximate inference. In Chapter~\ref{ch:exact_learning}, we introduce an
+algorithm that runs in similar time to the one proposed by
+\citet{lucchi2013learning}, but is able to learn a CRF to the exact optimum on
+the same dataset.
 
-
-%related work?? here again?
-%Current systems for semantic segmentation emply a wealth of different paradigms, most notably:
-%The ranking of figure ground hypotheses
-%conditional random field / superpixel? kraehenbuehl?
-%detector based
-%sparse coding
-
-%
-%Structured approaches
-%
 
 \section{List of Contributions}
 This thesis contains the following contributions:
