@@ -91,7 +91,7 @@
 \begin{center}
 \Large\sffamily
 \vspace*{1cm}
-\textbf{{\huge Learning Structured Prediction for Semantic Image Segmentation}}\\[5mm]
+\textbf{{\huge Methods for Learning Structured Prediction in Semantic Segmentation of Natural Images}}\\[5mm]
 Dissertation\\
 zur\\
 Erlangung des Doktorgrades (Dr.\ rer.\ nat.)\\
@@ -176,36 +176,35 @@ Objektklassensegmentierung.
 \selectlanguage{english}
 \chapter*{Abstract}
 Automatic segmentation and recognition of semantic classes in natural images is
-an important open problem in computer vision.
-In this work, we investigates three different approaches to recognition: without supervision,
-with supervision on level of images, and with supervision on the level of pixels.
+an important open problem in computer vision. In this work, we investigates
+three different approaches to recognition: without supervision, with
+supervision on level of images, and with supervision on the level of pixels.
 The thesis comprises three parts.
 
 The first part introduces a clustering algorithm that optimizes a novel
 information-theoretic objective function. We show that the proposed algorithm
 has clear advantages over standard algorithm from the literature on a wide
 array of datasets. Clustering algorithms are an important building block for
-higher level computer vision applications, in particular for semantic
+higher-level computer vision applications, in particular for semantic
 segmentation.
 
 The second part of this work proposes an algorithm for automatic segmentation
 and recognition of object classes in natural images, that learns a segmentation
 model solely from annotation in form of presence and absence of object classes
-in images. To the best of our knowledge, this is the first algorithm that is
-also able to addresses complex object classes.
+in images.
 
 The third and main part of this work investigates one of the most popular
 approaches to the task of object class segmentation and semantic segmentation,
 based on conditional random fields and structured prediction.
-
+%
 We investigate several learning algorithms, in particular in combination with
 approximate inference procedures. We show how structured models for image
 segmentation can be learned exactly in practical settings, even in the presence
 of many loops in the underlying neighborhood graphs.
 The introduced methods provide results advancing the state-of-the art on two
-complex benchmark datasets for semantic segmention, the MSRC-21 Dataset of RGB
+complex benchmark datasets for semantic segmentation, the MSRC-21 Dataset of RGB
 images and the NYU V2 Dataset or RGB-D images of indoor scenes.
-
+%
 Finally, we introduce a software library that allows us to perform extensive empirical
 comparisons of state-of-the-art structured learning approaches. This allows us
 to characterize their practical properties in a range of applications, in
@@ -260,33 +259,61 @@ endeavour.
 \include{nyu/paper}
 
 \chapter{Conclusion and Future Direction}
-Current research in computer vision progresses at an incredible speed, with new
-methods and applications emerging constantly.  Still, there are large
-differences in the paradigms employed by different researchers.  While it is
-generally acknowledged that context is one of the most important cues in
-recognizing objects and interpreting scenes, there is little consensus on how
-contextual information should be modelled, or even learned.
-The structured prediction paradigm allows a principled approach to
-incorporating predictions within an image, and to include context information.
-We investigated the potential of structural methods for the application of
-semantic image segmentation and object recognition, applications to which
-structured methods have been applied successfully before.  We focus on
-\emph{learning} of structural models and the interaction of inference and
-learning in the neighborhood models typically employed for semantic
-segmentation.
-The thesis presents a software implementation of a variety of popular learning
-algorithms for structural support vector machines, together with a thorough
-evaluation of their properties in the presence of approximate inference.
-We demonstrate that exact learning is possible, even in the presence of loops in the
-underlying factor graph. We also demonstrate the power of conditioning interactions
-on data, learning spacial interactions in a RGB-D setting.
-%TODO STATE OF THE F*ING ART!
+\section{Summary}
+This thesis explored the use of structured prediction methods for semantic
+segmentation and object class segmentation of natural images, as an important
+step towards general scene understanding.
+We use the paradigm of structured prediction, which allows for a principled
+integration of context and object relations.
+%Current research in computer vision progresses at an incredible speed, with new
+%methods and applications emerging constantly. Still, there are large
+%differences in the paradigms employed by different researchers. While it is
+%generally acknowledged that context is one of the most important cues in
+%recognizing objects and interpreting scenes, there is little consensus on how
+%contextual information should be modelled, or even learned.
+%The structured prediction paradigm allows a principled approach to
+%incorporating predictions within an image, and to include context information.
+%We investigated the potential of structural methods for the application of
+%semantic image segmentation and object recognition, applications to which
+%structured methods have been applied successfully before.
+We focus on \emph{learning} of structural models and the interaction of
+inference and learning in the neighborhood models typically employed for
+semantic segmentation.
+We presents an open source software implementation of a variety of
+popular learning algorithms for structural support vector machines, together
+with a thorough evaluation of their properties in the presence of approximate
+inference. Our software provides a solid basis for future research into learning,
+inference and models for computer vision, by providing extensive examples and
+benchmarks.
 
+We demonstrate that effective use of available inference mechanisms enables
+exact learning, even in the presence of loops in the underlying
+factor graph, leading to state-of-the art results on the MSRC-21 dataset.
+We also demonstrate the power of conditional interactions, learning spacial
+interactions in a RGB-D setting. Our approach improves upon the state-of-the
+art on the NYU V2 benchmark for annotation of semantic structure classes.
+
+We also presented a novel approach for clustering based on information theoretic
+principles. Our algorithm improves upon methods from the literature on a wide
+range of datasets. This indicates that also in the task of extracting
+superpixels, we can hope to achieve better results than the $k$-means based
+SLIC algorithm that we used.
+
+As manual annotation of images for learning semantic segmentation and object
+class recognition is laborious and error-prone, we suggested a method to
+learn object class segmentation for complex object classes from image-level
+annotations alone.
+
+\section{Future Directions}
 There are several directions for future research that we think would be
-interesting to pursue as an extension of the presented results, in particular in
-extending the second and third part:
+interesting to pursue as an extension of the presented results:
 \paragraph{Large-Scale Weakly Supervised Object Class Segmentation}
-google
+We demonstrated a new method for object class segmentation using only weak
+supervision. One of the main advantages of such a method is that it is
+potentially able to exploit the large amount of weakly labeled data that
+is available on the internet. Using additional training data, and evaluating on
+the given, manually annotated data, would be an interesting topic for future
+research.
 \paragraph{Inference Machines}
 Recently \citet{stoyanov2011empirical} started a new trend in structured
 prediction, which is sometimes called ``inference machines''. The basic
@@ -308,7 +335,9 @@ work in this direction, leaving much room for future investigation of this
 direction.
 \paragraph{Non-Linear Models}
 In this work, we only considered models that are linear in the input features--though
-features are highly non-linear in the original input pixels.
+features are highly non-linear in the original input pixels. Allowing non-linear
+interactions increases the representational power of a CRF, possibly leading
+to better segmentation results.
 Kernelization of structural support vector machines is trivial in theory, but
 had only limited success in the context of CRFs for image
 segmentation~\citep{lucchi2012structured}.
@@ -318,17 +347,38 @@ and decision tree fields~\citep{nowozin2011decision}, based on decision trees.
 Conditional neural fields have only applied to sequence classification so far,
 and extending them to our setting of semantic image segmentation would be very
 interesting. Decision tree fields~(DTFs) on the other hand have been applied to loopy
-graphs for image processing, but not for higher level tasks such as semantic
+graphs for image processing, but not for higher-level tasks such as semantic
 segmentation. If it is possible to include context in a meaningful way, it
-might be possible to solve even object-centric tasks such as object class
+might be possible to address even object-centric tasks such as object class
 segmentation with DTFs.
 
-\paragraph{Latent Variable Models}
-Something latent
+\paragraph{Higher Order Potentials and Latent Variable Models}
+While non-linear potentials would allow for more complex interactions between
+inputs and labelings, introducing higher order potentials or latent variables
+allow the model to express more complex interactions within the output
+variables. Possible examples are consistency of larger regions, learning parts
+or learning of scene classes and cooccurcences.
+In principle, higher order potentials and latent variable models are
+equivalent, in that each energy function expressed in either form can be
+transformed into an energy function of the other kind. In practice, learning of
+higher order potentials for semantic segmentation has received little
+attention, while most approaches using latent variables are often limited by
+the non-convexity of learning.  It would be interesting to compare current
+methods using latent variable and higher order approaches, and see how these
+interact with different inference and learning schemes.
+
 \paragraph{Feature Design}
-features are important
-which low-level cues?
-superpixels?
+This work mostly focused on learning methods, and less on the input, with
+the exception of Chapter~\ref{ch:nyu}, that explores the use of 3D features
+for semantic segmentation of indoor scenes. It is clear, however, that
+the input feature play an important role in the performance of any system.
+Using our approach for exact learning of loopy graphs, it seems to be worthwhile to
+revisit the works of \citet{nowozin2010parameter} and \citet{lucchi2011spatial},
+that evaluate the impact of input features and piecewise training, and of the importance
+of global constraints versus global features, respectively.
+In particular the importance of features for pairwise potentials has been
+somewhat overlooked, often being reduced to a single constant or contrast
+sensitive feature.
 
 \bibliographystyle{plainnat}
 \bibliography{main}
