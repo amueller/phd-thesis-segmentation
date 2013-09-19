@@ -20,9 +20,9 @@ Essentially, all models are wrong, but some are useful.
 In computer vision research, the goal is to automatically extract information from an image.
 In particular discerning semantic information, that is interpreting an image, is a prominent
 research topic.
-While much process has been made in recent years, computer vision systems still lack behind
+While much process has been made in recent years, computer vision systems still lag behind
 humans in most tasks that require semantic information. Often these tasks can be formulated
-in terms of \emph{semantic classes}, that is categories of parts, objects or scenes.
+in terms of \emph{semantic classes}, meaning categories of parts, objects or scenes.
 Examples include answering questions such as ``Is this a picture of a beach?'', ``How many
 cars are in this image?'' or even ``What objects lie on the table?''.
 These questions illustrate a range of possible tasks involving semantic categories,
@@ -32,8 +32,9 @@ to parsing a scene fully into objects and object classes, together with their re
 While humans can distinguish tens of thousands of object classes, and have little trouble
 in interpreting complex scenes, current methods are often restricted to a much smaller number
 of classes, and only have limited capabilities to model interactions or relations.
-We believe that context is one of the most important cues when it comes to classifying objects,
-and therefore understanding scenes. Consequently, we target dense labeling of scenes on a fine-grained level.
+We believe that \emph{context} is one of the most important cues when it comes to classifying objects,
+and therefore understanding scenes. Consequently, we target dense labeling of scenes, taking
+object relations into account.
 The task of densely labeling image pixels into classes is called object class segmentation
 or semantic segmentation.
 \pagebreak
@@ -41,7 +42,7 @@ or semantic segmentation.
 We choose this task in particular for several reasons:
 \begin{itemize}
     \item Pixel-level annotation provides highly detailed information about the scene.
-    \item Joint estimation of multiple classes allows for the use of \emph{context}.
+    \item Joint estimation of multiple classes allows for the use of context.
     \item In contrast to category-agnostic segmentation approaches, object class segmentation
         has an unambiguous true labeling.
     \item A variety of manually annotated datasets is publicly available.
@@ -53,7 +54,7 @@ While these are already important applications, we expect that with the
 abundance of camera data, and the proliferation of mobile computing, even
 more applications will emerge soon.
 
-We will in the following distinguish between the task of semantic segmentation,
+In the following we distinguish between the task of semantic segmentation,
 which is usually distinguishing unstructured ``stuff'' classes such as road and
 grass, and object class segmentation, which denotes the segmentation of very
 structured classes, such as cars, planes and people.
@@ -78,7 +79,7 @@ algorithms to the task of semantic image segmentation. Both topics have receive
 much attention in the computer vision and machine learning communities lately.
 Unfortunately, learning structured prediction in computer vision applications
 is still little understood.
-We will focus on the use of conditional random fields~(CRFs), which have shown
+We focus on the use of conditional random fields~(CRFs), which have shown
 great promise for computer vision applications. Using the paradigm of
 structural support vector machines, it is possible to learn conditional random
 fields to directly minimize a loss of interest. In particular, conditional
@@ -107,12 +108,12 @@ segmentation, that is somewhat orthogonal to this work. Their work considers the
 number superpixels and pairwise potentials for conditional maximum likelihood learning of tree-structured CRFs.
 \citet{nowozin2010parameter} also compare conditional maximum likelihood learning with maximum margin learning,
 finding little difference in accuracy.
-We focus our work on the more popular neighborhood graphs, which do not allow for easy inference.
-Therefore, conditional maximum likelihood learning would be much harder in our setting. For our studies,
+We focus our work on the more popular neighborhood graphs, which do not allow for efficient inference.
+Therefore, conditional maximum likelihood learning is intractable in our setting. For our studies,
 we fix the considered feature set, and vary the maximum margin learning algorithm. Despite
 this seemingly limited setup, we can make out large differences in the applicability of
 some of the commonly used methods. For comparison, we also evaluate the learning algorithms
-on chain CRFs, where inference is simple.
+on chain CRFs, where efficient inference is possible.
 More recently, \citet{lucchi2013learning} proposed a novel algorithm for
 efficiently learning structured prediction for semantic segmentation, using
 approximate inference. In Chapter~\ref{ch:exact_learning}, we introduce an
@@ -124,7 +125,7 @@ the same dataset.
 \section{List of Contributions}
 This thesis contains the following contributions:
 \begin{itemize}
-\item Introducing a general clustering algorithm that improves upon widely used
+\item Introducing a clustering algorithm that improves upon widely used
     approaches from the literature.
 \item Demonstrating a scalable algorithm for weakly supervised object class segmentation.
 \item Providing a general and efficient software framework for structured prediction.
@@ -135,7 +136,7 @@ This thesis contains the following contributions:
 
 \section{Thesis Outline}
 Before we delve into semantic segmentation and object class recognition, we
-will first investigate general clustering algorithm in Chapter~\ref{ch:itm}.
+first investigate a general clustering algorithm in Chapter~\ref{ch:itm}.
 Clustering is an important step in most semantic segmentation pipelines, in at
 least two places: bottom-up segmentation and creation of dictionaries for
 feature learning. We introduce a novel, information theoretic algorithm that
@@ -143,18 +144,19 @@ compares favourably with algorithms from the literature.  While we do not apply
 our algorithm to the task of bottom-up segmentation, this is a promising avenue
 for future research.
 
-We will then introducing a mostly unstructured
-approach to semi-supervised learning for object class segmentation in
-Chapter~\ref{ch:semi_supervised}, investigating the problem of annotating
-training data for semantic segmentation.
+We introducing an algorithm for  semi-supervised learning of object class
+segmentation in Chapter~\ref{ch:semi_supervised}, motivated by the problem of
+annotating training data for semantic segmentation.
 
 The central topic of this thesis is introduced in
 Chapter~\ref{ch:structured_pystruct}, which also introduces our software
 library for implementing structured learning and prediction algorithms.
 
 Chapter~\ref{ch:comparison} gives a quantitative comparison of the most widely
-used structured prediction algorithms, focusing on which algorithm is best to
-use in a given situation. In particular, we investigate learning behavior for
+used structured prediction algorithms in diverse settings.
+%, focusing on which algorithm is best to %TODO formulation
+%use in a given situation.
+In particular, we investigate learning behavior for
 semantic segmentation on several datasets.
 
 The problem of learning with approximate inference is investigated in
@@ -175,9 +177,23 @@ The main material of this thesis has either been published in conference
 proceedings or has been submitted to conferences or journals. We now list the
 relevant publications.
 \begin{description}
-    \item[Chapter~\ref{ch:itm}] \emph{Information Theoretic Clustering using Minimum Spanning Trees} Andreas C. M\"uller, Sebastian Nowozin and Christoph H. Lampert. Published in the proceedings of the German Conference on Pattern Recognition.
-    \item[Chapter~\ref{ch:semi_supervised}] \emph{Multi-Instance Methods for Partially Supervised Image Segmentation} Andreas C. M\"uller and Sven Behnke. Published in the proceedings of the IARP Worshop on Partially Supervised Learning.
-    \item[Chapter~\ref{ch:structured_pystruct}] \emph{PyStruct - Structured Prediction in Python} Andreas C. M\"uller and Sven Behnke. Submitted to the Journal of Machine Learning Research, Open Source Software track.
-    \item[Chapter~\ref{ch:exact_learning}] \emph{Learning a Loopy Model for Semantic Segmentation Exactly}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Computer Vision Theory and Applications.
-    \item[Chapter~\ref{ch:nyu}] \emph{Learning Depth-Sensitive Conditional Random Fields for Semantic Segmentation}. Andreas C. M\"uller and Sven Behnke. Submitted to the International Conference on Robotics and Automation.
+    \item[Chapter~\ref{ch:itm}] \emph{Information Theoretic Clustering using
+        Minimum Spanning Trees} Andreas C. M\"uller, Sebastian Nowozin and
+        Christoph H. Lampert. Published in the proceedings of the German
+        Conference on Pattern Recognition.
+    \item[Chapter~\ref{ch:semi_supervised}] \emph{Multi-Instance Methods for
+        Partially Supervised Image Segmentation} Andreas C. M\"uller and Sven
+        Behnke. Published in the proceedings of the IARP Worshop on Partially
+        Supervised Learning.
+    \item[Chapter~\ref{ch:structured_pystruct}] \emph{PyStruct - Structured
+        Prediction in Python} Andreas C. M\"uller and Sven Behnke. Submitted to
+        the Journal of Machine Learning Research, Open Source Software track.
+    \item[Chapter~\ref{ch:exact_learning}] \emph{Learning a Loopy Model for
+        Semantic Segmentation Exactly}. Andreas C. M\"uller and Sven Behnke.
+        Submitted to the International Conference on Computer Vision Theory and
+        Applications.
+    \item[Chapter~\ref{ch:nyu}] \emph{Learning Depth-Sensitive Conditional
+        Random Fields for Semantic Segmentation}. Andreas C. M\"uller and Sven
+        Behnke. Submitted to the International Conference on Robotics and
+        Automation.
 \end{description}
