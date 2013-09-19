@@ -1,4 +1,4 @@
-\chapter{Efficient Exact Learning of Loopy CRFs}\label{ch:exact_learning}
+\chapter{Learning of Loopy CRF Exactly}\label{ch:exact_learning}
 
 \section{Introduction}
 As discussed previously, %TODO in the introduction? in pystruct chapter?
@@ -10,7 +10,7 @@ discussed in Chapter~\ref{ch:structured_pystruct}, approximate inference leads
 to complications in learning.
 
 In this chapter, we investigate the necessity and consequences of these
-approximations in the one-slack cutting-plane learning algorithm in the context of semantic
+approximations in the $1$-slack cutting-plane learning algorithm in the context of semantic
 image segmentation. We show that despite inference being deemed intractable in
 loopy superpixel models, we are able to learn a pairwise conditional random
 field model using a structured support vector machine exactly for this task.
@@ -43,7 +43,7 @@ designing the model for the application at hand.
 %\citet{tsochantaridis2006large}. Both works assume tractable loss-augmented
 %inference.
 
-%Currently the most widely used method is the one-slack cutting plane formulation
+%Currently the most widely used method is the $1$-slack cutting plane formulation
 %introduced by \citet{joachims2009cutting}.
 %This work also introduced the caching of constraints,
 %which serves as a basis for our work. We improve upon their caching scheme, and in
@@ -63,7 +63,8 @@ particular linear programming (LP)---perform best on the considered model.
 They also show that learning parameters with the LP relaxation minimizes a
 bound on the empirical risk when extending the target domain to the relaxed
 solutions.
-In contrast, we aim at optimizing the non-relaxed objective directly, minimizing
+We argue that extending the target domain in this way is unnatural for many applications,
+and aim at optimizing the non-relaxed objective directly, minimizing
 the original empirical risk. This is an important difference, as relaxed solutions
 are usually not acceptable in practice.
 
@@ -90,7 +91,7 @@ on real-world applications.
 \begin{algorithm*}[t]
     \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack_again}}
     \begin{algorithmic}[1]
-        \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
+        \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$, inference oracle $\hat{I}$.
         \Ensure parameters $\theta$, slack $\xi$
         \State $\W \leftarrow \emptyset$
         \Repeat
@@ -103,7 +104,7 @@ on real-world applications.
             \end{align*}
             \For {i=1, \dots, k}
                 \State
-                $\hat{y}\hoch{i} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
+                $\hat{y}\hoch{i} \leftarrow \hat{I}(x\hoch{i}, y\hoch{i}, \theta) \approx \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
             \EndFor
             \State $\W \leftarrow \W \cup \{ (\hat{y}\hoch{i}, \dots, \hat{y}\hoch{i}) \} $
             \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] $
@@ -112,46 +113,55 @@ on real-world applications.
 \end{algorithm*}
 
 \section{Learning SSVMs with Approximate Inference}
-In this chapter, we use the 1-slack cutting plane algorithm, as we found this
-algorithm to be most suitable for out approach. For reference, the algorithm described in
-\Secref{one_slack}, Algorithm~\ref{alg_one_slack_again} is reproduced as
-Algorithm~\ref{alg_one_slack_again}. The inference algorithm $I$ is called in
-line~\ref{get_cutting_plane_again}. We investigate algorithms $I$ (often called
+In this chapter, we use the $1$-slack cutting plane algorithm, as we found this
+algorithm to be most suitable for out approach. Recall the optimization problem
+that is solved by the $1$-slack cutting plane algorithm:
+\begin{align}\eqlabel{oneslack_again}
+    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
+    \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
+        &\theta^T \sum_{i=1}^n [\Phi(x^i, y^i) - \Phi(x^i,
+            \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
+            - \xi
+\end{align}
+For reference, the algorithm described in
+\Secref{one_slack}, Algorithm~\ref{alg_one_slack} is reproduced as
+Algorithm~\ref{alg_one_slack_again}, with the additional input of an inference algorithm $\hat{I}$, which is called in
+line~\ref{get_cutting_plane_again}. We investigate algorithms $\hat{I}$ (often called
 separation
 oracles in the context) that do not yield the exact maximum here.
 There are two groups of inference procedures, as identified in
 \citet{finley2008training}: under-generating and over-generating approaches.
-An under-generating approach satisfies $I(x^i, y^i, \theta) \in
+An under-generating approach satisfies $\hat{I}(x^i, y^i, \theta) \in
 \mathcal{Y}$, but does not guarantee maximality in line~\ref{get_cutting_plane_again}
 of Algorithm~\ref{alg_one_slack_again}. An over-generating approach on the other
 hand, does solve the loss-augmented prediction in line~\ref{get_cutting_plane_again}
 exactly, but for a larger set $\hat{\mathcal{Y}} \supset \mathcal{Y}$, meaning
-that possibly $I(x^i, y^i, \theta) \notin \mathcal{Y}$.
+that possibly $\hat{I}(x^i, y^i, \theta) \notin \mathcal{Y}$.
 %We elaborate on
 %the properties of under-generating and over-generating inference procedures in
 %Section~\ref{bounds}. %TODO Filler sentence? wat?
 
 \subsection{Bounding the Objective}\seclabel{bounds}
 Even using approximate inference procedures, several statements
-about the original exact objective (\Eqref{mainequation}) can be
+about the original exact objective (\Eqref{oneslack_again}) can be
 obtained.
 
-Let $o_{\W}(\theta)$ denote objective \Eqref{oneslack} with
+Let $o_{\W}(\theta)$ denote objective \Eqref{oneslack_again} with
 given parameters $\theta$ restricted to a working set $\W$, as computed in
 line~\ref{line_restricted} of Algorithm~\ref{alg_one_slack_again} and  let
 \[
-    o^I(\theta) = C\xi' + \frac{||\theta||}{2}^2
+    o^{\hat{I}}(\theta) = C\xi' + \frac{||\theta||}{2}^2
 \]
-when using inference algorithm $I$, that is $o^I(\theta)$ is the approximation of the primal
-objective given by $I$. To simplify exposure, we drop the dependency on $\theta$.
+when using inference algorithm $\hat{I}$, that is $o^{\hat{I}}(\theta)$ is the approximation of the primal
+objective given by $\hat{I}$. To simplify exposure, we drop the dependency on $\theta$.
 
-Depending on the properties of the inference procedure $I$ used, it is easy to see:
+Depending on the properties of the inference procedure $\hat{I}$ used, it is easy to see:
 \begin{enumerate}
     \item If all constraints $\hat{y}$ in  $\W$ are feasible, that is generated
         by an under-generating or exact inference mechanism, then $o_{\W}$ is
         an lower bound on the true optimum $o(\theta^*)$.
 
-    \item If $I$ is an over-generating or exact algorithm, $o^I$ is an upper
+    \item If $\hat{I}$ is an over-generating or exact algorithm, $o^{\hat{I}}$ is an upper
         bound on $o(\theta^*)$.
 \end{enumerate}
 
@@ -169,10 +179,10 @@ both speed up and improve learning.
 
 \subsection{Combining Inference Procedures}\seclabel{combining}
 The cutting plane method described in \Secref{one_slack} relies only
-on some separation oracle $I$ that produces violated constraints when
+on some separation oracle $\hat{I}$ that produces violated constraints when
 performing loss-augmented prediction.
 
-Using any under-generating oracle $I$, learning can proceed as long as a
+Using any under-generating oracle $\hat{I}$, learning can proceed as long as a
 constraint is found that is violated by more than the stopping tolerance
 $\epsilon$.  Which constraint is used next has an impact on the speed of
 convergence, but not on correctness. Therefore, as long as an under-generating
@@ -235,7 +245,7 @@ procedure.
 
 %objective given by $I$. To simplify exposure, we drop the dependency on $\theta$.
 In the following, we use the notation of \Secref{bounds} and indicate
-the choices of oracle $I$ with $Q$ for a chosen inference algorithm and $C$ for
+the choices of oracle $\hat{I}$ with $Q$ for a chosen inference algorithm and $C$ for
 using cached constraints.
 
 To determine whether to produce inference results from the cache or to run the inference algorithm,
@@ -442,7 +452,7 @@ evaluate on the Pascal VOC 2010 ``test'' set.
                     & Move-making & Exact \\
     \cmidrule{1-3}
     Dual Objective $o_\W$ & 65.10 & 67.66  \\
-    Estimated Objective $o^I$ &  67.62& 67.66\\
+    Estimated Objective $o^{\hat{I}}$ &  67.62& 67.66\\
     True Primal Objective $o^E$& 69.92& 67.66\\
     \bottomrule
     \end{tabularx}
@@ -527,7 +537,7 @@ The objective function values using only the under-generating move-making and
 the exact inference are detailed in \Tabref{msrc_objective} and \Tabref{pascal_objective}.
 We see that a significant gap between the cutting plane objective and the primal objective
 remains when using only under-generating inference.
-Additionally, the estimated primal objective $o^I$ using under-generating inference is
+Additionally, the estimated primal objective $o^{\hat{I}}$ using under-generating inference is
 too optimistic, as can be expected. This underlines the fact that
 under-generating approaches can not be used to upper-bound the primal
 objective or compute meaningful duality gaps.
@@ -539,7 +549,7 @@ objective or compute meaningful duality gaps.
                     & Move-making & Exact \\
     \cmidrule{1-3}
     Dual Objective $o_\W$ &92.06& 92.24\\
-    Estimated Objective $o^I$ & 92.07 &92.24\\
+    Estimated Objective $o^{\hat{I}}$ & 92.07 &92.24\\
     True Primal Objective $o^E$&92.35& 92.24  \\
     \bottomrule
     \end{tabularx}
@@ -551,7 +561,6 @@ objective or compute meaningful duality gaps.
 
 \subsection{Implementation Details}
 We implemented the described procedure in \pystruct.
-
 We used the SLIC implementation provided by \citet{achanta2012slic} to extract superpixels and
 the SIFT implementation in the \texttt{vlfeat} package~\citep{vedaldi08vlfeat}.
 For clustering visual words, piecewise training of unary potentials and the
@@ -572,7 +581,7 @@ In this chapter we demonstrated that it is possible to learn state-of-the-art
 conditional random field models exactly using structural support vector
 machines, despite the model containing many loops.  The key to efficient
 learning is the combination of different inference mechanisms and a novel
-caching scheme for the one-slack cutting plane method, in combination with
+caching scheme for the $1$-slack cutting plane method, in combination with
 state-of-the-art inference methods.
 
 We show that guaranteeing exact results is feasible in a practical setting, and
@@ -583,7 +592,7 @@ Even though exact learning does not necessarily lead to a large improvement in
 accuracy, it frees the practitioner from worrying about optimization and
 approximation issues, leaving more room for improving the model, instead of the
 optimization.
-
+\enlargethispage{10mm}
 We do not expect learning of pixel-level models, which typically have tens or
 hundreds of thousands of variables, to be efficient using exact inference. However we
 believe our results will carry over to other super-pixel based approaches.

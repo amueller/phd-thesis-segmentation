@@ -41,13 +41,13 @@ semantic segmentation.
 \pagebreak
 
 We choose this task in particular for several reasons:
-\begin{itemize}
+\begin{itemize*}
     \item Pixel-level annotation provides highly detailed information about the scene.
     \item Joint estimation of multiple classes allows for the use of context.
     \item In contrast to category-agnostic segmentation approaches, object class segmentation
         has an unambiguous true labeling.
     \item A variety of manually annotated datasets is publicly available.
-\end{itemize}
+\end{itemize*}
 %
 Applications of semantic segmentation and scene understanding include automatic
 image interpretation for retrieval, autonomous driving and mobile robotics.
@@ -76,9 +76,11 @@ Chapter~\ref{ch:semi_supervised} introduces an approach to cope with this
 shortcoming of object class segmentation approaches by introducing a method to
 find segmentations automatically from image level annotations.
 
-The main part of this thesis investigates the use of structured learning
+The main part of this thesis investigates the use of structured learning~\citep{taskar2003max, tsochantaridis2006large}
 algorithms to the task of semantic image segmentation. Both topics have receive
-much attention in the computer vision and machine learning communities lately.
+much attention in the computer vision and machine learning communities
+lately~\citep{ladicky2009associative, krahenbuhl2012efficient,
+branson2013efficient, blake2011markov}.
 Unfortunately, learning structured prediction in computer vision applications
 is still little understood.
 We focus on the use of conditional random fields~(CRFs), which have shown great

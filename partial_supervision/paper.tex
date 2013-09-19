@@ -35,7 +35,9 @@ negative otherwise.  During training, only the labels of the training bags, not
 of the instances inside the bags, are known.  The goal is to learn a classifier
 for unseen bags. 
 Formally, let $\mathcal{X}$ be the set of instances. To simplify notation, we
-assume that bags are simply sets, not multi-sets.  Then a bag is an element of
+assume that bags are simply sets, not multi-sets.
+\pagebreak\\
+Then a bag is an element of
 the power set $2^\mathcal{X}$ and the task is to learn a function
 \begin{equation} f_{MI} \colon 2^\mathcal{X} \rightarrow \{-1,+1\}.  \end{equation}
 Training examples are tuples $(X_i,y_i)$ of bags $X_i \subset \mathcal{X}$ and
@@ -277,7 +279,7 @@ instance prediction error, as we assume no instance labels to be known.
     \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}lccccccc}
     \toprule
         & SVM-SVR & EMDD & mi-SVM & MI-SVM & MICA & MIK & MIK-I \\
-    \cmidrule(rl){2-8}
+    \cmidrule{2-8}
     Musk1 & 87.9 &84.9 &  87.4 &  77.9     & 84.3 & 88.0& 88.0 \\
     Musk2 & 85.4 &84.8 &  83.6 &  84.3     & 90.5 & 89.3& 85.2 \\
     \bottomrule
@@ -312,8 +314,8 @@ image/segment setup.
     \toprule
     & \multicolumn2c{Musk1}  & \multicolumn2c{Musk2}  \\
                 &accuracy & witness-rate & accuracy & witness-rate  \\
-    \cmidrule(rl){2-3}
-    \cmidrule(rl){4-5}
+    \cmidrule{2-3}
+    \cmidrule{4-5}
     mi-SVM      & 87.4          & 100\%               &  83.6          & 83.9\%\\
     SVM-SVR     & 87.9          & 100\%               &  85.4          & 89.5\%\\
     MIK-I& 88.0          & 99\%                &  85.2          & 62.3\%\\
@@ -362,9 +364,7 @@ described in \Secref{combiningsegments}.
     \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}p{208pt}ccc}
     \toprule
                 & car & bike & person \\
-    \cmidrule(l){2-2}
-    \cmidrule(l){3-3}
-    \cmidrule(l){4-4}
+    \cmidrule{2-4}
         This work&   0.30&  0.45&  0.43 \\
         Best strongly supervised approaches~\citep{fulkerson2009class,schulz2011}&   0.72&  0.72&  0.66 \\
     \bottomrule

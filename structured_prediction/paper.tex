@@ -107,8 +107,8 @@ The most common form by far is
 \end{equation}
 where $\phi_F(x)$ is a vector representation of the input $x$, and there are
 different parameter vectors $\theta_{F, y_{N_F}}$ for each possible assignment
-of $y_{N_F} \in \mathcal{Y}_{N_F}$.
-
+of $y_{N_F} \in \mathcal{Y}_{N_F}$.\pagebreak\\
+%
 Both, \Eqref{general_psi} and \Eqref{linear_psi} are instantiations of the general
 linear form \Eqref{main_equation}. To see this, for \Eqref{general_psi} we simply
 concatenate the individual components for all $f \in \mathcal{F}$:
@@ -188,7 +188,8 @@ objective
 \begin{equation}\eqlabel{learning_equation}
     \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  \ell(x\hoch{i}, y\hoch{i}, \theta)
 \end{equation}
-with regularization parameter $C$. Here, $\ell$ is a hinge-loss like upper bound
+with regularization parameter $C$.\pagebreak\\
+Here, $\ell$ is a hinge-loss like upper bound
 on the empirical $\Delta$-risk:
 \begin{equation}\eqlabel{loss_augmentation}
     \ell(x\hoch{i}, y\hoch{i}, \theta) = [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y) - \theta^T \phi(x\hoch{i}, y\hoch{i}]_+.
@@ -226,7 +227,7 @@ processors with almost linear speed improvements.
 Arguably the most straight-forward way to approach \Eqref{learning_equation} is
 using subgradient descent.  In light of the complexity of solving the
 loss-augmented prediction problem in \Eqref{loss_augmentation}, it is natural
-to work in a stochastic setting (see \citet{ratliff2007online}).
+to work in a stochastic setting (see \citet{ratliff2007online}).\pagebreak\\
 Given a model through $\phi$ and a set of parameters $\theta$, a subgradient
 considering a single training example $(x\hoch{i}, y\hoch{i})$
 can be computed simply by solving the loss-augmented prediction problem:
@@ -297,7 +298,7 @@ benefit in our experiments.
 
 The $n$-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
 into a quadratic objective with a combinatorial number of constraints:
-\begin{align}\label{eq:oneslack}
+\begin{align}\label{eq:nslack}
     \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i\\
     \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \mathcal{Y}^k:\\
     &\theta^T \sum_{i=1}^n [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i},
@@ -375,10 +376,11 @@ following reformulation of Equation~\Eqref{learning_equation}:
             \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
             - \xi
 \end{align}
+\enlargethispage{10mm}
 Informally, the $1$-slack formulation corresponds to joining all training
 samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
 interactions between variables corresponding to different data points, and
-then applying the $n$-slack algorithm with a single data point.
+then applying the $n$-slack algorithm with a single data point.\pagebreak\\
 A detailed description can be found in Algorithm~\ref{alg_one_slack}.
 %
 By construction, only a single constraint is added in each iteration of
@@ -477,5 +479,5 @@ In practice, the SZLJSP algorithm is usually used with the weighted averaging
 described in \Eqref{averaging}, as this is known to improve performance in the
 closely related stochastic subgradient algorithms, and empirically improves
 convergence.
-
+\enlargethispage{10mm}
 The detailed procedure as given by \citet{lacoste2012block} is shown in Algorithm~\ref{alg_szljsp}.
