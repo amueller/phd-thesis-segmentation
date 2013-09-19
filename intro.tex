@@ -64,15 +64,6 @@ and NYU V2.
 Both tasks have the same ultimate goal of parsing, and therefore understanding, images
 in terms of semantic classes, but usually employ  different mechanisms to represent and process.
 
-Before we delve into semantic segmentation and object class recognition, we
-will first investigate general grouping mechanisms in Chapter~\ref{ch:itm}.
-Clustering is an important step in most semantic segmentation pipelines, in at
-least two places: bottom-up segmentation and creation of dictionaries for
-feature learning. Chapter~\ref{ch:itm} introduces a novel, information theoretic
-algorithm that compares favourably with algorithms from the literature.
-While we do not apply our algorithm to the task of bottom-up segmentation,
-this is a promising avenue for future research.
-
 One of the bottlenecks in learning object class segmentation and semantic
 segmentation is the availability of training data.  While unlabeled image data,
 and even data with semantic
@@ -133,29 +124,35 @@ the same dataset.
 \section{List of Contributions}
 This thesis contains the following contributions:
 \begin{itemize}
-\item Introduction of general clustering algorithm that improves upon widely used
+\item Introducing a general clustering algorithm that improves upon widely used
     approaches from the literature.
-\item Demonstration of an algorithm for  weakly supervised object class segmentation.
-\item Providing a general efficient implementation for structured prediction.
-\item Analysis of max-margin learning algorithms with exact or approximate inference in different applications.
-\item Demonstrating that exact learning for semantic segmentation and object class segmentation is possible in loopy graphs.
-%\item Shows importance of edge features.
+\item Demonstrating a scalable algorithm for weakly supervised object class segmentation.
+\item Providing a general and efficient software framework for structured prediction.
+\item Analysing  max-margin learning algorithms with exact or approximate inference in different applications.
+\item Showing that exact learning for semantic segmentation and object class
+    segmentation is possible in practice, even in loopy graphs.
 \end{itemize}
 
 \section{Thesis Outline}
-We start by introducing a novel clustering algorithm in Chapter~\ref{ch:itm},
-which we plan to use as an additional building block for semantic segmentation
-algorithms in future work. Clustering is important both for the initial
-segmentation into superpixels, and in the creation of visual words.
+Before we delve into semantic segmentation and object class recognition, we
+will first investigate general clustering algorithm in Chapter~\ref{ch:itm}.
+Clustering is an important step in most semantic segmentation pipelines, in at
+least two places: bottom-up segmentation and creation of dictionaries for
+feature learning. We introduce a novel, information theoretic algorithm that
+compares favourably with algorithms from the literature.  While we do not apply
+our algorithm to the task of bottom-up segmentation, this is a promising avenue
+for future research.
 
 We will then introducing a mostly unstructured
 approach to semi-supervised learning for object class segmentation in
 Chapter~\ref{ch:semi_supervised}, investigating the problem of annotating
-training data for semantic segmentation. The central topic of this thesis is
-introduced in Chapter~\ref{ch:structured_pystruct}, which also introduces our
-software library for implementing structured learning and prediction
-algorithms.
-Chapter~\ref{ch:comparision} gives a quantitative comparison of the most widely
+training data for semantic segmentation.
+
+The central topic of this thesis is introduced in
+Chapter~\ref{ch:structured_pystruct}, which also introduces our software
+library for implementing structured learning and prediction algorithms.
+
+Chapter~\ref{ch:comparison} gives a quantitative comparison of the most widely
 used structured prediction algorithms, focusing on which algorithm is best to
 use in a given situation. In particular, we investigate learning behavior for
 semantic segmentation on several datasets.
@@ -171,7 +168,7 @@ Finally, Chapter~\ref{ch:nyu} applies the methods developed in
 Chapter~\ref{ch:structured_pystruct} and Chapter~\ref{ch:exact_learning} to the
 problem of semantic annotation with structure classes in RGB-D data. We
 demonstrate that we are able to learn meaningful spacial relations, and improve
-upon the state-of-the-art in the NYU V2 datasets that we consider.
+upon the state-of-the-art on the NYU V2 datasets.
 
 \section{Publications}
 The main material of this thesis has either been published in conference
