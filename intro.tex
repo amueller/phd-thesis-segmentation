@@ -1,11 +1,17 @@
 \chapter{Introduction}
 \vspace{1cm}
 \hfill%
-\begin{minipage}{.5\linewidth}
-Remember that all models are wrong;\\
-the practical question is how wrong do they have to be to not be useful.
+\begin{minipage}{.4\linewidth}
+    %\[ \argmax_{y \in \mathcal{Y}} f(x, y) \]
+    %\dots I wish I could let it stand on its own like this, but of course there is more to come.
+    %\flushright
+    %\emph{Martial Hebert}
+%Remember that all models are wrong;\\
+%the practical question is how wrong do they have to be to not be useful.
+Essentially, all models are wrong, but some are useful. 
 \flushright%
 \emph{George E. P. Box}
+
 %\includegraphics[width=\linewidth]{python_soul}%
 %\flushright%
 %Randall Munroe, \emph{xkcd.com}
@@ -32,7 +38,9 @@ a scene, few approaches have been evaluated on more than about twenty classes.
 
 In this work, we will investigate the tasks of semantic segmentation and object
 class segmentation.  These ask for a semantic annotation of each pixel with one
-of a set of known classes. We choose this task in particular for several reasons:
+of a set of known classes.
+
+We choose this task in particular for several reasons:
 \begin{itemize}
     \item Pixel-level annotation provides highly detailed information about the scene.
     \item Joint estimation of multiple classes allows for the use of \emph{context}.
@@ -58,7 +66,6 @@ and NYU V2.
 Both tasks have the same ultimate goal of parsing, and therefore understanding, images
 in terms of semantic classes, but usually employ  different mechanisms to represent the input.
 
-
 One of the bottlenecks in learning object class segmentation and semantic
 segmentation is the availability of training data.  While unlabeled image data,
 and even data with semantic
@@ -73,13 +80,16 @@ algorithms to the task of semantic image segmentation. Both topics have receive
 much attention in the computer vision and machine learning communities lately.
 Unfortunately, learning structured prediction in computer vision applications
 is still little understood.
-
 We will focus on the use of conditional random fields~(CRFs), which have shown
 great promise for computer vision applications. Using the paradigm of
 structural support vector machines, it is possible to learn conditional random
 fields to directly minimize a loss of interest. In particular, conditional
 random fields allow to combine different cues, possibly produced by other
-approaches, in a principled manner.
+approaches, in a principled manner. One of the main difficulties with CRF
+approaches to computer vision problems is, that context in images is usually
+represented as a neighborhood graph.  These graphs, by nature, contain many
+cycles, making inference intractable in general. Consequently, learning algorithms
+have to rely on approximate inference, with often unknown consequences to learning.
 
 There have been several previous studies on learning structural support vector machines,
 and learning for conditional random fields. The impact of approximate inference was first
@@ -106,10 +116,6 @@ this seemingly limited setup, we can make out large differences in the applicabi
 some of the commonly used methods. For comparison, we also evaluate the learning algorithms
 on chain CRFs, where inference is simple.
 
-%We hoe this thesis will further the understanding
-%of structured learning methods, give practical guidance and provide
-%implementations to further the use of structured prediction methods in computer
-%vision.
 
 %related work?? here again?
 %Current systems for semantic segmentation emply a wealth of different paradigms, most notably:
