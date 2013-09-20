@@ -41,8 +41,6 @@ feature and output class. The pairwise potential consists of a matrix of
 transition potentials with $26 x 26=676$ entries.
 It is well-known that efficient exact inference in chains is possible using
 message passing algorithms. 
-%We use the dynamic programming algorithm
-%implemented in \textsc{OpenGM}.
 
 
 \subsection{Multi-Label Classification}
@@ -135,7 +133,7 @@ We also used the same pairwise features for the two datasets: a constant feature
 a color contrast feature, and a feature encoding relative vertical position between superpixels.
 Overall, the models for both datasets had $21 \cdot 21 + 21^2 \cdot 4$ features.
 It is possible to assume symmetric potentials for this dataset, leading to less
-pairwise features.  We found both parametrizations yielded similar results.
+pairwise features. We found both parametrizations yielded similar results.
 
 \section{Experiments}
 We compare the following algorithms on the above models:
@@ -157,16 +155,60 @@ All algorithm take a $C$ parameter, which we adjusted on a fully trained model
 on a validation set (experiments not reported here) and held constant for all models.
 We found, however, that the algorithms and models are quite robust to the choice of $C$ within
 one or two orders of magnitude.
-As stopping criterion, we used a duality gap of $0.1$ when possible, and a pre-defined
-number of iterations for the subgradient algorithms.
+As stopping criterion, we used a duality gap of $0.1$ when possible, and a
+pre-defined number of iterations for the subgradient algorithms. It is worth
+noting that the quadratic programming based algorithms have additional
+hyper-parameters that we do not discuss here in detail, such as the threshold
+for removing a constraint as inactive, how often inactive constraints are
+removed, and parameters of the underlying QP solver. On the other hand, the
+SZLJSP, for example, has no hyper-parameters except for the stopping criterion.
 
 Our ultimate evaluation criterion is how fast the learning algorithms converge,
 and how robust they are to approximate inference.  To quantify our goals, we
 track primal suboptimality and training set error during learning, as well as
 final error on the test set.
-We report suboptimality as a function of runtime, and as a function of passes over the training set.
-Both are important to practitioners, as they give important insight into the workins of the algorithm.
-The actual runtime is certainly the most important factor, but also highly influenced by implementation details
-and properties of the dataset. We are particularly interested in cases where inference is highly non-trivial.
-In these cases, inference 
+We report suboptimality as a function of runtime, and as a function of passes
+over the training set.  Both are important to practitioners, as they give
+important insight into the workins of the algorithm.  The actual runtime is
+certainly the most important factor, but also highly influenced by
+implementation details and properties of the dataset. We are particularly
+interested in cases where inference is highly non-trivial, making inference the
+dominating factor of runtime.
+We define one pass over the dataset as calling prediction once for each sample.
+This way, we can get a clear picture how learning times with complexity of the
+inference task.
+
+\subsection{Experiments using Exact Inference}
+In this section, we present results on multi-class classification, sequence
+labeling and multi-label prediction with a tree-structured model. In these
+tasks, exact inference is possible, and we can compute the exact objective of
+the various algorithms easily. We use the dynamic programming algorithm
+implemented in \textsc{OpenGM} for experiments
+
+
+\subsection{Experiments using Approximate Inference}
+For the remaining tasks of multi-label classification with the full graph, the
+snakes dataset and image segmentation, exact inference is usually not possible.
+
+We use two different approximate inference algorithms, fusion moves, a fast
+local search procedure, and AD$^3$, a dual-subgradient method to solve the LP
+relaxation of the inference problem.
+Evaluation of algorithms where exact inference is not possible is much harder,
+as it is usually not possible to evaluate the exact objective. When using AD$^3$,
+we can still consider the relaxed task, which will be solved exactly in the
+majority of cases (AD$^3$ sometimes fails to find the primal solution to the LP
+relaxation). %TODO is this happening?
+When using fusion moves, there is no obvious interpretation of the produced
+primal objective, other than that it provides a lower bound of the actual
+objective. Nevertheless, we find it informative to analyze the behavior of this lower bound.
+
+For both inference algorithms, we also evaluate the predictive performance on
+the training set.  We explicitly do not consider the relaxed problem
+here---instead we round possible fractional results.
+While the training error does not directly reflect the objective, it provides
+a measure of how effective the ``prediction machine'' given by the learned model
+together with the inference algorithm is.
+
+\section{Discussion}
+
 
