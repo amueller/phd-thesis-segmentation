@@ -1,4 +1,4 @@
-\chapter{Weakly Supervised Object Segmentation}\label{ch:semi_supervised}
+\chapter[Weakly Supervised Object Segmentation]{Weakly Supervised\linebreak Object Segmentation}\label{ch:semi_supervised}
 
 Most algorithms for semantic image segmentation and object-class segmentation
 work with strong supervision: a pixel-wise labeling of training images. In this
@@ -13,7 +13,7 @@ Recently, several approaches have been proposed for semi-supervised semantic
 segmentation.  While these are close to our work, there are several important
 distinctions.  We address the task of object-class segmentation, that concerns
 object categories, while semantic segmentation approaches often focus on
-"stuff" categories like "sky" and "road" that are more easily detected using
+"stuff" categories like "sky" and "road" which are more easily detected using
 simple texture features.
 Additionally, in contrast to, for example, \citet{vezhnevets2011weakly}, our approach is in
 principle applicable to large datasets, the regime where weak annotation is
@@ -213,8 +213,8 @@ Training an SVM with this kernel produces a bag-level classifier for each
 class, which we refer to as MIK\@.  This procedure is very efficient since
 the resulting kernel matrix is of size of the number of bags, which is much smaller
 than a kernel matrix of size of the number of instances, as is commonly used in the
-literature~\citep{andrews2003support,nguyen2010new,zhang2008m3miml}.  Another
-advantage over other methods is that it uses a single convex optimization,
+literature~\citep{andrews2003support,nguyen2010new,zhang2008m3miml}. Another
+advantage over other methods is the use of a single convex optimization,
 whereas other approaches often use iterative
 algorithms~\citep{andrews2003support} or need to fit complex probabilistic
 models~\citep{zha2008joint}.
@@ -257,7 +257,7 @@ This simple heuristic yields good results in practice.
 	\begin{center}
         \includegraphics[width=\linewidth]{images/scheme-crop.pdf}
 	\end{center}
-        \caption{Overview of our method. See text for details.}
+        \caption{Schematic overview. See text for details.}
 	\figlabel{results}
 \end{figure}
 
@@ -365,7 +365,7 @@ described in \Secref{combiningsegments}.
     \toprule
                 & car & bike & person \\
     \cmidrule{2-4}
-        This work&   0.30&  0.45&  0.43 \\
+        MIL-MKL (our approach)&   0.30&  0.45&  0.43 \\
         Best strongly supervised approaches~\citep{fulkerson2009class,schulz2011}&   0.72&  0.72&  0.66 \\
     \bottomrule
     \end{tabularx}

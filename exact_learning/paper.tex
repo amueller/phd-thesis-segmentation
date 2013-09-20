@@ -70,7 +70,7 @@ are usually not acceptable in practice.
 
 As using LP relaxations was considered too costly for typical computer vision
 approaches, later work employed graph-cuts~\citep{szummer2008learning} or Loopy
-Believe Propagation (LBP)~\citep{lucchi2011spatial}. These works use a single
+Belief Propagation (LBP)~\citep{lucchi2011spatial}. These works use a single
 inference algorithm for the whole learning process, and can not provide any
 bounds on the true objective or the empirical risk. In contrast, in this chapter
 we show how to combine different inference methods that are more appropriate
@@ -214,10 +214,10 @@ the fusion move algorithm is replaced by AD$^3$ with branch and bound.
 While using more different oracles is certainly possible, we found
 that using just these three methods performed very well in practice.  This
 combination allows us to make fast progress initially and guarantee optimality
-in the end. Our strategy is visualized in \Figref{scheme_inference_algs}
-Notably, it is not necessary for an algorithm used as 3) to always produce
-exact results. For guaranteeing optimality of the model, it is sufficient that
-we obtain a certificate of optimality when learning stops.
+in the end. Our strategy is visualized in \Figref{scheme_inference_algs}.
+Notably, it is not necessary for an algorithm used as the third strategy to
+always produce exact results. For guaranteeing optimality of the model, it is
+sufficient that we obtain a certificate of optimality when learning stops.
 % TODO certify optimality != exact...
 
 \subsection{Dynamic Constraint Selection}\seclabel{caching}
