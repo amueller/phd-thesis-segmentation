@@ -267,7 +267,7 @@ worst case.
 \subsection{Inference Algorithms}
 
 As a fast under-generating inference algorithm, we used $\alpha$-expansion
-moves based on non-submodular graph-cuts using Quadratid Pseudo-Boolean
+moves based on non-submodular graph-cuts using Quadratic Pseudo-Boolean
 Optimization (QPBO)~\citep{rother2007optimizing}.  This move-making strategy
 can be seen as a simple instantiation of the more general framework of fusion
 moves, as introduced by \citet{lempitsky2010fusion}
@@ -569,7 +569,7 @@ machine learning package~\citep{pedregosa2011scikit}.
 %TODO implementation details here?
 The move-making algorithm using QPBO is implemented with the help of the QPBO-I
 method provided by \citet{rother2007optimizing}.
-We use the excellent implementation of AD$^3$ provided by the authors of
+We use the excellent implementation of AD$^3$ provided by
 \citet{martins2011augmented}. 
 
 Thanks to using these high-quality implementations, running the whole pipeline
