@@ -115,4 +115,58 @@ features, the pairwise potentials has $45 \cdot 4 \cdot 11^2$ parameters.
 
 
 \subsection{Superpixel CRFs for Semantic Segmentation}
+Our main attention is devoted to the use of conditional random fields for
+semantic segmentation.  We use the Pascal VOC and MSRC datasets. A detailed
+description of the method will be given in Chapter~\ref{ch:exact_learning}.
+%TODO will it?
+The Pascal VOC has \ldots training and \ldots test images, each having
+around 100 superpixels. There are 20 object categories, plus background. The % TODO check!
+MSRC dataset has \ldots training and \ldots test images, also segmented in
+around 100 superpixels each. We use the MSRC-21 dataset, which has 21 target
+classes.
+Each superpixel is represented as an output variable, with the ground truth obtained
+by majority vote over the pixel belonging to the superpixel.
+Pairwise potentials were introduced for each pair of neighboring superpixels.
+We then removed all superpixels that were labeled as ``void'', together with
+their pairwise potentials.
+As unary potentials, we use the TextonBoost probabilities provided by \citet{krahenbuhl2012efficient}.
+We average probabilities inside each superpixel, yielding 21 input features for both datasets.
+We also used the same pairwise features for the two datasets: a constant feature,
+a color contrast feature, and a feature encoding relative vertical position between superpixels.
+Overall, the models for both datasets had $21 \cdot 21 + 21^2 \cdot 4$ features.
+It is possible to assume symmetric potentials for this dataset, leading to less
+pairwise features.  We found both parametrizations yielded similar results.
+
+\section{Experiments}
+We compare the following algorithms on the above models:
+\begin{itemize}
+    \item Stochastic Subgradient Descent using the Pegasos schedule: %TODO
+    \item Stochastic Subgradient Descent using a momentum heuristic:
+    %\item Stochastic Subgradient Descent using a momentum heuristic: AVERAGING
+    %\item Stochastic Subgradient Descent using a momentum heuristic: AVERAGING
+    \item The $1$-slack cutting plane algorithm without constraint caching.
+    \item The $1$-slack cutting plane algorithm with constraint caching. For
+            each sample, the last $50$ inference results are stored.
+            Details of the caching strategy can be found in Chapter~\ref{ch:exact_learning}.
+            %TODO
+    \item The $n$-slack cutting plane algorithm, where the QP is solved after each training.
+    \item The $n$-slack cutting plane algorithm, where the QP is solved every 100 training samples.
+    \item The SZLJSP algorithm.
+\end{itemize}
+All algorithm take a $C$ parameter, which we adjusted on a fully trained model
+on a validation set (experiments not reported here) and held constant for all models.
+We found, however, that the algorithms and models are quite robust to the choice of $C$ within
+one or two orders of magnitude.
+As stopping criterion, we used a duality gap of $0.1$ when possible, and a pre-defined
+number of iterations for the subgradient algorithms.
+
+Our ultimate evaluation criterion is how fast the learning algorithms converge,
+and how robust they are to approximate inference.  To quantify our goals, we
+track primal suboptimality and training set error during learning, as well as
+final error on the test set.
+We report suboptimality as a function of runtime, and as a function of passes over the training set.
+Both are important to practitioners, as they give important insight into the workins of the algorithm.
+The actual runtime is certainly the most important factor, but also highly influenced by implementation details
+and properties of the dataset. We are particularly interested in cases where inference is highly non-trivial.
+In these cases, inference 
 
