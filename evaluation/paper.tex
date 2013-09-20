@@ -1,1 +1,118 @@
 \chapter{Empirical Comparison of Learning Algorithms}\label{ch:comparison}
+In this chapter, we provide an empirical evaluation of the learning algorithms
+described in Chapter~\ref{ch:structured_pystruct}.  We use the open source
+implementations in \pystruct, and publish the evaluation code and datasets with
+the package.
+
+\section{Datasets and Models}
+We consider several qualitatively different datasets, that have been widely used in the literature.
+The problems we consider are multi-class classification, sequence labeling, multi-label prediction,
+and general graph labeling.
+
+\subsection{Multi-Class Classification (MNIST)}
+The simplest task we use is multi-class classification. In this task,
+the inference problem is trivial, as it is assumed the target set is small enough
+to be enumerated efficiently. While this problem could be solved more efficiently
+with specialized algorithms, it nevertheless provides an initial insight into structured
+prediction algoriths.
+
+We choose the classical MNIST dataset of handwritten digits, consisting of
+60000 training images and 10000 test images of the digits zero to nine. Each
+image is a $28 \times 28$ grey-level image, resulting in a $784$-dimensional
+feature vector. We normalize the feature to lie between $0$ and $1$.
+
+The model we use for multi-class classification is the Crammer-Singer
+formulation. We do not include a bias, leading to $784 \cdot 10 = 7840$
+parameters in the model.
+
+
+\subsection{Sequence Labeling (OCR)}
+A classical application of structured prediction is sequence labeling.
+We choose the ``OCR'' dataset introduced in the seminal work of \citet{taskar2003max}.
+Each input consists of the segmented handwritten letters of a word in lower case. The task is to classify
+all letters in a word, that is assign each segmented input letter one of the
+classes ``a'' to ``z''. As the first letter of each word was capitalized, these
+were removed by \citet{taskar2003max}, leading to somewhat odd-looking
+labels. The words are between \ldots and \ldots letters long, and each letter
+is represented as a binary image of size \ldots.
+We use a simple chain model with a single constant pairwise feature.
+This means the unary potential has \ldots parameters, one for each input
+feature and output class. The pairwise potential consists of a matrix of
+transition potentials with $26 x 26=676$ entries.
+It is well-known that efficient exact inference in chains is possible using
+message passing algorithms. 
+%We use the dynamic programming algorithm
+%implemented in \textsc{OpenGM}.
+
+
+\subsection{Multi-Label Classification}
+Multi-label classification is a generalization of multi-class classification,
+in which each example can be associated with more than one class. In other
+words, the algorihm must decide for each sample and for each class whether the
+sample belongs to that class or not.
+Multi-label classification was first formulated as a structured prediction problem
+in by \citet{finley2008training}, where it was used to investigate the influence of
+approximate inference on the $n$-slack cutting plane algorithm. In this formulation,
+each class is represented as a binary node in a factor graph---the states representing
+presence of absence of the class. A different factor of pairwise potentials is introduced
+between each pair of classes.
+We also consider a different model, where pairwise potentials are only
+introduced between specific nodes. Build a tree over the binary variables by
+computing the Chow-Liu Tree~\citep{chow1968approximating} of the targets. While
+this results in a less expressive model, a tree-shaped model allows for exact
+inference via message passing.
+We use two of the datasets used in \citet{finley2008training}, the scene
+and yeast datasets. We choose these two as these are real-world datasets for
+which the pairwise approach outlined above actually improves upon the
+baseline~\citep{finley2008training}.
+The scene dataset has six labels, 294 input features, 1211 training samples and
+1196 test samples. This leads to $204 \cdot 6$ parameters for the unary potentials,
+$3 \cdot 5 \cdot 4$ parameters for the full pairwise potentials (four for each edge), and
+$5 \cdot 4$ parameters for the pairwise potentials of the tree-shaped model.
+Using four parameters for each edge is a slight over-parametrization that
+simplifies writing out the model.
+The yeast dataset has 14 labels, 103 features, 1500 training samples and 971
+test samples. The resulting numbers of parameters are $14 \cdot 103$ parameters
+for the unary potentials, $7 \cdot 13 \cdot 4$ parameters for the full pairwise
+potential, and $13 \cdot 4$ parameters for the tree-shaped model.
+
+\subsection{2D Grid CRF (Snakes)}
+The snakes dataset is a synthetic dataset, where samples are labeld 2D grids.
+It was introduced in \citet{nowozin2011decision} to demonstrate the importance
+of learning conditional pairwise potentials. The dataset consists of ``snakes''
+of length ten traversing the 2D grid. Each grid cell that was visited is marked
+as the snake heading out towards the top, bottom, left, or right, while
+unvisited cells are marked as background.  The goal is to predict a labeling of
+the snake from ``head'' to ``tail'', that is assigning numbers from zero to
+nine to the cells that are occupied by the snake.  An illustration is given in
+%TODO
+The task is interesting, as local evidence for the target label is weak except
+around head and tail. Therefor pairwise potentials are necessary to solve the
+task. The dataset is noise-free in the sense that given the above description, a
+human could easily produce the desired labeling without making any mistake.
+The dataset is also interesting as the model of \citet{nowozin2011decision} produced
+notoriously hard to optimize energy functions.
+
+In \citet{nowozin2011decision}, the input was encoded into five RGB colors
+(``up'', ``down'', ``left'', ``right'', ``background'').  To encode the input
+more suitable for our linear methods, we convert this representation to a
+one-hot encoding of the five states.
+
+We use a grid CRF model for this task. Unary for each node are given by the
+input of the 8-neighborhood of the node---using a 4-neighborhood would most
+likely yield better results, but we do not want to encode too much
+task-knowledge into our model.
+Using the one-hot encoding of the input, this leads to $9 \dot 5 = 45$ unary features.
+With 11 output classes, the unary potential has $11 \cdot 9 \cdot 5$ parameters.
+Features for the pairwise potentials are constructed by concatenating the features
+of the two neighboring nodes, taking the direction of the edge into account.
+The pairwise feature therefore has dimensionality $45 \cdot 4$, with the first
+$45$ entries corresponding to the feature of the ``top'' node, the second $45$
+entries to the features ``bottom'' node, followed bye the ``left'' and
+``right'' nodes. As each edge is either horizontal \emph{or} vertical, only two
+of these parts will be non-zero for any given edge.  With $45 \cdot 4$ edge
+features, the pairwise potentials has $45 \cdot 4 \cdot 11^2$ parameters.
+
+
+\subsection{Superpixel CRFs for Semantic Segmentation}
+
