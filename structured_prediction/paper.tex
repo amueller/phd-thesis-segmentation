@@ -60,7 +60,7 @@ $\Phi(x, y)$, which manifests the relation between input $x$ and output $y$. As
 $\mathcal{Y}$ is typically very large, it is crucial to exploit the particular
 form of $\Phi(x, y)$ to solve the prediction problem of \Eqref{main_equation}.
 
-While $y$ could be complicated like a parsing tree or the geometric
+While $y$ could be complicated like a parse tree or the geometric
 configuration of a molecule, many settings, such as the image segmentation
 setting we are interested in, can be reduced to the case where $y$ is a vector of
 discrete labels $\mathcal{Y} = \{1, \dotsc, k\}^n$.
@@ -278,12 +278,12 @@ benefit in our experiments.
                 \State
                 $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})] $
                 \If{$\displaystyle \delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})] \geq \xi_i + \epsilon$}
-                    \State $\W_i \leftarrow \W_i \cup \{ \hat{y}\} $
+                \State \hspace{-3mm}$\W_i \leftarrow \W_i \cup \{ \hat{y}\} $
                     \State
                     \vspace{-15mm}
                     \begin{align*}
-                    (\theta, \xi_1, \dots, \xi_k) \leftarrow \displaystyle &\argmin_{\theta, \xi_1, \dots, \xi_k} \frac{||\theta||}{2}^2 + C \sum_{i=1}^k\xi_i\\
-                    &\text{s.t. }\forall i=1,\dots,k \forall \hat{y} \in \W_i:\\
+                    (\theta, \xi_1, \dots, \xi_k) \leftarrow \displaystyle \argmin_{\theta, \xi_1, \dots, \xi_k}& \frac{||\theta||}{2}^2 + C \sum_{i=1}^k\xi_i\\
+                        \text{s.t. }& \text{for } i=1,\dots,k\ \forall \hat{y} \in \W_i:\\
                     &\theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi_i
                     \end{align*}
                 \EndIf
@@ -299,11 +299,11 @@ benefit in our experiments.
 The $n$-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
 into a quadratic objective with a combinatorial number of constraints:
 \begin{align}\label{eq:nslack}
-    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i\\
-    \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \mathcal{Y}^k:\\
-    &\theta^T \sum_{i=1}^n [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i},
-        \hat{y}\hoch{i})] \geq \sum_{i=1}^k \Delta(y\hoch{i}, \hat{y}\hoch{i})
-            - \xi
+    \min_{\theta, \xi_1, \dots, \xi_k}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i\\
+    \text{s.t. }&\text{for } i=1,\dots,k\ \forall \hat{y} \in \mathcal{Y}:\\
+    &\theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i},
+        \hat{y})] \geq \Delta(y\hoch{i}, \hat{y})
+            - \xi_i
 \end{align}
 As it is not feasible to deal with all constraints, only a working set $\W$ of active constraints
 is maintained, using the cutting plane method. The algorithm starts with an empty working set,
