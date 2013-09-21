@@ -6,7 +6,7 @@ segmentation and visual grouping can be naturally formulated as image labeling t
 Arguably the most popular way to approach such labeling problems is via graphical
 models, such as Markov random fields (MRFs) and conditional random fields (CRFs).
 MRFs and CRFs provide a principled way of integrating local evidence and
-modeling spacial dependencies, which are strong in most image-based tasks.
+modeling spatial dependencies, which are strong in most image-based tasks.
 %
 While in earlier approaches, model parameters were set by hand or using
 cross-validation, more recently parameters are often learned using a max-margin
@@ -353,9 +353,9 @@ loss-augmented prediction on these mini-batches of size $r$.
             \State 
             \vspace{-5mm}
             \begin{align*}
-            (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi\\
-            &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
-            &\theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
+            (\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi}&\frac{||\theta||}{2}^2 + C \xi\\
+            \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
+             &\theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
             \end{align*}
             \For {i=1, \dots, k}
                 \State

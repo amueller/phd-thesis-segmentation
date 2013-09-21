@@ -17,21 +17,21 @@ Essentially, all models are wrong, but some are useful.
 %Randall Munroe, \emph{xkcd.com}
 \end{minipage}%
 \\[2cm]
-In computer vision research, the goal is to automatically extract information from an image.
-In particular discerning semantic information, that is interpreting an image, is a prominent
-research topic.
+In computer vision research, the goal is to automatically extract information
+from a given image of image sequence.  In particular discerning semantic
+information, that is interpreting an image, is a prominent research topic.
 While much progress has been made in recent years, computer vision systems still lag behind
-humans in most tasks that require semantic information. Often these tasks can be formulated
+human vision in most tasks that require semantic information. These tasks can often be formulated
 in terms of \emph{semantic classes}, meaning categories of parts, objects or scenes.
 Examples include answering questions such as ``Is this a picture of a beach?'', ``How many
 cars are there in this image?'' or even ``What objects lie on the table?''.
 These questions illustrate a range of possible tasks involving semantic categories,
-from classifying images of single objects, over localization and counting of object classes,
-to parsing a scene fully into objects and object classes, together with their relations.
+such as classifying images of single objects, localization and counting of object classes,
+and parsing a scene fully into objects and object classes together with their relations.
 %
 While humans can distinguish tens of thousands of object classes, and have
 little trouble in interpreting complex scenes, current methods are often
-restricted to a much smaller number of classes, and only have limited
+restricted to a much smaller number of classes and only have limited
 capabilities to model interactions or relations.  We believe that
 \emph{context} is one of the most important cues when it comes to classifying
 objects, and therefore understanding scenes. Consequently, we target dense
@@ -51,12 +51,15 @@ We choose this task in particular for several reasons:
 %
 Applications of semantic segmentation and scene understanding include automatic
 image interpretation for retrieval, autonomous driving and mobile robotics.
-While these are already important applications, we expect that with the
-abundance of camera data, and the proliferation of mobile computing, even
-more applications will emerge soon.
+%While these are already important applications, we expect that with the
+%abundance of camera data, and the proliferation of mobile computing, even
+%more applications will emerge soon.
+Besides these applications, due to the abundance of camera data and the
+proliferation of mobile computing, we expect semantic annotation of images to
+be a key component in future technologies.
 
 In the following we distinguish between the task of semantic segmentation,
-which is usually distinguishing unstructured ``stuff'' classes such as road and
+which usually distinguishes unstructured ``stuff'' classes such as road and
 grass, and object class segmentation, which denotes the segmentation of very
 structured classes, such as cars, planes and people. We consider four
 different datasets in this thesis: the object class segmentation datasets
@@ -64,7 +67,7 @@ Graz02 and Pascal VOC 2010, and the semantic segmentation datasets MSRC-21, and
 NYU V2.
 %
 Both tasks have the same ultimate goal of parsing, and therefore understanding,
-images in terms of semantic classes, but usually employ  different mechanisms
+images in terms of semantic classes. However they employ different mechanisms
 to represent and process.
 
 One of the bottlenecks in learning object class segmentation and semantic
@@ -83,10 +86,10 @@ lately~\citep{ladicky2009associative, krahenbuhl2012efficient,
 branson2013efficient, blake2011markov}.
 Unfortunately, learning structured prediction in computer vision applications
 is still little understood.
-We focus on the use of conditional random fields~(CRFs), which have shown great
-promise for computer vision applications. Using the paradigm of structural
+We focus on the use of conditional random fields~(CRFs), which have shown
+promising  results for computer vision applications. Using the paradigm of structural
 support vector machines, it is possible to learn conditional random fields to
-directly minimize a loss of interest. In particular, conditional random fields
+directly minimize a loss of interest. In particular, CRFs
 allow to combine different cues, possibly produced by other approaches, in a
 principled manner. One of the main difficulties with CRF approaches to computer
 vision problems is that context in images is usually represented as a
@@ -100,7 +103,7 @@ inference was first investigated by \citet{finley2008training}, applying
 structural support vector machines to multi-label data. Later, different works
 investigated how to combine approximate inference and learning in a single
 framework. \citet{meshi2010learning, komodakis2011efficient}, and
-\citet{hazan2010primal} approached the problem using duality, and formulate
+\citet{hazan2010primal} approach the problem using duality, and formulate
 learning and inference as a joint optimization problem.
 \citet{stoyanov2011empirical}, and later \citet{jancsarylearning} and
 \citet{krahenbuhlparameter} formulate learning structured prediction as
@@ -125,11 +128,11 @@ and vary the maximum margin learning algorithm. Despite this seemingly limited
 setup, we can make out large differences in the applicability of some of the
 commonly used methods. For comparison, we also evaluate the learning algorithms
 on chain CRFs, where efficient inference is possible.
-More recently, \citet{lucchi2013learning} proposed a novel algorithm for
+More recently, \citet{lucchi2013learning} propose a novel algorithm for
 efficiently learning structured prediction for semantic segmentation, using
-approximate inference. In Chapter~\ref{ch:exact_learning}, we introduce an
+approximate inference. In Chapter~\ref{ch:exact_learning}, we develop an
 algorithm that runs in similar time to the one proposed by
-\citet{lucchi2013learning}, but is able to learn a CRF to the exact optimum on
+\citet{lucchi2013learning}, which is able to learn a CRF to the exact optimum on
 the same dataset.
 
 
@@ -137,12 +140,20 @@ the same dataset.
 This thesis contains the following contributions:
 \begin{itemize}
 \item Introducing a clustering algorithm that improves upon widely used
-    approaches from the literature.
-\item Demonstrating a scalable algorithm for weakly supervised object class segmentation.
-\item Providing a general and efficient open source software framework for structured prediction.
-\item Analysing max-margin learning algorithms with exact or approximate inference in different applications.
+    approaches from the literature. Our algorithm yields better clusterings in
+    terms of known classes on a wide range of standard datasets.
+\item Demonstrating a scalable algorithm for weakly supervised object class
+    segmentation.  The proposed method is able to learn to segment complex object
+    classes using image annotation alone.
+\item Providing a general and efficient open source software framework for
+    structured prediction. 
+\item Analysing max-margin learning algorithms with exact or approximate
+    inference in different applications. We give a thorough evaluation of
+    all major SSVM learning algorithms, using a wide array of application.
 \item Showing that exact learning for semantic segmentation and object class
-    segmentation is possible in practice, even in loopy graphs.
+    segmentation is possible in practice, even in loopy graphs. We combine
+    fast inference, caching and inference algorithms which certify optimality
+    to learn a $1$-slack SSVM.
 \end{itemize}
 
 \section{Thesis Outline}
@@ -159,9 +170,10 @@ We introduce an algorithm for semi-supervised learning of object class
 segmentation in Chapter~\ref{ch:semi_supervised}, motivated by the problem of
 annotating training data for semantic segmentation.
 
-The central topic of this thesis is introduced in
-Chapter~\ref{ch:structured_pystruct}, which also introduces our software
-library for implementing structured learning and prediction algorithms.
+The central topic of this thesis, learning structured prediction for semantic
+segmentation, is introduced in Chapter~\ref{ch:structured_pystruct}. This
+chapter also introduces our software library for implementing structured
+learning and prediction algorithms.
 
 Chapter~\ref{ch:comparison} gives a quantitative comparison of the most widely
 used structured prediction algorithms in diverse settings.
@@ -180,8 +192,8 @@ and provide state-of-the-art results on the MSRC-21 dataset.
 Finally, Chapter~\ref{ch:nyu} applies the methods developed in
 Chapter~\ref{ch:structured_pystruct} and Chapter~\ref{ch:exact_learning} to the
 problem of semantic annotation with structure classes in RGB-D data. We
-demonstrate that we are able to learn meaningful spacial relations, and improve
-upon the state-of-the-art on the NYU V2 datasets.
+demonstrate that we are able to learn meaningful spatial relations, and outperform
+state-of-the-art methods on the NYU V2 datasets.
 
 \section{Publications}
 The main material of this thesis has either been published in conference

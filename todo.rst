@@ -2,6 +2,7 @@ check past/presence in references!!!
 in pystruct experiments, refer to other sections for details, not website
 where is the right place to discuss details for segmentation?
 call fusion moves fusion moves everywhere!!
+read logfile :)
 
 
 future / present tense?!?!?
