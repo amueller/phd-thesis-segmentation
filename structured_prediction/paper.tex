@@ -230,11 +230,11 @@ loss-augmented prediction problem in \Eqref{loss_augmentation}, it is natural
 to work in a stochastic setting (see \citet{ratliff2007online}).\pagebreak\\
 Given a model through $\phi$ and a set of parameters $\theta$, a subgradient
 considering a single training example $(x\hoch{i}, y\hoch{i})$
-can be computed simply by solving the loss-augmented prediction problem:
-\begin{align}
-    &\frac{d}{d\theta} \left [ \frac{1}{2} ||\theta||^2 + C \ell(x\hoch{i}, y\hoch{i}, \theta) \right ] \ni C\left [ \phi(x\hoch{i}, \hat{y}) - \phi(x\hoch{i}, y\hoch{i}) \right]+ \theta\\
+can becomputed simply by solving the loss-augmented prediction problem:
+\begin{align*}
+    &\frac{d}{d\theta} \left [ \frac{1}{2} ||\theta||^2 + C \ell(x\hoch{i}, y\hoch{i}, \theta) \right ] \ni C\left [ \phi(x\hoch{i}, \hat{y}) - \phi(x\hoch{i}, y\hoch{i}) \right]+ \theta\numberthis\\
     &\text{with }\hat{y} \in \argmax_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \phi(x\hoch{i}, y)
-\end{align}
+\end{align*}
 The most commonly used update has the simple form
 \begin{equation}
     \theta_{t+1} = (1 - \eta_t) \theta_t - \eta_t C \left [\phi(x\hoch{i}, \hat{y}) - \phi(x\hoch{i}, y\hoch{i})\right]
@@ -298,13 +298,13 @@ benefit in our experiments.
 
 The $n$-slack cutting plane method~\citep{tsochantaridis2006large} reformulates \Eqref{learning_equation}
 into a quadratic objective with a combinatorial number of constraints:
-\begin{align}\label{eq:nslack}
-    \min_{\theta, \xi_1, \dots, \xi_k}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i\\
+\begin{align*}
+    \min_{\theta, \xi_1, \dots, \xi_k}\ &\frac{1}{2} ||\theta||^2 + C \sum_{i=1}^k \xi_i \numberthis \label{eq:nslack}\\
     \text{s.t. }&\text{for } i=1,\dots,k\ \forall \hat{y} \in \mathcal{Y}:\\
     &\theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i},
         \hat{y})] \geq \Delta(y\hoch{i}, \hat{y})
             - \xi_i
-\end{align}
+\end{align*}
 As it is not feasible to deal with all constraints, only a working set $\W$ of active constraints
 is maintained, using the cutting plane method. The algorithm starts with an empty working set,
 and repeatedly iterates over the training data. For each sample, the most
@@ -369,13 +369,13 @@ loss-augmented prediction on these mini-batches of size $r$.
 
 The $1$-slack cutting plane method~\citep{joachims2009cutting} solves the
 following reformulation of Equation~\Eqref{learning_equation}:
-\begin{align}\label{eq:oneslack}
-    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
+\begin{align*}
+    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi \numberthis\label{eq:oneslack}\\
     \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
         &\theta^T \sum_{i=1}^n [\Phi(x^i, y^i) - \Phi(x^i,
             \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
             - \xi
-\end{align}
+\end{align*}
 \enlargethispage{10mm}
 Informally, the $1$-slack formulation corresponds to joining all training
 samples into a single training example $(\mathbf{x}, \mathbf{y})$ that has no
@@ -407,9 +407,11 @@ to make the algorithm more efficient:
         (line~\ref{get_cutting_plane} in Algorithm~\ref{alg_one_slack}).
         For generating a new constraint $(\hat{y}^1, \dotsc, \hat{y}^n)$, we
         find
-        \[ \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n
+        \begin{equation}
+            \hat{y}^i \leftarrow \argmax_{\hat{y}\in C^i} \sum_{i=1}^n
             \Delta(y^i, \hat{y}) - \theta^T \sum_{i=1}^n [\Phi(x^i, y^i) -
-                \Phi(x^i, \hat{y})] \]
+                \Phi(x^i, \hat{y})] 
+        \end{equation}
         by enumeration of $C^i$ and continue until
         line~\ref{convergence_check}.  Only if $\xi' - \xi < \epsilon$, that is
         the produced constraint is not violated strongly enough, we return to

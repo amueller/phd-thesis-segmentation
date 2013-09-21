@@ -4,7 +4,6 @@ where is the right place to discuss details for segmentation?
 call fusion moves fusion moves everywhere!!
 references for datasets in introduction
 alignment in algorithms sucks when using "align"
-only one reference number for align in QP for n-slack, 1-slack
 read logfile :)
 Graz 02 zitat fehlt?
 phi vs Psi? GAH!

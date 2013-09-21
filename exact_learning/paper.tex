@@ -116,13 +116,13 @@ on real-world applications.
 In this chapter, we use the $1$-slack cutting plane algorithm, as we found this
 algorithm to be most suitable for out approach. Recall the optimization problem
 that is solved by the $1$-slack cutting plane algorithm:
-\begin{align}\eqlabel{oneslack_again}
-    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi\\
+\begin{align*}
+    \min_{\theta, \xi}\ &\frac{1}{2} ||\theta||^2 + C \xi \numberthis\label{eq:oneslack_again}\\
     \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}^1, \dots, \hat{y}^n) \in \mathcal{Y}^n:\\
         &\theta^T \sum_{i=1}^n [\Phi(x^i, y^i) - \Phi(x^i,
             \hat{y}^i)] \geq \sum_{i=1}^n \Delta(y^i, \hat{y}^i)
             - \xi
-\end{align}
+\end{align*}
 For reference, the algorithm described in
 \Secref{one_slack}, Algorithm~\ref{alg_one_slack} is reproduced as
 Algorithm~\ref{alg_one_slack_again}, with the additional input of an inference algorithm $\hat{I}$, which is called in

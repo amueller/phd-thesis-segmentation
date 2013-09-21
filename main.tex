@@ -21,6 +21,7 @@
 \usepackage{color}
 \usepackage{minted}
 \usepackage[german,english]{babel}
+
 %\renewcommand*\sfdefault{avant}
 \usepackage{helvet}
 %\usepackage[defaultsans]{droidsans}
@@ -47,6 +48,9 @@
 
 \definecolor{rulecolor}{rgb}{0.80,0.80,0.80}
 \newminted{python}{frame=single,rulecolor=\color{rulecolor}, linenos, xleftmargin=7mm}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+
 
 \newcommand{\pystruct}{\textsc{PyStruct}\xspace}
 \newcommand{\svmstruct}{SVM$^\text{struct}$\xspace}
