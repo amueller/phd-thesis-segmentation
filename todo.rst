@@ -1,7 +1,6 @@
 check past/presence in references!!!
 in pystruct experiments, refer to other sections for details, not website
 where is the right place to discuss details for segmentation?
-alignment in algorithms sucks when using "align"
 read logfile :)
 [links to algorithm lines don't work -- also links to algorithm doesn't work]
 
