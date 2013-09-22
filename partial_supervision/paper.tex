@@ -53,7 +53,7 @@ has been successfully applied to this task~\citep{zhou2007multi}. We propose to
 go a step further and apply multi-instance learning to the task of object-class
 segmentation in natural images, by also classifying instances, not only bags.
 In this, we follow the work of \citet{liconvex2010} and \citet{zha2008joint}, who not
-only learn $f_{MI}$, but also $f_{I}$.
+only learned $f_{MI}$, but also $f_{I}$.
 
 In our model, each image forms a bag, while the candidate segments correspond
 to the instances contained in the bag. During learning, only presence of object
@@ -91,7 +91,7 @@ We discuss only those that are relevant to the present treatment.
 \citet{gaertner2002multi} introduced the concept of a multi-instance
 kernel on bags, defined in terms of a kernel on instances. 
 The basic principle of the multi-instance kernel is similar to a soft-max over instances in
-each bag. This can be viewed as approximating the kernel value of the ``closest pair'' given by two bags. \citet{gaertner2002multi} show that the multi-instance kernel
+each bag. This can be viewed as approximating the kernel value of the ``closest pair'' given by two bags. \citet{gaertner2002multi} showed that the multi-instance kernel
 is able to separate bags if and only if the original kernel on instances is able to separate the underlying concepts.
 The method of multi-instance kernels has a particular appeal in that it transforms a multi-instance problem into a standard
 classification problem by using an appropriate kernel. The downside of this approach is that it does
@@ -99,7 +99,7 @@ not directly label instances, only bags.
  %and that it assumes that instances inside a bag have i.i.d.
 %labels.
 
-\citet{zhou2009multi} explicitly address the fact that instances are not
+\citet{zhou2009multi} explicitly addressed the fact that instances are not
 independent within a bag , leading to an algorithm that can take advantage of
 possible correlations. Computational costs of their algorithm does not scale
 well with the number of instances, although a heuristic algorithm is proposed
@@ -109,7 +109,7 @@ to overcome this restriction.
 advantage of their algorithm over the MI-kernel of \citet{gaertner2002multi},
 so we use the MI-kernel for better scalability.
 
-\citet{liconvex2010} compute likelihood ratios for instances, giving a new
+\citet{liconvex2010} computed likelihood ratios for instances, giving a new
 convex formulation of the multi-instance problem. Using these likelihood
 ratios, classification can be performed directly on the instances, provided an
 appropriate threshold for classifying instances as positive is known. We

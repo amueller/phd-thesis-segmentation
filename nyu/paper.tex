@@ -75,7 +75,7 @@ particular the loss-based learning are integral ingredients of the success of ou
 
 \section{Related Work}
 The task of dense semantic annotation of 3D maps has seen an increased interest
-in recent years.  Early work includes \citet{nuchter2008towards}, who combine
+in recent years.  Early work includes \citet{nuchter2008towards}, who combined
 6D SLAM, surface annotation, and object recognition to build semantically
 annotated maps. They demonstrate their approach on a mobile robot in an indoor
 environment.
@@ -84,12 +84,12 @@ More recently \citet{sengupta2012automatic} introduced a dataset of
 semantically annotated street-scenes in a closed track, captured as pairs of
 stereo images. They approach the task by jointly reasoning about 3D layout and
 semantics of the scenes and produce a dense labeling on image level.
-\citet{senguptaurban} extend the approach to produce a volumetric
+\citet{senguptaurban} extended the approach to produce a volumetric
 reconstruction of the scene, together with a dense semantic labeling of the
 volumetric representation. Their approach to image segmentation builds on
 the hierarchical CRF approach of
 \citet{ladicky2009associative}, which is similar in spirit to our approach,
-but uses Potts potentials together with cross-validation to adjust parameters.
+but used Potts potentials together with cross-validation to adjust parameters.
 
 Recent approaches for indoor semantic annotation of maps mostly focused on
 RGB-D images, which are now easy to obtain using structured light sensors.
@@ -117,29 +117,29 @@ using in this work.  Their focus is on inferring support relations in indoor
 scenes, such as objects resting on tables or shelfs, which in turn rest on the floor.
 Their approach is based on robust estimation of 3D plane hypotheses, which are then jointly
 optimized with support relations and structure classes.
-\citet{SilbermanECCV12} use a complex pipeline, employing significant domain knowledge.
+\citet{SilbermanECCV12} used a complex pipeline, employing significant domain knowledge.
 In this work, on the other hand, we try to learn all relevant domain specific features
 directly from the data, which allows us to out-perform the work of \citet{SilbermanECCV12}
 with respect to structure class segmentation.
 
-\citet{couprie-iclr-13} approach the task of semantic segmentation of structure classes
+\citet{couprie-iclr-13} approached the task of semantic segmentation of structure classes
 in RGB-D using the paradigm of convolutional neural networks, extending
 previous work of \citet{farabet-pami-13} and \citet{schulz2012learning}.
-Similar to our approach, \citet{couprie-iclr-13} combine the output of a
+Similar to our approach, \citet{couprie-iclr-13} combined the output of a
 pixel-based, low-level learning algorithm with an independent unsupervised
 segmentation step. In contrast to their work, we improve our results by not
 only averaging predictions within superpixels, but also explicitly learning
 interactions between neighboring superpixels, favoring a consistent
 interpretation of the whole image.
 
-\citet{stueckler2013} extends the approach of \citet{stuckler2012semantic} to
-a real-time system for online learning and prediction of semantic classes. Their
-use a GPU implementation of random forests, and integrate 3D scene information
-in an online fashion. They evaluate their approach on the dataset of
-\citet{SilbermanECCV12} with promising results.
-We use the implementation of random forest provided by
-\citet{stueckler2013}, but instead of integrating predictions over time, we
-focus on exploiting the structure within a single frame.
+\citet{stueckler2013} extended the approach of \citet{stuckler2012semantic} to
+a real-time system for online learning and prediction of semantic classes.
+Their method use a GPU implementation of random forests, and integrate 3D scene
+information in an online fashion. They evaluated their approach on the dataset
+of \citet{SilbermanECCV12} with promising results.  We use the implementation
+of random forest provided by \citet{stueckler2013}, but instead of integrating
+predictions over time, we focus on exploiting the structure within a single
+frame.
 
 While many of the works mentioned in this chapter make use of a CRF
 approach, we are not aware of any prior work on semantic annotation of 3D maps
@@ -152,7 +152,6 @@ that fully learns their potentials.
 %random fields, learning object interactions from the
 %data to directly maximize a loss function~\citep{lucchi2013learning, krahenbuhl2012efficient},
 %which is the approach we are following.
-
 
 
 \section[Learning Depth-Sensitive Conditional Random Fields]{Learning Depth-Sensitive\linebreak Conditional Random Fields}\seclabel{learning}

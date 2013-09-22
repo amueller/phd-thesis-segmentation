@@ -103,10 +103,10 @@ inference was first investigated by \citet{finley2008training}, applying
 structural support vector machines to multi-label data. Later, different works
 investigated how to combine approximate inference and learning in a single
 framework. \citet{meshi2010learning, komodakis2011efficient}, and
-\citet{hazan2010primal} approach the problem using duality, and formulate
+\citet{hazan2010primal} approached the problem using duality, and formulate
 learning and inference as a joint optimization problem.
 \citet{stoyanov2011empirical}, and later \citet{jancsarylearning} and
-\citet{krahenbuhlparameter} formulate learning structured prediction as
+\citet{krahenbuhlparameter} formulated learning structured prediction as
 optimizing a \emph{prediction engine}, that takes into account all aspects of
 the model, in particular the inference algorithm used.
 In this work, on the other hand, we follow the well-established algorithms for
@@ -114,11 +114,11 @@ learning structural support vector machines, and investigate how we can use the
 available inference algorithms to obtain good results within a reasonable
 time-frame.
 
-\citet{nowozin2010parameter} provide a detailed evaluation of different aspects
+\citet{nowozin2010parameter} provided a detailed evaluation of different aspects
 of learning object class segmentation, that is somewhat orthogonal to this
 work. Their work considers the choice of features, number of superpixels and
 pairwise potentials for conditional maximum likelihood learning of
-tree-structured CRFs.  \citet{nowozin2010parameter} also compare conditional
+tree-structured CRFs.  \citet{nowozin2010parameter} also compared conditional
 maximum likelihood learning with maximum margin learning, finding little
 difference in accuracy.
 We focus our work on the more popular neighborhood graphs, which do not allow
@@ -128,7 +128,7 @@ and vary the maximum margin learning algorithm. Despite this seemingly limited
 setup, we can make out large differences in the applicability of some of the
 commonly used methods. For comparison, we also evaluate the learning algorithms
 on chain CRFs, where efficient inference is possible.
-More recently, \citet{lucchi2013learning} propose a novel algorithm for
+More recently, \citet{lucchi2013learning} proposed a novel algorithm for
 efficiently learning structured prediction for semantic segmentation, using
 approximate inference. In Chapter~\ref{ch:exact_learning}, we develop an
 algorithm that runs in similar time to the one proposed by
