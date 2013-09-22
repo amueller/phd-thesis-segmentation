@@ -281,11 +281,11 @@ benefit in our experiments.
                 \State \hspace{-3mm}$\W_i \leftarrow \W_i \cup \{ \hat{y}\} $
                     \State
                     \vspace{-15mm}
-                    \begin{align*}
-                    (\theta, \xi_1, \dots, \xi_k) \leftarrow \displaystyle \argmin_{\theta, \xi_1, \dots, \xi_k}& \frac{||\theta||}{2}^2 + C \sum_{i=1}^k\xi_i\\
-                        \text{s.t. }& \text{for } i=1,\dots,k\ \forall \hat{y} \in \W_i:\\
-                    &\theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi_i
-                    \end{align*}
+                    \begin{flalign*}
+                        \qquad\qquad(\theta, \xi_1, \dots, \xi_k) \leftarrow \displaystyle \argmin_{\theta, \xi_1, \dots, \xi_k}& \frac{||\theta||}{2}^2 + C \sum_{i=1}^k\xi_i&\\
+                        \text{s.t. }& \text{for } i=1,\dots,k\ \forall \hat{y} \in \W_i:&\\
+                                    &\theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi_i&
+                    \end{flalign*}
                 \EndIf
             \EndFor
             \vspace{-10mm}
@@ -352,11 +352,11 @@ loss-augmented prediction on these mini-batches of size $r$.
         \Repeat
             \State 
             \vspace{-5mm}
-            \begin{align*}
-            (\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi}&\frac{||\theta||}{2}^2 + C \xi\\
-            \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
-             &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
-            \end{align*}
+            \begin{flalign*}
+                \quad\,\,(\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi}&\frac{||\theta||}{2}^2 + C \xi&\\
+                \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:&\\
+                            &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi&
+            \end{flalign*}
             \For {i=1, \dots, k}
                 \State
                 $\hat{y}\hoch{i} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane}
