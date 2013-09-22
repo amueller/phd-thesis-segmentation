@@ -6,7 +6,11 @@ references for datasets in introduction
 alignment in algorithms sucks when using "align"
 read logfile :)
 Graz 02 zitat fehlt?
-phi vs Psi? GAH!
+links to algorithm lines don't work -- also links to algorithm doesn't work
+
+
+phi vs Psi? GAH! <==
+hyphenation pixel-level!!
 
 
 future / present tense?!?!?

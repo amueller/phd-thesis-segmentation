@@ -144,7 +144,7 @@ We can rewrite this objective as
 \end{align}
 where
 \begin{itemize}
-\item $\displaystyle D_\text{KL}\, = \int_\mathcal{X} p(X) \ln\left(\frac{p(X)}{q(X)}\right)\,dX$ is the Kullback-Leibler divergence,
+    \item $\displaystyle D_\text{KL}(p(X) \parallel q(X))\, = \int_\mathcal{X} p(X) \ln\left(\frac{p(X)}{q(X)}\right)\,dX$ is the Kullback-Leibler divergence,
 \item $\displaystyle H(X)\, = \int_\mathcal{X} p(X) \ln(p(X))\,dX$ is the differential entropy, and
 \item $\displaystyle H(X \given Y{=}y)\, = \int_\mathcal{X} p(X \given Y {=}y) \ln(p(X \given Y {=} y))\,dX$ is the conditional differential entropy.
     \end{itemize}
@@ -223,8 +223,35 @@ This requirement is made explicit in our assumptions of an absolute continuous
 data density: If the support of $p(X)$ was a lower-dimensional sub-manifold of
 $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
 
+\subsection{Finding Euclidean Minimum Spanning Tree Clusterings}
+The objective given by \Eqref{objective} is a non-linear combinatorial
+optimization problem. It has two properties that make it hard to optimize:
+\begin{enumerate}
+    \item The objective depends in a non-linear way on $L_y$.
+        This makes linear programming techniques, that proved successful for
+        other combinatorial tasks, not directly applicable.
+    \item $L_y$ is defined in terms of minimum spanning trees. This set is hard
+        to characterize, as changing the cluster membership of a single node may change
+        the two minimum spanning trees involved completely.
+\end{enumerate}
+
+\begin{figure}
+\centering
+\includegraphics[width=.32\textwidth]{illustration_left}
+\includegraphics[width=.32\textwidth]{illustration_center}
+\includegraphics[width=.32\textwidth]{illustration_right}
+\caption{Illustration of the optimization algorithm for $k=3$ on synthetic
+dataset. \emph{Left}: Euclidean minimum spanning tree of the data.
+\emph{Center}: The edge that yields the best two-cluster partition in terms of
+\Eqref{objective} was removed, yielding two connected components. \emph{Right}:
+Another edge from the forest was removed, resulting in the desired number of
+three components. Note that the edges that are removed are not the longest edges
+but form a trade-off between edge length and cluster size.}
+\label{fig:illustration}
+\end{figure}
+
 \begin{algorithm}[t]
-\begin{algorithmic}\label{overall}
+\begin{algorithmic}
     \Require Points $\mathbf{x}$, desired number of clusters $k$.
     \Ensure Clustering $\mathbf{y}$ of $\mathbf{x}$
     \State $G \leftarrow T(\mathbf{x})$
@@ -245,7 +272,7 @@ $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
             \State $n_x \leftarrow \displaystyle 1 + \sum_{c \in \text{children}(x)} n_c$
         \EndFor
         \For{node $x$}
-        \State $w'_x \leftarrow w_{\text{root}} - w_x$
+        \State $w'_x \leftarrow w_{x_0} - w_x$
         \EndFor
         \For{$e \in E(G), e=(c, p)$, $p$ parent of $c$}
             \State $v_c \leftarrow w'_p + w_p - w_c - d(p,c)$
@@ -256,41 +283,14 @@ $\mathbb{R}^d$, $p(X)$ could not be absolute continuous.
         
     \EndFunction
 \end{algorithmic}
-\caption{Information Theoretic MST-based Clustering}
+\caption{Information Theoretic MST-based Clustering\label{overall}}
 
 \end{algorithm}
-
-\subsection{Finding Euclidean Minimum Spanning Tree Clusterings}
-The objective given by \Eqref{objective} is a non-linear combinatorial
-optimization problem. It has two properties that make it hard to optimize:
-\begin{enumerate}
-    \item The objective depends in a non-linear way on $L_y$.
-        This makes linear programming techniques, that proved successful for
-        other combinatorial task, not directly applicable.
-    \item $L_y$ is defined in terms of minimum spanning trees. This set is hard
-        to characterize, as changing the cluster membership of a single node may change
-        the two minimum spanning trees involved completely.
-\end{enumerate}
-
-\begin{figure}
-\centering
-\includegraphics[width=.32\textwidth]{illustration_left}
-\includegraphics[width=.32\textwidth]{illustration_center}
-\includegraphics[width=.32\textwidth]{illustration_right}
-\caption{Illustration of the optimization algorithm for $k=3$ on synthetic
-dataset. \emph{Left}: Euclidean minimum spanning tree of the data.
-\emph{Center}: The edge that yields the best two-cluster partition in terms of
-\Eqref{objective} was removed, yielding two connected components. \emph{Right}:
-Another edge from the forest was removed, resulting in the desired number of
-three components. Note that the edge that are removed are not the longest edges
-but form a trade-off between edge length and cluster size.}
-\label{fig:illustration}
-\end{figure}
 
 For the above reasons, we propose a simple procedure to approximately solve
 \Eqref{objective}.
 %filler removed Let us first fix some notation.
-Consider a graph $G$ with nodes $\mathbf{x}$ and edge weights given by the
+Consider a graph $G$ with nodes $\mathbf{x}$, an arbitray set of edges, and edge weights given by the
 Euclidean distances between points.  The connected components of $G$ induce a
 clustering $\mathbf{y}(G)$ of $\mathbf{x}$, by assigning $x_i$ and $x_j$ the
 same cluster if and only if they are in the same connected component of $G$.
@@ -313,8 +313,6 @@ Thus we can formulate the clustering problem equivalently as
 \begin{equation}
     \max_{G \in \mathcal{F}} \hat{I}(G).
 \end{equation}
-
-
 Optimization over forests remains hard, and we further restrict ourself to
 solutions of the form $\mathcal{G} := \{ F \in \mathcal{F} \mid F \text{\ subgraph of\
 } T(\mathbf{x}) \}$ for a given minimum spanning tree $T(\mathbf{x})$, leading to
@@ -328,7 +326,7 @@ This amounts to searching for the edge $e$ that maximizes $\hat{I}(T(\mathbf{x})
 \setminus e)$. The naive algorithm that computes the objective for each edge
 separately has run time that is quadratic in the number of data points.  To
 improve upon this, we use a dynamic programming approach as described in
-Algorithm~1, in function SplitCluster, which has only linear
+function \textsc{SplitCluster} of Algorithm~\ref{overall} , which has only linear
 complexity. Using this algorithm, run time in the two cluster case is dominated
 by computing $T(\mathbf{x})$.
 %
@@ -336,8 +334,8 @@ We extend this algorithm to the case of more than two clusters in a greedy way:
 Starting with the full spanning tree of $\mathbf{x}$, we remove the edge
 yielding the lowest value of \Eqref{graphobjective} until the number of
 components equals the number of desired clusters. The overall procedure is
-summarized in Algorithm~1, an illustration can be found in
-\Figref{illustration}. We refer to Algorithm~1 as \emph{Information
+summarized in Algorithm~\ref{overall}, an illustration can be found in
+\Figref{illustration}. We refer to Algorithm~\ref{overall} as \emph{Information
 Theoretic MST-based (ITM) clustering}.
 
 We use Prim's algorithm combined with a ball tree data structure for distance
@@ -346,7 +344,7 @@ While this procedure has no strong runtime guarantees, we found this faster
 in practice than specialized algorithms for euclidean minimum spanning trees, 
 which achieve a better theoretical runtime of $O(n \log(n) \alpha(n))$ \citep{dtb2010}. Here
 $\alpha$ is the inverse of the Ackerman function. The dynamic programming solution of
-Algorithm~1 has a run time of $O(n)$ per removed edge, leading to an overall
+Algorithm~\ref{overall} has a run time of $O(n)$ per removed edge, leading to an overall
 run time of $O(n \log(n) \alpha(n)+ nk)$. The $O(nk)$ comes from a worst case
 scenario, in which each step in the hierarchical clustering procedure only
 splits off a constant number of points. In a more realistic setting, we expect
@@ -440,7 +438,7 @@ the algorithms we compare work with a fixed number of clusters, which we set to
 the number of classes in the dataset for all experiments.
 
 As single link agglomerative clustering is sensitive to outliers, we set
-a hard limit on the minimum number of samples per cluster of five for
+a hard limit of five on the minimum number of samples per cluster for
 the quantitative analysis.
 
 \begin{table}[t]
@@ -483,7 +481,7 @@ To satisfy the assumption of absolute continuity of the data distribution,
 we restrict ourself to data with continuous features.
 
 We evaluated the experiments using the \emph{adjusted Rand index 
-(ARI}~\citep{hubert1985comparing}  popular measures 
+(ARI}~\citep{hubert1985comparing} a popular measure
 of cluster quality~\citep{gomes2010discriminative,kamvar2003spectral}.
 The Rand index~\citep{rand1971objective} between two clusterings counts on how
 many pairs of points two clusterings agree. The adjusted Rand index contains a
@@ -521,14 +519,14 @@ of the MST of the data.
 \cmidrule{5-9}
 Description &     n &    d &   k &  $k$-Means      & MeanNN        & SL            &   ITM        & ITM ID \\
 \cmidrule{1-4}                   \cmidrule{5-5}    \cmidrule{6-6}  \cmidrule{7-7} \cmidrule{8-8} \cmidrule{9-9}
-digits      &  1797 &   64 &  10 &     0.62 &      0.67            &0.10          &\B{0.85}       &0.73\\ 
-faces       &   400 & 4096 &  40 &     0.41 &      0.49            &0.08          &0.02           &\B{0.54}\\ 
-iris        &   150 &    4 &   3 &     0.72 &      0.75            &0.55          &\B{0.88}       &0.88\\
-usps        &  9298 &  256 &  10 &     0.52 &      0.54            &0.00          &   0.44        &\B{0.64}\\ 
-vehicle     &   846 &   18 &   4 &     0.10 &      0.09            &0.00          &\B{0.10}       &0.10\\
-vowel       &   990 &   10 &  11 &     0.17 &      0.19            &0.00          &\B{0.20}       &0.19\\
-waveform    &  5000 &   21 &   2 & \B{0.37} &      0.30            &0.00          &   0.23        &0.23\\
-mnist       & 70000 &  784 &  10 &     0.37 &      N/A$^\dagger$         &0.00          &   0.50        &0.77\\
+digits      &$ 1797$&$  64$&$ 10$& $    0.62 $&     $0.67$           &$0.10$         &$\mathbf{0.85}$       &$0.73$\\ 
+faces       &$  400$&$4096$&$ 40$& $    0.41 $&     $0.49$           &$0.08$         &$0.02$           &$\B{0.54}$\\ 
+iris        &$  150$&$   4$&$  3$& $    0.72 $&     $0.75$           &$0.55$         &$\B{0.88}$       &$0.88$\\
+usps        &$ 9298$&$ 256$&$ 10$& $    0.52 $&     $0.54$           &$0.00$         &$   0.44$        &$\B{0.64}$\\ 
+vehicle     &$  846$&$  18$&$  4$& $    0.10 $&     $0.09$           &$0.00$         &$\B{0.10}$       &$0.10$\\
+vowel       &$  990$&$  10$&$ 11$& $    0.17 $&     $0.19$           &$0.00$         &$\B{0.20}$       &$0.19$\\
+waveform    &$ 5000$&$  21$&$  2$& $\B{0.37} $&     $0.30$           &$0.00$         &$   0.23 $       &$0.23$\\
+mnist       &$70000$&$ 784$&$ 10$& $    0.37 $&     N/A$^\dagger$    &$0.00$         &$   0.50$        &$\B{0.77}$\\
 \bottomrule
 \end{tabularx}
 \caption{Adjusted Rand Index of $k$-Means, MeanNN, single link agglomerative
