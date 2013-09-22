@@ -2,16 +2,13 @@ check past/presence in references!!!
 in pystruct experiments, refer to other sections for details, not website
 where is the right place to discuss details for segmentation?
 call fusion moves fusion moves everywhere!!
-references for datasets in introduction
 alignment in algorithms sucks when using "align"
 read logfile :)
-Graz 02 zitat fehlt?
-links to algorithm lines don't work -- also links to algorithm doesn't work
+[links to algorithm lines don't work -- also links to algorithm doesn't work]
 
 
 future work: n-slack fast? caching bcfw?
 
-phi vs Psi? GAH! <==
 hyphenation pixel-level!!
 
 
