@@ -10,35 +10,90 @@ The problems we consider are multi-class classification, sequence labeling, mult
 and general graph labeling.
 
 \subsection{Multi-Class Classification (MNIST)}
+\begin{figure}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_0}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_1}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_2}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_3}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_4}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_5}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_6}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_7}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_8}
+    \includegraphics[width=.092\linewidth, frame]{evaluation/images/mnist_digit_9}
+    \caption{%
+        Visualization of samples from the ten classes in the MNIST dataset.\figlabel{mnist_illustration}
+    }
+\end{figure}
 The simplest task we use is multi-class classification. In this task,
 the inference problem is trivial, as it is assumed the target set is small enough
 to be enumerated efficiently. While this problem could be solved more efficiently
 with specialized algorithms, it nevertheless provides an initial insight into structured
 prediction algoriths.
-
 We choose the classical MNIST dataset of handwritten digits, consisting of
-60000 training images and 10000 test images of the digits zero to nine. Each
-image is a $28 \times 28$ grey-level image, resulting in a $784$-dimensional
-feature vector. We normalize the feature to lie between $0$ and $1$.
+60000 training images and 10000 test images of the digits zero to nine.
+\Figref{mnist_illustration} shows some examples. Each image is a $28 \times 28$
+grey-level image, resulting in a $784$-dimensional feature vector. We normalize
+the feature to lie between $0$ and $1$.
 
 The model we use for multi-class classification is the Crammer-Singer
 formulation. We do not include a bias, leading to $784 \cdot 10 = 7840$
 parameters in the model.
 
 
+\begin{figure}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_00}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_01}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_02}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_03}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_04}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_05}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_06}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_07}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_08}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_09}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_10}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_11}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/justifications_12}\\[3mm]
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/skiing_00}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/skiing_01}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/skiing_02}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/skiing_03}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/skiing_04}\\[3mm]
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_00}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_01}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_02}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_03}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_04}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_05}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_06}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_07}
+    \includegraphics[width=.068\linewidth, frame]{evaluation/images/unexpected_08}\\
+    \caption{%
+        Visualization of some words from the OCR dataset. The first letters were removed by \citet{taskar2003max} as 
+        they were capitals.
+        The words are: (j)ustifications, (s)kiing and (u)nexpected. The letters in parentheses are not part of the dataset.
+        \figlabel{ocr_illustration}
+    }
+\end{figure}
 \subsection{Sequence Labeling (OCR)}
 A classical application of structured prediction is sequence labeling.
 We choose the ``OCR'' dataset introduced in the seminal work of \citet{taskar2003max}.
-Each input consists of the segmented handwritten letters of a word in lower case. The task is to classify
-all letters in a word, that is assign each segmented input letter one of the
-classes ``a'' to ``z''. As the first letter of each word was capitalized, these
-were removed by \citet{taskar2003max}, leading to somewhat odd-looking
-labels. The words are between \ldots and \ldots letters long, and each letter
-is represented as a binary image of size \ldots.
+Each input consists of the segmented handwritten letters of a word in lower
+case. The task is to classify all letters in a word, that is assign each
+segmented input letter one of the classes ``a'' to ``z''. As the first letter
+of each word was capitalized, these were removed by \citet{taskar2003max},
+leading to somewhat odd-looking labels. The words are between three and fourteen
+letters long, and each letter is represented as a binary image of size $16
+\time 8$, with a toal of $6877$ words.
+The dataset is devided into ten folds. We consider two setups: learning
+on one fold, and testing on the remaining nine folds, following \citet{taskar2003max},
+and learning on nine folds and testing on the remaining fold, following \citet{lacoste}.
+We refer to the learning on one fold as OCR-small, and learning on nine folds as OCR-big.
 We use a simple chain model with a single constant pairwise feature.
-This means the unary potential has \ldots parameters, one for each input
+This means the unary potential has $16 \cdot 8 \cdot 26$ parameters, one for each input
 feature and output class. The pairwise potential consists of a matrix of
-transition potentials with $26 x 26=676$ entries.
+transition potentials with $26 \cdot 26=676$ entries.
 It is well-known that efficient exact inference in chains is possible using
 message passing algorithms. 
 
@@ -74,6 +129,30 @@ test samples. The resulting numbers of parameters are $14 \cdot 103$ parameters
 for the unary potentials, $7 \cdot 13 \cdot 4$ parameters for the full pairwise
 potential, and $13 \cdot 4$ parameters for the tree-shaped model.
 
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XXXXXXX@{}}
+    \includegraphics[width=\linewidth]{evaluation/images/snake_input_0001}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_input_0002}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_input_0003}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_input_0004}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_input_0005}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_input_0006}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_input_0007}\\
+    \includegraphics[width=\linewidth]{evaluation/images/snake_label_0001}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_label_0002}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_label_0003}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_label_0004}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_label_0005}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_label_0006}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snake_label_0007}
+    \end{tabu}
+\caption{%
+    Visualization of the snakes dataset. The top row shows input patterns, the bottom row the corresponding
+    labels. The colors in the image showing the labels correspond to dark blue for background, and encoding
+    the length of the snake from head (red) to tail (blue).
+\figlabel{snakes_illustration}}
+\end{figure}
+
 \subsection{2D Grid CRF (Snakes)}
 The snakes dataset is a synthetic dataset, where samples are labeld 2D grids.
 It was introduced in \citet{nowozin2011decision} to demonstrate the importance
@@ -82,10 +161,10 @@ of length ten traversing the 2D grid. Each grid cell that was visited is marked
 as the snake heading out towards the top, bottom, left, or right, while
 unvisited cells are marked as background.  The goal is to predict a labeling of
 the snake from ``head'' to ``tail'', that is assigning numbers from zero to
-nine to the cells that are occupied by the snake.  An illustration is given in
-%TODO
-The task is interesting, as local evidence for the target label is weak except
-around head and tail. Therefor pairwise potentials are necessary to solve the
+nine to the cells that are occupied by the snake.  \Figref{snakes_illustration} illustrates the
+principle.
+Local evidence for the target label is weak except
+around head and tail, making this a challenging task. Pairwise potentials are necessary to solve the
 task. The dataset is noise-free in the sense that given the above description, a
 human could easily produce the desired labeling without making any mistake.
 The dataset is also interesting as the model of \citet{nowozin2011decision} produced
@@ -176,14 +255,50 @@ interested in cases where inference is highly non-trivial, making inference the
 dominating factor of runtime.
 We define one pass over the dataset as calling prediction once for each sample.
 This way, we can get a clear picture how learning times with complexity of the
-inference task.
+inference task. For the subgradient and SZLJSP algorithms, learning time is linear
+in the number of passes ofver the dataset, while chaching and solving of a QP makes
+the learning time depend on the number of iterations in hard-to-predict ways.
 
 \subsection{Experiments using Exact Inference}
 In this section, we present results on multi-class classification, sequence
 labeling and multi-label prediction with a tree-structured model. In these
 tasks, exact inference is possible, and we can compute the exact objective of
 the various algorithms easily. We use the dynamic programming algorithm
-implemented in \textsc{OpenGM} for experiments
+implemented in \textsc{OpenGM} for experiments.
+
+We start our experiments with the MNIST dataset.
+The convergence of the primal objective and training set loss in terms of
+passes over the training set is shown in \figref{mnist_iterations}.
+Several trends can be observed: the $n$-slack cutting plane algorithms are converge fastest, with
+the version that recomputes the QP at every step leading the race. The algorithms are
+closely followed by the caching $1$-slack cutting plane algorithm.
+They are followed by the significantly slower SZLJSP algorithm, and finally
+the non-caching $1$-slack cutting plane algorithm and subgradient descent.
+These results are intiutive, as they reflect ``how much work'' each algorithm does
+for each loss-augmented prediction step. More work towards the objective leads to faster convergence.
+This ``more work'' is quantified in \figref{mnist_times}.
+Clearly the $1$-slack algorithms to ``to much'' work, leading to very slow convergence.
+Also, caching does not speed up learing learning on this dataset, as loss-augmented predction
+is as fast as querying the cache.
+
+We now consider datasets with non-trivial inference.
+The results for OCR-small are shown in \figref{ocr_small_iterations} and \figref{ocr_small_time}.
+The trends seen in the figures are similar to what we saw for MNIST above.
+Again, even though inference is non-trivial, the non-caching $1$-slack
+algorithm is slower than the caching one. Again, the plots against passes over the trainingset
+do not reflect the runtime complexity of the $n$-slack approach.
+
+There is one interesting phenomenon to be seen here: The cutting-plane algorithms stop immediately
+when reaching the desired suboptimality of $0.1$. The SZLJSP algorithm, on the other hand, keeps
+on learning much longer---even longer than it took to get to the desired suboptimality. This is caused
+by a much looser bound given by the dual. Remember that the stopping criterion for both cutting-plane 
+and SZLJSP are given by the duality gap. It seems that while the primal objective converges much
+faster in the SZLJSP algorithm than in the non-caching $1$-slack algorithm, the dual does not.
+This means that in for this practical experiment, the non-caching $1$-slack algorithm was \emph{faster}
+in guaranteeing the desired suboptimality.
+\figref{ocr_small_duals} illustrates this point by ploting primal and dual
+objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
+
 
 
 \subsection{Experiments using Approximate Inference}
@@ -210,5 +325,9 @@ a measure of how effective the ``prediction machine'' given by the learned model
 together with the inference algorithm is.
 
 \section{Discussion}
-
-
+From the experiments above, it is clear there is currently \emph{no single best algorithm}.
+We can say, however, that the stochastic subgradient descent algorithm with
+pegasos step-size always converged slower, both in terms of learning time and
+in passes over the dataset, as the SZLJSP algorithm.
+Together with the fact that stochastic subgradient descent has no good stopping
+criterion, there seems to be no reason to use the stochastic gradient descent.

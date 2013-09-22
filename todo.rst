@@ -9,6 +9,8 @@ Graz 02 zitat fehlt?
 links to algorithm lines don't work -- also links to algorithm doesn't work
 
 
+future work: n-slack fast? caching bcfw?
+
 phi vs Psi? GAH! <==
 hyphenation pixel-level!!
 
