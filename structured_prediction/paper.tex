@@ -276,15 +276,15 @@ benefit in our experiments.
         \Repeat
             \For {i=1, \dots, k}
                 \State
-                $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})] $
-                \If{$\displaystyle \delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})] \geq \xi_i + \epsilon$}
+                $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \delta(y\hoch{i}, \hat{y}) - \theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})] $
+                \If{$\displaystyle \delta(y\hoch{i}, \hat{y}) - \theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})] \geq \xi_i + \epsilon$}
                 \State \hspace{-3mm}$\W_i \leftarrow \W_i \cup \{ \hat{y}\} $
                     \State
                     \vspace{-15mm}
                     \begin{align*}
                     (\theta, \xi_1, \dots, \xi_k) \leftarrow \displaystyle \argmin_{\theta, \xi_1, \dots, \xi_k}& \frac{||\theta||}{2}^2 + C \sum_{i=1}^k\xi_i\\
                         \text{s.t. }& \text{for } i=1,\dots,k\ \forall \hat{y} \in \W_i:\\
-                    &\theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi_i
+                    &\theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi_i
                     \end{align*}
                 \EndIf
             \EndFor
@@ -355,14 +355,14 @@ loss-augmented prediction on these mini-batches of size $r$.
             \begin{align*}
             (\theta, \xi) \leftarrow \displaystyle \argmin_{\theta, \xi}&\frac{||\theta||}{2}^2 + C \xi\\
             \text{s.t. }&\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
-             &\theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
+             &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
             \end{align*}
             \For {i=1, \dots, k}
                 \State
-                $\hat{y}\hoch{i} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane}
+                $\hat{y}\hoch{i} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane}
             \EndFor
             \State $\W \leftarrow \W \cup \{ (\hat{y}\hoch{i}, \dots, \hat{y}\hoch{i}) \} $
-            \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] $
+            \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] $
         \Until $\xi' - \xi < \epsilon$ \label{convergence_check}
     \end{algorithmic}
 \end{algorithm*}
@@ -433,7 +433,7 @@ to make the algorithm more efficient:
             \State $t \leftarrow t + 1$
             \State Pick $i$ uniformly at random from $\{1, \dotsc, k\}$.
             \State Perform loss-augmented prediction on sample $i$:
-            \Statex[2]   $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \Delta(y\hoch{i}, \hat{y}) - \theta^T [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$
+            \Statex[2]   $\hat{y} \leftarrow I(x\hoch{i}, y\hoch{i}, \theta) := \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \Delta(y\hoch{i}, \hat{y}) - \theta^T [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})]$
             \State Compute parameter and loss updates based on sample $i$:
             \Statex[2]     $\theta_s \leftarrow \frac{C}{n} \Phi(x, \hat{y})$
             \Statex[2]     $\ell_s \leftarrow \frac{C}{n} \delta(y\hoch{i}, \hat{y})$

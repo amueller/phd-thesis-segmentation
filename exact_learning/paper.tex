@@ -100,14 +100,14 @@ on real-world applications.
             \begin{align*}
                 (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi\\
             &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
-            &\theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
+            &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
             \end{align*}
             \For {i=1, \dots, k}
                 \State
-                $\hat{y}\hoch{i} \leftarrow \hat{I}(x\hoch{i}, y\hoch{i}, \theta) \approx \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
+            $\hat{y}\hoch{i} \leftarrow \hat{I}(x\hoch{i}, y\hoch{i}, \theta) \approx \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
             \EndFor
             \State $\W \leftarrow \W \cup \{ (\hat{y}\hoch{i}, \dots, \hat{y}\hoch{i}) \} $
-            \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\psi(x\hoch{i}, y\hoch{i}) - \psi(x\hoch{i}, \hat{y}\hoch{i})] $
+        \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] $
         \Until $\xi' - \xi < \epsilon$ \label{convergence_check}
     \end{algorithmic}
 \end{algorithm*}
