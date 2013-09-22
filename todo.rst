@@ -1,15 +1,12 @@
 check past/presence in references!!!
 in pystruct experiments, refer to other sections for details, not website
 where is the right place to discuss details for segmentation?
-call fusion moves fusion moves everywhere!!
 alignment in algorithms sucks when using "align"
 read logfile :)
 [links to algorithm lines don't work -- also links to algorithm doesn't work]
 
 
 future work: n-slack fast? caching bcfw?
-
-hyphenation pixel-level!!
 
 
 future / present tense?!?!?
@@ -27,7 +24,7 @@ MSRC state of the art?
 
 definiere ich unary und pairwise terms?
 
-STRUKTUR: zuerste conditioning wichtig oder zuerst exact lernen? NYU?
+STRUKTUR: YU?
 Erstmal modelle, auswerten, ... dann am schluss: so haben wir das exakt gemacht.
 oder erst exakt, dann "gut mal, das ist wichtig bei den modellen", dann nyu?
 
@@ -35,7 +32,6 @@ SQUARED AVERAGING!
 
 
 s/learning rate/step size/g  Done (check again later)
-
 1-slack und n-slack consistent (one/1, n, $n$)  (done, check again later)
 
 INTRO

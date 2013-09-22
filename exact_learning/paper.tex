@@ -266,11 +266,10 @@ worst case.
 
 \subsection{Inference Algorithms}
 
-As a fast under-generating inference algorithm, we used $\alpha$-expansion
-moves based on non-submodular graph-cuts using Quadratic Pseudo-Boolean
-Optimization (QPBO)~\citep{rother2007optimizing}.  This move-making strategy
-can be seen as a simple instantiation of the more general framework of fusion
-moves, as introduced by \citet{lempitsky2010fusion}
+As a fast under-generating inference algorithm, we used fusion
+moves~\citep{rother2007optimizing, lempitsky2010fusion}. Fusion moves are a local
+search procedure, using moves that are generated using an auxiliar binary problem,
+which is solved using QPBO~\cite{rother2007optimizing}.
 
 For inference with optimality certificate, we use the recently developed
 Alternating Direction Dual Decomposition (AD$^3$) method of
@@ -567,7 +566,7 @@ For clustering visual words, piecewise training of unary potentials and the
 approximation to the $\chi^2$-kernel, we made use of the \texttt{scikit-learn}
 machine learning package~\citep{pedregosa2011scikit}.
 %TODO implementation details here?
-The move-making algorithm using QPBO is implemented with the help of the QPBO-I
+The we implement fusion moves with the help of the QPBO-I
 method provided by \citet{rother2007optimizing}.
 We use the excellent implementation of AD$^3$ provided by
 \citet{martins2011augmented}. 

@@ -7,7 +7,7 @@ easier to obtain: whole image labels.
 While we do not reach the accuracy of competing fully supervised approaches,
 our efficient, semi-supervised method is potentially able to scale to much
 larger datasets, without the need of time-consuming manual annotation on
-pixel-level.
+pixel level.
 
 Recently, several approaches have been proposed for semi-supervised semantic
 segmentation.  While these are close to our work, there are several important
@@ -57,11 +57,11 @@ only learn $f_{MI}$, but also $f_{I}$.
 
 In our model, each image forms a bag, while the candidate segments correspond
 to the instances contained in the bag. During learning, only presence of object
-classes is needed as bag level supervision. By learning $f_{I}$, we are then
+classes is needed as bag-level supervision. By learning $f_{I}$, we are then
 able to predict for individual segments whether they contain the object class
 of interest, thereby obtaining a segmentation of the object.
 To measure the performance of our algorithm, we use a dataset that not only contains
-image level annotation, but also pixel level annotation of object. This allows
+image-level annotation, but also pixel-level annotation of object. This allows
 us to judge the success of learning on instance level.
 
 \section{Related Work}
@@ -285,7 +285,7 @@ instance prediction error, as we assume no instance labels to be known.
     Musk2 & 85.4 &84.8 &  83.6 &  84.3     & 90.5 & 89.3& 85.2 \\
     \bottomrule
     \end{tabularx}
-    \caption{Bag level performance of various MIL algorithms on the standard Musk
+    \caption{Bag-level performance of various MIL algorithms on the standard Musk
     datasets. All but MIK provide instance-level labeling.\tablabel{muskacc}}
     
 \end{table}
@@ -388,7 +388,7 @@ We proposed an algorithm for object-class segmentation using only weak
 supervision based on multiple-instance learning. In our approach each image is
 represented as a bag of object-like proposal segments.
 
-We described a way to extent bag level predictions made by the multi-instance
+We described a way to extent bag-level predictions made by the multi-instance
 kernel method to instance level while remaining competitive with the
 state-of-the-art in bag label prediction.
 

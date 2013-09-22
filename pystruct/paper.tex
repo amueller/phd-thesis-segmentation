@@ -52,7 +52,7 @@ data-dependent pairwise potentials, and several latent variable models.
 The maximization for finding $y$ in Equation~\ref{eq:main_equation} is carried out
 using highly optimized implementations from external libraries. \pystruct
 includes support for using {\sc OpenGM}~\citep{kappes2013comparative}, {\sc
-LibDAI}~\citep{Mooij_libDAI_10}, QPBO fusion moves~\citep{rother2007optimizing},
+LibDAI}~\citep{Mooij_libDAI_10}, fusion moves~\citep{rother2007optimizing, lempitsky2010fusion},
 and {\sc AD$^3$}~\citep{martins2011augmented}. It also includes an interface to
 a general purpose linear programming solver from \textsc{cvxopt}~\citep{dahl2006cvxopt}.
 
@@ -196,7 +196,7 @@ Here \texttt{class\_weight} re-weights the hamming loss according to inverse cla
 frequencies. The parametric pairwise interactions have three features: a
 constant feature, color similarity, and relative vertical position. The first two
 are declared to be symmetric with respect to the direction of an edge, the last
-is antisymmetric. The inference method used is QPBO-fusion moves.  Line 5
+is antisymmetric. We use fusion moves for inference.  Line 5
 creates a \texttt{learner} object that will learn the parameters for the given
 model using the $n$-slack cutting plane method, and line 6 performs the actual
 learning.  Using this simple setup, we achieve an accuracy of 30.3 on the
