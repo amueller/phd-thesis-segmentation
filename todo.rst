@@ -1,9 +1,12 @@
+MSRC-21 verbessern wir den state of the art?
+inference vermeiden?
 in pystruct experiments, refer to other sections for details, not website
 where is the right place to discuss details for segmentation?
 read logfile :)
 [links to algorithm lines don't work -- also links to algorithm doesn't work]
 
 more related work!
+TABLE comparision algorithms!!
 
 future work: n-slack fast? caching bcfw?
 
@@ -83,7 +86,4 @@ TO WRITE: comparison of learning algs for large-scale
 ========================================================
 Dataset? Applications?
 Segmentation? Chains ocr / colln?
-
-
-TO WRITE: Importance of conditioning in edges!
-===============================================
+TABLE!!

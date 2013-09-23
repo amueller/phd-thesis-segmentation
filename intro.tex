@@ -18,7 +18,7 @@ Essentially, all models are wrong, but some are useful.
 \end{minipage}%
 \\[2cm]
 In computer vision research, the goal is to automatically extract information
-from a given image of image sequence.  In particular discerning semantic
+from a given image or image sequence.  In particular discerning semantic
 information, that is interpreting an image, is a prominent research topic.
 While much progress has been made in recent years, computer vision systems still lag behind
 human vision in most tasks that require semantic information. These tasks can often be formulated
@@ -34,13 +34,13 @@ little trouble in interpreting complex scenes, current methods are often
 restricted to a much smaller number of classes and only have limited
 capabilities to model interactions or relations.  We believe that
 \emph{context} is one of the most important cues when it comes to classifying
-objects, and therefore understanding scenes. Consequently, we target dense
+objects, and therefore understanding scenes. Therefore, we target dense
 labeling of scenes, taking object relations into account.  The task of densely
 labeling image pixels into classes is called object class segmentation or
 semantic segmentation.
 \pagebreak
 
-We choose this task in particular for several reasons:
+We choose this task in particular for following reasons:
 \begin{itemize*}
     \item Pixel-level annotation provides highly detailed information about the scene.
     \item Joint estimation of multiple classes allows for the use of context.
@@ -74,10 +74,10 @@ One of the bottlenecks in learning object class segmentation and semantic
 segmentation is the availability of training data.  While unlabeled image data,
 and even data with semantic
 ``tags'' is available in practically unlimited quantities, semantic annotation
-on pixel level is only available through laborious manual annotation. 
+on pixel level is scarce and only available through laborious manual annotation. 
 Chapter~\ref{ch:semi_supervised} introduces an approach to cope with this
 shortcoming of object class segmentation approaches by introducing a method to
-find segmentations automatically from image level annotations.
+learn segmentation automatically from image level annotations.
 
 The main part of this thesis investigates the use of structured learning~\citep{taskar2003max, tsochantaridis2006large}
 algorithms to the task of semantic image segmentation. Both topics have received
@@ -90,10 +90,10 @@ We focus on the use of conditional random fields~(CRFs), which have shown
 promising  results for computer vision applications. Using the paradigm of structural
 support vector machines, it is possible to learn conditional random fields to
 directly minimize a loss of interest. In particular, CRFs
-allow to combine different cues, possibly produced by other approaches, in a
+allow to combine different cues, possibly produced using different paradgims in a
 principled manner. One of the main difficulties with CRF approaches to computer
 vision problems is that context in images is usually represented as a
-neighborhood graph.  These graphs, by nature, contain many cycles, making
+neighborhood graph of pizels or superpixels.  These graphs, by nature, contain many cycles, making
 inference intractable in general. Consequently, learning algorithms have to
 rely on approximate inference, with often unknown consequences to learning.
 
@@ -154,6 +154,10 @@ This thesis contains the following contributions:
     segmentation is possible in practice, even in loopy graphs. We combine
     fast inference, caching and inference algorithms which certify optimality
     to learn a $1$-slack SSVM.
+\item Learning 3D relations of semantic structure categories for indoor scenes.
+    We extend the CRF approach to learning spacial relations from RGB-D data and
+    improve upon the state-of-the-art in semantic annotation on the NYU V2 dataset
+    of indoor scenes.
 \end{itemize}
 
 \section{Thesis Outline}
@@ -167,8 +171,8 @@ our algorithm to the task of bottom-up segmentation, this is a promising avenue
 for future research.
 
 We introduce an algorithm for semi-supervised learning of object class
-segmentation in Chapter~\ref{ch:semi_supervised}, motivated by the problem of
-annotating training data for semantic segmentation.
+segmentation in Chapter~\ref{ch:semi_supervised}, motivated by the difficulty of
+obtraining annotated training data for semantic segmentation.
 
 The central topic of this thesis, learning structured prediction for semantic
 segmentation, is introduced in Chapter~\ref{ch:structured_pystruct}. This

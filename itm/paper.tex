@@ -25,7 +25,7 @@ In the context of this work, clustering plays an important role in many respects
 \end{itemize}
 
 So not only is clustering one of the fundamental problems in machine learning, it is also
-an important building block for the methods in this work.
+an important building block for other methods in this work.
 %
 Most algorithms are based on ad-hoc criteria such as intra-cluster similarity
 and inter-cluster dissimilarity.
@@ -46,18 +46,24 @@ non-convex clusters.
 %
 The resulting objective is easy to evaluate, but difficult to optimize
 over. We overcome this by proposing an efficient approximate optimization
-based on the Euclidean minimum spanning tree algorithm. 
+based on Euclidean minimum spanning trees.
 %
 Because the estimator and the optimization are both parameter-free, 
 the only free parameter of the algorithm is the number of clusters, 
 which makes it very easy to use in practice.
+%
+The non-parametric entropy estimate we
+are using is applicable only if the data distribution is absolute continuous and
+therefore can not be applied if the data lies on a proper submanifold.
+We show how to overcome this obstacle in practice by using an estimate of the
+intrinsic dimensionality of the data.
 %
 The contributions of this chapter are:
 \begin{itemize}
     \item Proposing the use of a MST-based entropy estimator in information theoretic clustering.
     \item Giving a fast algorithm for a relaxed version of the resulting problem.
     \item Showing the practicality on a number of synthetic and real datasets.
-    \item Extending the clustering to data on submanifolds by estimating implicit dimensionality.
+    \item Extending the clustering to data on submanifolds by estimating intrinsic dimensionality.
 \end{itemize}
 
 %CHL: Maybe use this somewhere else, here it sounds redundant.

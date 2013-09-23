@@ -1,48 +1,20 @@
 
-
-%\begin{abstract}
-%    We present a structured learning approach to semantic annotation of RGB-D
-%    images. 
-%    Our method learns to reason about spatial relations of objects and
-%    fuses low-level class predictions to a consistent interpretation of a
-%    scene. Our model incorporates color, depth and 3D scene features, on which
-%    an energy function is learned to directly optimize object class prediction using
-%    the loss-based maximum-margin principle of structural support vector machines.
-%    %With the proliferation of cheap % TODO urghs formulation
-%    %high-quality RGB-D sensors, it became possible to capture more and more
-%    %data not only as color images, but with additional depth information. The
-%    %depth channel provides important clues not only for scene structure, but
-%    %also for predicting semantic object classes.
-%    %We demonstrate how CRF learning, an approach
-%    %that has shown great promise for RGB images, can exploit depth information
-%    %to improve semantic interpretation of the scene.
-%    We evaluate our approach on the NYU V2 dataset of indoor scenes, a challenging
-%    dataset covering a wide variety of scene layouts and object classes. We
-%    hard-code much less information about the scene layout into our model then previous
-%    approaches, and instead learn object relations directly from the data. We
-%    find that our conditional random field approach improves upon previous
-%    work, setting a new state-of-the-art for the dataset.
-%\end{abstract}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \chapter{Learning Depth-Sensitive Conditional Random Fields}\label{ch:nyu}
 
 %\section{Introduction}
 For robots to perform varied tasks in unstructured environments, understanding their
-surroundings is essential. We formulate the problem of semantic annotation of maps
-as a dense labeling of RGB-D images into semantic classes. Dense labeling of objects
+surroundings is essential. In this chapter, we look at the semantic annotation of maps
+as a dense labeling of \mbox{RGB-D} images into semantic classes. We formulate the problem
+as learning a CRF over a superpixel segmentation of the \mbox{RGB-D} image, producing a labeling
+that takes 3D layout into account. Dense labeling of objects
 and structure classes allows for a detailed reasoning about the scene.
 
-In this work, we propose the use of random forests combined with conditional
-random fields (CRFs) to perform robust estimation of structure classes in RGB-D
-images. The CRF is learned using a structural support vector machine,
-allowing it to integrate the noisy low-level information produced by a pixel-based
-random forest to a consistent interpretation of the scene.
+%We use of random forests to obtain a noisy low-level estimate of structure class on pixel level.
+%These estimates serve as the unary input to the learned CRF model which integrates
+%these low-level cues to a consistent interpretation of the scene.
 
-We thereby extend the success of learned CRF models for
-semantic segmentation in RGB images to the domain of 3D scenes.
+We thereby extend the success of learned CRF models for semantic segmentation
+in RGB images as considered in Chapter~\ref{exact_learning} to the domain of 3D scenes.
 Our emphasis lies on exploiting the additional depth and 3D information in all
 processing steps, while relying on \emph{learning} to create a model that 
 is adjusted to the properties of the sensor input and environment.
@@ -50,11 +22,11 @@ is adjusted to the properties of the sensor input and environment.
 Our approach starts with a random forest, providing a noisy local estimate
 of semantic classes based on color and depth information. These estimates
 are grouped together using a superpixel approach, for which we extend previous
-superpixel algorithms from the RGB to the RGB-D domain.
+superpixel algorithms from the RGB to the \mbox{RGB-D} domain.
 We then build a geometric model of the scene, based on the neighborhood graph
 of superpixels.  We use this graph not only to capture spatial relations in the
 2D plane of the image, but also to model object distances and surface angles in
-3D, using a point cloud generated from the RGB-D image. The process is depicted
+3D, using a point cloud generated from the \mbox{RGB-D} image. The process is depicted
 in \Figref{teaser}.
 
 We assess the accuracy of our model on the challenging NYU Segmentation V2
@@ -92,38 +64,38 @@ the hierarchical CRF approach of
 but used Potts potentials together with cross-validation to adjust parameters.
 
 Recent approaches for indoor semantic annotation of maps mostly focused on
-RGB-D images, which are now easy to obtain using structured light sensors.
+\mbox{RGB-D} images, which are now easy to obtain using structured light sensors.
 \citet{stuckler2012semantic}, for example, used a Random Forest model to obtain a dense
 semantic labeling of images and integrated predictions over multiple views in 3D.
 They evaluated their approach on table-top and simple indoors scenes.
 %
 \citet{silberman2011indoor} introduced the NYU Depth Dataset V1 indoor dataset,
-which consisted of a large variety of densely annotated indoor scenes, captured as RGB-D images.
-Their work also introduced a baseline method for semantic segmentation of RGB-D
+which consisted of a large variety of densely annotated indoor scenes, captured as \mbox{RGB-D} images.
+Their work also introduced a baseline method for semantic segmentation of \mbox{RGB-D}
 image, which is based on a CRF over superpixels, with unary potentials given by interest point descriptors.
 While pairwise potentials for the CRF were carefully
 designed for the dataset, potentials were either directly set by hand or estimated using empirical
-frequencies. This is in contrast to our work, which applies structured prediction techniques
+frequencies. This is in contrast to our approach which applies structured prediction techniques
 to learn potentials automatically to optimize predictive performance.
 %
 \citet{ren2012rgb} evaluated the design of features for semantic labeling of
-RGB-D data, and use a hierarchical segmentation to provide context. While they
+\mbox{RGB-D} data, and use a hierarchical segmentation to provide context. While they
 also define a CRF on superpixels, their model is again not learned, but a
 weighted Potts model, using only a probability of boundary map, and not taking
 spatial layout into account at all.
 %
 \citet{SilbermanECCV12} extended the NYU Depth Dataset V1 to the NYU Depth Dataset V2 that we are also
-using in this work.  Their focus is on inferring support relations in indoor
+using here.  Their focus is on inferring support relations in indoor
 scenes, such as objects resting on tables or shelfs, which in turn rest on the floor.
 Their approach is based on robust estimation of 3D plane hypotheses, which are then jointly
 optimized with support relations and structure classes.
 \citet{SilbermanECCV12} used a complex pipeline, employing significant domain knowledge.
-In this work, on the other hand, we try to learn all relevant domain specific features
+In our approach, on the other hand, we try to learn all relevant domain specific features
 directly from the data, which allows us to out-perform the work of \citet{SilbermanECCV12}
 with respect to structure class segmentation.
 
 \citet{couprie-iclr-13} approached the task of semantic segmentation of structure classes
-in RGB-D using the paradigm of convolutional neural networks, extending
+in \mbox{RGB-D} using the paradigm of convolutional neural networks, extending
 previous work of \citet{farabet-pami-13} and \citet{schulz2012learning}.
 Similar to our approach, \citet{couprie-iclr-13} combined the output of a
 pixel-based, low-level learning algorithm with an independent unsupervised
@@ -218,7 +190,7 @@ minimum size.
 Our method builds on the probability output of a random forest, trained for pixel-wise
 classification of the structure classes.
 We use the GPU implementation provided by \citet{stueckler2013}\footnote{\url{https://github.com/deeplearningais/curfil}}.
-The input for training are the full RGB-D images, transformed to Lab
+The input for training are the full \mbox{RGB-D} images, transformed to Lab
 color space. Each tree in the forest uses training pixels only from a subset of
 training images. For each training image, an equal number of pixels for each
 occurring class is sampled. Split features are given by difference of regions
@@ -328,7 +300,7 @@ measure accuracy for pixels without valid depth measurement.
 
 We evaluate our approach on the public NYU depth V2 segmentation dataset of
 indoor scenes.  The dataset comes with a detailed annotation of 1449 indoor
-RGB-D images belonging to a wide variety of indoor scenes, categorized into 26
+\mbox{RGB-D} images belonging to a wide variety of indoor scenes, categorized into 26
 scene classes.  The annotation contains four semantic structural classes:
 structure, floor, furniture and prop. There is an additional ``void'' class,
 which is used for object boundaries and hard-to-annotate regions. We follow the
@@ -477,7 +449,7 @@ are excluded from the evaluation. See \Secref{experiments} for details.
 
 \section{Summary and Discussion}
 We introduce a CRF formulation for semantic segmentation
-of structure classes in RGB-D images. We base our model in the output of an efficient GPU implementation
+of structure classes in \mbox{RGB-D} images. We base our model in the output of an efficient GPU implementation
 of random forest, and model spatial neighborhood using a superpixel-based approach.
 We combine color, depth and 3D orientation features into an energy function
 that is learned using the SSVM approach. By explicitly modeling 3D relations in
@@ -489,13 +461,13 @@ While our approach allows modeling of spatial relations, these are limited to
 local interactions. In future work, these interactions could be extended to
 larger areas using latent variable models or higher
 order potentials~\citep{ladicky2009associative}.
-Another possible line of future work is to combine our approach with a more
+Another possible line of future investigation is to combine our approach with a more
 task-specific one, directly including support plane assumptions into the model,
 as done by \citet{SilbermanECCV12}. Finally, we could also combine our
 single-frame approach with the approach of \citet{stueckler2013}, which fuses
 individual views in 3D to exploit temporal coherence.
 
-While this work did not explicitly address real time application, the random
+We did not explicitly address real time application, the random
 forest implementation that we build upon allows for real-time
 processing~\citep{stueckler2013}. The SLIC superpixel algorithm can also be
 implemented on GPU in real-time, as was demonstrated by \citep{ren2011gslic}, and similarly
