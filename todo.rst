@@ -1,5 +1,5 @@
-mehr related work ueber image segmentation
 mehr ueber superpixel und crf based approaches bei "Exact learning"
+mehr related work ueber image segmentation
 redundanz vermeiden
 bounding the objective teil raus? STINKT!!!
 

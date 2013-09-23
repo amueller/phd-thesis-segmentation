@@ -483,3 +483,71 @@ closely related stochastic subgradient algorithms, and empirically improves
 convergence.
 \enlargethispage{10mm}
 The detailed procedure as given by \citet{lacoste2012block} is shown in Algorithm~\ref{alg_szljsp}.
+
+\section{CRFs for Semantic Segmentation}
+Conditional Random Fields have been established as an important tool in many
+areas of computer vision. Applications include dense stereo, optical flow, 
+inpainting, de-noising, image editing, low-level segmentation and semantic segmentation.
+
+There are broadly two types of models that are used: models in which each pixel
+in an image is represented as a node, and models in which pixels are first
+grouped together into superpixels and each superpixel is represented as a node.
+In pixel-based CRFs edges are usually introduced between adjacent pixels, that is using
+either 4-neighborhoods or 8-neighborhoods. Superpixel-based approaches introduce
+edges between adjacent superpixels, that is those that share a boundary.
+%TODO images of superpixels!
+%
+The motivation for using superpixels is that it is often easy to group nearby
+pixels that belong to the same object just based on local color or texture cues.
+While it is hard to even define what makes a sensible segmentation of an image,
+it is much easier to define, and also to compute an \emph{over-segmentation}.
+The only requirement for an over-segmentation is that each segment only
+contains pixels belonging to the same entity.
+
+Using superpixels instead of pixels has large computational advantages.
+A model that uses superpixels contains much fewer variables than one that works on pixel-level.
+Typical sizes for superpixels are in the hundereds of pixels, leading to a hundred-fold decrease
+in complexity for prediction. There are also semantic advantages. Using superpixels
+can constitute a form of regularization, including prior knowledge about the structure
+of images. Modeling interactions between superpixels also allows more distant parts of an image
+to interact, instead of modeling long-term relations only indirectly over neighbors.
+Finally, modeling decisions on a superpixel-level allows for more context for a local decision,
+while semantic decisions on pixel-level are not meaningful near object boundaries.
+The main disadvantage of superpixel-based approaches is that the initial oversegmentation can
+not be influenced by later reasoning. This can be a problem if fine structures need to be
+segmented for which local evidence does not suffice.
+
+% about algorithms, slic?
+% hierarchical\dots has superpixels and pixels?
+%  pro/con superpixels?
+
+% submodular/non-submodular? higher order?
+
+In early models, parameters were usually set by hand. Recent works mostly use a
+maximum margin based formulation based on maximum margin Markov
+models~\cite{taskar2003max} or structural ssvms~\cite{tsochantaridis2006large}
+for parameter learning~\cite{lucchi2013learning, lucchi2011spatial}.
+
+Most CRF-based image segmentation approaches use loopy neighborhood graphs,
+leading to intractable inference problems during learning -- see
+\citep{nowozin2010parameter} for a tree based approach. There has been much
+research in learning structured prediction models using approximate inference.
+The influence of approximate inference on structured support vector machine
+training was first analyzed in  \citep{finley2008training}.
+
+More recently, \cite{meshi2010learning}, \cite{hazan2010primal} and
+\cite{komodakis2011efficient} introduced formulations for joint inference and
+learning using duality.
+
+\citep{finley2008training} shows that using certain Linear Programming (LP)
+relaxations, generalization guarantees can be preserved. Unfortunately,
+standard LP solvers are too slow for many applications, in particular semantic
+segmentation as formulated in this work.
+
+Most related to our approach is \citep{szummer2008learning}, which utilize graph cut
+based optimization for inference.
+Instead of using the classical approach of \cite{boykov2001fast}, which is restricted
+to submodular potentials, we use a $\alpha$-expansion move-making algorithm based on binary QPBO
+\cite{rother2007optimizing}. While relying on local search loses the guarantees of binary QPBO,
+this method is fast and we find it to perform well in practice.
+
