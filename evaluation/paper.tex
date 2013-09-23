@@ -278,9 +278,9 @@ the non-caching $1$-slack cutting plane algorithm and subgradient descent.
 These results are intiutive, as they reflect ``how much work'' each algorithm does
 for each loss-augmented prediction step. More work towards the objective leads to faster convergence.
 This ``more work'' is quantified in \Figref{mnist_times}.
-Clearly the $1$-slack algorithms to ``to much'' work, leading to very slow convergence.
-Also, caching does not speed up learing learning on this dataset, as loss-augmented predction
-is as fast as querying the cache.
+Clearly the $1$-slack algorithms to ``to much'' work, leading to very slow
+convergence.  Also, caching does not speed up learing learning on this dataset,
+as loss-augmented predction is as fast as querying the cache.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -329,11 +329,42 @@ objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 \figlabel{ocr_large_results}}
 \end{figure}
 
-The results for the OCR-large dataset are shown in \figref{ocr_large_results}
+The results for the OCR-large dataset are shown in \Figref{ocr_large_results}
 The trends are the same as for the smaller dataset: $n$-slack and caching $1$-slack cutting plane are very fast
 in terms of passes through the dataset, but $n$-slack cutting plane is impractical slow
 with respect to runtime. The SZLJSP algorithm converges fast intially, but the $1$-slack cutting plane
 is faster at high precision and faster in certifying the desired duality gap.
+%TODO initially 1-slack is beaten by ssgd
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree}&%
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_time}
+    \end{tabu}
+\caption{%
+   Convergence of the primal objective on the multi-label yeast dataset with a tree-shaped model.
+\figlabel{yeast_tree}}
+\end{figure}
+
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \includegraphics[width=\linewidth]{evaluation/images/scene_tree}&%
+    \includegraphics[width=\linewidth]{evaluation/images/scene_tree_time}
+    \end{tabu}
+\caption{%
+   Convergence of the primal objective on the multi-label scene dataset with a tree-shaped model.
+   \figlabel{scene_tree}}
+\end{figure}
+
+Next, we consider the multi-label task, starting with the tree-shaped models.
+The results for the yeast and scene datasets are shown in \Figref{yeast_tree} and \Figref{scene_tree},
+respectively. The caching $1$-slack algorithm is much faster than the non-caching one on both datasets.
+The caching $1$-slack algorithm is the fastest algorithm to achieve the desired primal suboptimality.
+On the scene dataset, the other cutting-plane base algorithms are second fastest, while they
+lag behind the stoachastic algorithms on the larger yeast dataset. Again, initial convergence is
+faster for the stochastic algorithms.
+
+The results when using the full model are shown in \Figref{yeast_full} and \Figref{scene_full}.
+Here, inference is much more complex than in the previous tasks.
 
 \subsection{Experiments using Approximate Inference}
 For the remaining tasks of multi-label classification with the full graph, the
