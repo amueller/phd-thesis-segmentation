@@ -146,7 +146,7 @@ Segmentierung und Erkennung von Objektklassen in nat\"urlichen Bildern vor, das
 mit Hilfe von Supervision in Form von Klassen-Vorkommen auf Bildern in der Lage
 ist ein Segmentierungsmodell zu lernen.
 
-Der dritte und letzte Teil der Arbeit untersucht einen der am weitesten
+Der dritte Teil der Arbeit untersucht einen der am weitesten
 verbreiteten Ans\"atze zur semantischen Segmentierung und
 Objektklassensegmentierung, Conditional Random Fields, verbunden mit Verfahren
 der strukturierten Vorhersage.
@@ -281,30 +281,32 @@ inference and learning in the neighborhood models typically employed for
 semantic segmentation.
 We presented an open source software implementation of a variety of
 popular learning algorithms for structural support vector machines, together
-with a thorough evaluation of their properties in the presence of approximate
-inference. Our software provides a solid basis for future research into learning,
-inference and models for computer vision, by providing extensive examples and
+with a thorough evaluation of their properties, in particulare when using approximate
+inference. Our software provides a foundation for future research into learning,
+inference and models for computer vision by providing extensive examples and
 benchmarks.
 
 We showed that effective use of available inference mechanisms enables
 exact learning, even in the presence of loops in the underlying
 factor graph. Our methods achieve competitive performance with similar
- methods on the Pascal VOC 2010 dataset, and yield state-of-the art
+ methods on the Pascal VOC 2010 dataset, and improve upon state-of-the art
  results on the MSRC-21 dataset.
 We demonstrated the power of conditional interactions by learning spatial
 interactions in an RGB-D setting. Here, our approach improves upon the state-of-the
 art on the NYU V2 benchmark for annotation of semantic structure classes.
 
-We also presented a novel approach for clustering based on information theoretic
-principles. Our algorithm improves upon methods from the literature on a wide
-range of datasets. This indicates that in the task of extracting
-superpixels, we can also hope to achieve better results than the $k$-means based
-SLIC algorithm that we used.
+We also presented a novel approach for clustering based on information
+theoretic principles. Our algorithm improves upon methods from the literature
+in finding pre-defined classes on a wide range of datasets. This indicates that
+in the task of extracting superpixels, we can also hope to achieve better
+results than the $k$-means based SLIC algorithm that we used.
 
 As manual annotation of images for learning semantic segmentation and object
 class recognition is laborious and error-prone, we suggested a method to
 learn object class segmentation for complex object classes from image-level
-annotations alone.
+annotations alone. Our approach is formulated using multiple instance learning
+over a set of candidate segments. We demonstrated the feasibility and effectiveness
+of our approach on the challenging Graz-02 dataset of street scenes.
 
 \section{Future Directions}
 There are several directions for future research that we think would be

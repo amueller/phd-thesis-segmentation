@@ -172,9 +172,11 @@ to learn the SSVM to optimality \emph{exactly}.
 
 \subsection{Low Level Segmentation}
 We take a super-pixel based approach to semantic segmentation.
-Our superpixel generation is based on the SLIC algorithm~\citep{achanta2012slic}. We extend the
-standard SLIC algorithm, which works on the Lab space, to also include 
-depth information. The resulting algorithm is a localized $k$-Means in Lab-D-XY space.
+Our superpixel generation is based on the SLIC
+algorithm~\citep{achanta2012slic}, as in Chapter~\ref{exact_learning}. We
+extend the standard SLIC algorithm, which works on the Lab space, to also
+include depth information. The resulting algorithm is a localized $k$-Means in
+Lab-D-XY space.
 Our implementation is publicly available through the scikit-image library\footnote{\url{http://scikit-image.org}}.
 Similar to \citet{SilbermanECCV12}, we found little visual improvement over the
 RGB segmentation when using additional depth information. On the other hand,
@@ -302,8 +304,9 @@ We evaluate our approach on the public NYU depth V2 segmentation dataset of
 indoor scenes.  The dataset comes with a detailed annotation of 1449 indoor
 \mbox{RGB-D} images belonging to a wide variety of indoor scenes, categorized into 26
 scene classes.  The annotation contains four semantic structural classes:
-structure, floor, furniture and prop. There is an additional ``void'' class,
-which is used for object boundaries and hard-to-annotate regions. We follow the
+structure, floor, furniture and prop. As in the MSRC-21 and Pascal VOC
+datasets, there is an additional ``void'' class, which is used for object
+boundaries and hard-to-annotate regions. We follow the
 literature in excluding these pixels completely from the evaluation.
 We optimize our model for \emph{average class accuracy} (the mean of the
 diagonal of the confusion matrix), which puts more emphasis on the harder
@@ -311,10 +314,8 @@ classes of props and furniture, which have smaller area than structure and
 floor.
 
 Our approach is implemented using our \textsc{PyStruct}
-library\footnote{\url{http://pystruct.github.io}}.  The code for our
-experiments will be released upon acceptance. We use \textsc{scikit-learn}~\citep{pedregosa2011scikit}
-for $k$-means clustering and the SVM baseline.
-
+library introduced in \Secref{pystruct}.
+%
 All hyper parameters were adjusted using 5-fold cross-validation. The
 hyper parameters of the random forests were found using the \texttt{hyperopt}
 framework of \cite{bergstra2011algorithms}. For the CRF model, the only
@@ -323,6 +324,10 @@ hyper-parameter $C$ of the structural SVM formulation. These were adjusted
 using grid-search.
 We found 500 superpixels per image to work best, which allow for a maximum
 possible performance of 95\% average class accuracy on the validation set.
+
+We observed that the linear programming relaxation
+often found an integer solution, without the need for a branch-and-bound procedure. We also found
+that using fusion moves alone produced inferior results.
 
 \Tabref{results} compares different components of our approach with the literature.
 Please note that we \emph{first} designed our final model, using only the

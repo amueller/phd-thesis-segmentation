@@ -1,5 +1,9 @@
-MSRC-21 verbessern wir den state of the art?
-inference vermeiden?
+mehr related work ueber image segmentation
+mehr ueber superpixel und crf based approaches bei "Exact learning"
+redundanz vermeiden
+bounding the objective teil raus? STINKT!!!
+
+
 in pystruct experiments, refer to other sections for details, not website
 where is the right place to discuss details for segmentation?
 read logfile :)

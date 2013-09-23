@@ -14,9 +14,11 @@ approximations in the $1$-slack cutting-plane learning algorithm in the context 
 image segmentation. We show that despite inference being deemed intractable in
 loopy superpixel models, we are able to learn a pairwise conditional random
 field model using a structured support vector machine exactly for this task.
-We evaluate our approach on the popular MSRC-21 and Pascal VOC datasets. % and nyu?
+We evaluate our approach on the popular MSRC-21 and Pascal VOC datasets. Our
+approach improves upon the state-of-the art on the MSRC-21 dataset, and is
+competative with comparable approaches on the Pascal VOC dataset.% and nyu?
 
-The contribution of this chapter is threefold:
+The contribution of this chapter are:
 \begin{itemize}
     \item We analyze the simultaneous use of multiple approximate inference
         methods for learning SSVMs using the cutting plane method, relating
@@ -26,6 +28,8 @@ The contribution of this chapter is threefold:
     \item We demonstrate that using a combination of under-generating and exact
         inference methods, we can learn an SSVM exactly in a practical
         application, even in the presence of loopy graphs.
+    \item We show that even using a strong approximate inference procedure can
+        improve upon the state-of-the art on the MSRC-21 dataset.
     % also fusion moves is pretty good?
 \end{itemize}
 
@@ -508,9 +512,9 @@ results from the literature. As a sanity check, we also provide results without
 pairwise interactions.
 
 Results on the MSRC-21 dataset are shown in \Tabref{msrcacc}.
-We find that our model is on par with state-of-the-art approaches, implying
-that our model is realistic for this task. In particular, our results are comparable to those of
-\citet{lucchi2013learning}, who use a stochastic subgradient method with working sets.
+We find that our model is improves upon state-of-the-art approaches. In
+particular, our results improve upon to those of \citet{lucchi2013learning},
+who use a stochastic subgradient method with working sets.
 Their best model takes 583s for training, while training our model exactly takes 1814s.
 We find it remarkable that it is possible to guarantee optimality in time of
 the same order of magnitude that a stochastic subgradient procedure with
