@@ -35,7 +35,8 @@ We choose the classical MNIST dataset of handwritten digits, consisting of
 \Figref{mnist_illustration} shows some examples. Each image is a $28 \times 28$
 grey-level image, resulting in a $784$-dimensional feature vector. We normalize
 the feature to lie between $0$ and $1$.
-
+%
+\enlargethispage{15mm}
 The model we use for multi-class classification is the Crammer-Singer
 formulation. We do not include a bias, leading to $784 \cdot 10 = 7840$
 parameters in the model.
@@ -268,7 +269,7 @@ implemented in \textsc{OpenGM} for experiments.
 
 We start our experiments with the MNIST dataset.
 The convergence of the primal objective and training set loss in terms of
-passes over the training set is shown in \figref{mnist_iterations}.
+passes over the training set is shown in \Figref{mnist_iterations}.
 Several trends can be observed: the $n$-slack cutting plane algorithms are converge fastest, with
 the version that recomputes the QP at every step leading the race. The algorithms are
 closely followed by the caching $1$-slack cutting plane algorithm.
@@ -276,17 +277,36 @@ They are followed by the significantly slower SZLJSP algorithm, and finally
 the non-caching $1$-slack cutting plane algorithm and subgradient descent.
 These results are intiutive, as they reflect ``how much work'' each algorithm does
 for each loss-augmented prediction step. More work towards the objective leads to faster convergence.
-This ``more work'' is quantified in \figref{mnist_times}.
+This ``more work'' is quantified in \Figref{mnist_times}.
 Clearly the $1$-slack algorithms to ``to much'' work, leading to very slow convergence.
 Also, caching does not speed up learing learning on this dataset, as loss-augmented predction
 is as fast as querying the cache.
 
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \includegraphics[width=\linewidth]{evaluation/images/letters_small}&%
+    \includegraphics[width=\linewidth]{evaluation/images/letters_small_time}
+    \end{tabu}
+\caption{%
+   Convergence of the primal objective on OCR-small. 
+\figlabel{ocr_small_results}}
+\end{figure}
+
 We now consider datasets with non-trivial inference.
-The results for OCR-small are shown in \figref{ocr_small_iterations} and \figref{ocr_small_time}.
+The results for OCR-small are shown in \Figref{ocr_small_results}.
 The trends seen in the figures are similar to what we saw for MNIST above.
 Again, even though inference is non-trivial, the non-caching $1$-slack
 algorithm is slower than the caching one. Again, the plots against passes over the trainingset
 do not reflect the runtime complexity of the $n$-slack approach.
+
+\begin{figure}
+    \begin{center}
+    \includegraphics[width=.5\linewidth]{evaluation/images/letters_small_dual}
+\end{center}
+\caption{%
+   Convergence of the primal objective on OCR-small. 
+\figlabel{ocr_small_dual}}
+\end{figure}
 
 There is one interesting phenomenon to be seen here: The cutting-plane algorithms stop immediately
 when reaching the desired suboptimality of $0.1$. The SZLJSP algorithm, on the other hand, keeps
@@ -296,10 +316,24 @@ and SZLJSP are given by the duality gap. It seems that while the primal objectiv
 faster in the SZLJSP algorithm than in the non-caching $1$-slack algorithm, the dual does not.
 This means that in for this practical experiment, the non-caching $1$-slack algorithm was \emph{faster}
 in guaranteeing the desired suboptimality.
-\figref{ocr_small_duals} illustrates this point by ploting primal and dual
+\Figref{ocr_small_dual} illustrates this point by ploting primal and dual
 objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \includegraphics[width=\linewidth]{evaluation/images/letters_big}&%
+    \includegraphics[width=\linewidth]{evaluation/images/letters_big_time}
+    \end{tabu}
+\caption{%
+   Convergence of the primal objective on OCR-large. 
+\figlabel{ocr_large_results}}
+\end{figure}
 
+The results for the OCR-large dataset are shown in \figref{ocr_large_results}
+The trends are the same as for the smaller dataset: $n$-slack and caching $1$-slack cutting plane are very fast
+in terms of passes through the dataset, but $n$-slack cutting plane is impractical slow
+with respect to runtime. The SZLJSP algorithm converges fast intially, but the $1$-slack cutting plane
+is faster at high precision and faster in certifying the desired duality gap.
 
 \subsection{Experiments using Approximate Inference}
 For the remaining tasks of multi-label classification with the full graph, the

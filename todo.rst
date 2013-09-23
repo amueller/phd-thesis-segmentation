@@ -1,9 +1,9 @@
-check past/presence in references!!!
 in pystruct experiments, refer to other sections for details, not website
 where is the right place to discuss details for segmentation?
 read logfile :)
 [links to algorithm lines don't work -- also links to algorithm doesn't work]
 
+more related work!
 
 future work: n-slack fast? caching bcfw?
 
@@ -32,6 +32,7 @@ SQUARED AVERAGING!
 
 s/learning rate/step size/g  Done (check again later)
 1-slack und n-slack consistent (one/1, n, $n$)  (done, check again later)
+kommata!
 
 INTRO
 ======
@@ -48,14 +49,9 @@ Itm
 
 weak supervision
 ==================
-multi-class...
-korrekturlesen!
-zitate auf andere zwei approaches!!
 
 intro to structured prediction
 ============================================
-Consistency \phi \Phi DONE
-subgradient learning rate citations? haben ja pegasos jetzt...
 Table complexity comparisons? -> in text vorerst
 Graphiken?
 factor-graph?
@@ -65,10 +61,6 @@ summary of intro...
 Pystruct
 ========
 wann fuere ich die abkuerzung SSVM ein? DONE
-mehr ueber modelle? conditional? -> meh erstmal nicht?
-another row in library table: bundle methods BMRM ?
-ALGORITM table update, dlib algorithms?
-Pairwise?! -> meh erstmal nicht ^^
 
 exact learning
 =================
