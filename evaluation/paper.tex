@@ -379,6 +379,8 @@ is faster at high precision and faster in certifying the desired duality gap.
     \includegraphics[width=\linewidth]{evaluation/images/scene_full_log}&%
     \includegraphics[width=\linewidth]{evaluation/images/scene_full_log_time}\\
     \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log}&%
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log}&%
     \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log_time}
     \end{tabu}
 \caption{%
@@ -422,6 +424,42 @@ here---instead we round possible fractional results.
 While the training error does not directly reflect the objective, it provides
 a measure of how effective the ``prediction machine'' given by the learned model
 together with the inference algorithm is.
+
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_loss}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time_loss}\\
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo_loss}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo_time_loss}
+    \end{tabu}
+\caption{%
+    Snakes
+\figlabel{snakes_results}}
+\end{figure}
+
+
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
+    \includegraphics[width=\linewidth]{evaluation/images/msrc}&%
+    \includegraphics[width=\linewidth]{evaluation/images/msrc_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/msrc_loss}&%
+    \includegraphics[width=\linewidth]{evaluation/images/msrc_time_loss}\\
+    \includegraphics[width=\linewidth]{evaluation/images/msrc}&%
+    \includegraphics[width=\linewidth]{evaluation/images/msrc_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/msrc_loss}&%
+    \includegraphics[width=\linewidth]{evaluation/images/msrc_time_loss}
+    \end{tabu}
+\caption{%
+    MSRC, Pascal VOC
+\figlabel{msrc_pascal}}
+\end{figure}
+
 
 \section{Discussion}
 From the experiments above, it is clear there is currently \emph{no single best algorithm}.

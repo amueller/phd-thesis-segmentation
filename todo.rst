@@ -1,10 +1,10 @@
-TABLES ueber oder unterschriften?!
-4.3 neues chapter: unary potentials und pairwise potentials beschreiben
+LOGO!!!! 
 
+4.3 neues chapter: unary potentials und pairwise potentials beschreiben
 korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!
 
-Vladn korrekturen
+Vladn korrekturen (zwei mails)
 versuche: vielleicht noch averaged SSGD?
 SSGD abkuerzung?
 
@@ -14,14 +14,10 @@ mehr related work ueber image segmentation
 redundanz vermeiden
 bounding the objective teil raus? STINKT!!!
 
-
-in pystruct experiments, refer to other sections for details, not website
-where is the right place to discuss details for segmentation?
 read logfile :)
 [links to algorithm lines don't work -- also links to algorithm doesn't work]
 
 more related work!
-TABLE comparision algorithms!!
 
 future work: n-slack fast? caching bcfw?
 
