@@ -11,6 +11,7 @@
 \usepackage{natbib}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{siunitx}
 \usepackage{tabu}
 \usepackage{graphicx}
 \usepackage{algorithm}
@@ -80,6 +81,11 @@
 \newcommand{\B}[1]{\mathbf{#1}}
 
 \setlength{\tabcolsep}{2pt}
+
+%\newcolumntype Y{S[group-four-digits=true, per-mode=symbol, round-precision=0, table-number-alignment=right]}
+\newcolumntype Y{X[c,1]{S[group-four-digits=true, table-format=2.2, table-number-alignment=right]}}
+\tabucolumn Y
+
 
 \begin{document}
 
