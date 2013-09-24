@@ -230,11 +230,10 @@ for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
 %yielded similar results.
 
 \begin{table}
-    \caption{Summary of Datasets.\tablabel{datasets}}
     \begin{tabu} to \linewidth{@{}X[1,l]YX[1,c]X[1,c]YY@{}}
     %\multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\
     \toprule
-    Dataset    & {samples} & nodes & edges & {dim w} & {labels}\\
+    Dataset    & {samples} & variables & graph & {dim $\theta$} & {labels}\\
     \cmidrule{1-6}
     MNIST      & 60000   & 1     & none  & 7840  & 10\\
     OCR-small  & 704     & 3--14 & chain & 1444  & 26\\
@@ -247,8 +246,8 @@ for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
     MSRC21     & 276     & 7--113& loopy &  1764 & 21\\
     Pascal VOC & 964     & 8--112& loopy &  2646 & 21\\
     \bottomrule
-
     \end{tabu}
+    \caption{Summary of datasets used in the evaluation. \tablabel{datasets}}
 \end{table}
 
 \section{Experiments}

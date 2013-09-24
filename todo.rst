@@ -5,6 +5,8 @@ korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!
 
 Vladn korrekturen
+versuche: vielleicht noch averaged SSGD?
+SSGD abkuerzung?
 
 image bei slic / CRF...
 

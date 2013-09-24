@@ -271,8 +271,6 @@ There are five different features used to build pairwise potentials in our model
 \section{Experiments}\seclabel{experiments}
 
 \begin{table*}[t]
-    \caption{Quantitative comparison of the proposed method with the
-    literature.\tablabel{results}}
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}l@{}cccccc}
 \toprule
                         & \footnotesize{ground}        &  \footnotesize{structure}    & \footnotesize{furniture}     & \footnotesize{props}         & \footnotesize{class avg.}   & \footnotesize{pixel avg.}\\
@@ -290,14 +288,16 @@ RF + SP + CRF                   & \textbf{94.9} &   78.9        &          71.1 
 
 \bottomrule
 \end{tabularx}
-\quad\\The best value in each column is printed in bold$^\dagger$. The upper part of
+    \caption{Quantitative comparison of the proposed method with the
+        literature.
+The best value in each column is printed in bold$^\dagger$. The upper part of
 the table shows contributions by different parts of our pipeline. RF stands for random forest prediction, RF + SP for aggregated
 random forests prediction within superpixels, RF + SP + SVM for an SVM trained on the unary potentials, and RF + SP + CRF is
-our proposed pipeline. We optimized our approach for class average
+our proposed pipeline. We optimized our approach for class average\tablabel{results}
 accuracy.\\
 $^\dagger$ \footnotesize Note that the work of \citet{stueckler2013} is not directly
 comparable, as they integrated information over multiple frames, and did not
-measure accuracy for pixels without valid depth measurement.
+measure accuracy for pixels without valid depth measurement.}
 \end{table*}
 
 We evaluate our approach on the public NYU depth V2 segmentation dataset of
