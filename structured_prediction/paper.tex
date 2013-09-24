@@ -189,10 +189,10 @@ objective
     \min_\theta \frac{1}{2} ||\theta||^2 + C \sum_i  \ell(x\hoch{i}, y\hoch{i}, \theta)
 \end{equation}
 with regularization parameter $C$.\pagebreak\\
-Here, $\ell$ is a hinge-loss like upper bound
+Here, $\ell$ is a hinge-loss-like upper bound
 on the empirical $\Delta$-risk:
 \begin{equation}\eqlabel{loss_augmentation}
-    \ell(x\hoch{i}, y\hoch{i}, \theta) = [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \Phi(x\hoch{i}, y) - \theta^T \Phi(x\hoch{i}, y\hoch{i}]_+.
+    \ell(x\hoch{i}, y\hoch{i}, \theta) = [\max_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \Phi(x\hoch{i}, y) - \theta^T \Phi(x\hoch{i}, y\hoch{i})]_+.
 \end{equation}
 This is an instance of regularized empirical risk minimization, with a
 piecewise linear, convex upper bound on the loss. 
@@ -230,7 +230,7 @@ loss-augmented prediction problem in \Eqref{loss_augmentation}, it is natural
 to work in a stochastic setting (see \citet{ratliff2007online}).\pagebreak\\
 Given a model through $\Phi$ and a set of parameters $\theta$, a subgradient
 considering a single training example $(x\hoch{i}, y\hoch{i})$
-can becomputed simply by solving the loss-augmented prediction problem:
+can be computed simply by solving the loss-augmented prediction problem:
 \begin{align*}
     &\frac{d}{d\theta} \left [ \frac{1}{2} ||\theta||^2 + C \ell(x\hoch{i}, y\hoch{i}, \theta) \right ] \ni C\left [ \Phi(x\hoch{i}, \hat{y}) - \Phi(x\hoch{i}, y\hoch{i}) \right]+ \theta\numberthis\\
     &\text{with }\hat{y} \in \argmax_{y \in \mathcal{Y}} \Delta(y\hoch{i}, y) + \theta^T \Phi(x\hoch{i}, y)
@@ -272,7 +272,7 @@ benefit in our experiments.
     \begin{algorithmic}[1]
         \Require training samples $\{ (x\hoch{1}, y\hoch{1}), \dots, (x\hoch{k}, y\hoch{k})\}$, regularization parameter $C$, stopping tolerance $\epsilon$.
         \Ensure parameters $\theta$, slack $(\xi_1, \dotsc, \xi_k)$
-        \State $\W_i \leftarrow \emptyset, \xi_i \leftarrow 0 \text{ for } i=1,\dots,k$
+        \State $\W_i \leftarrow \varnothing, \xi_i \leftarrow 0 \text{ for } i=1,\dots,k$
         \Repeat
             \For {i=1, \dots, k}
                 \State

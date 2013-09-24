@@ -29,7 +29,7 @@ The simplest task we use is multi-class classification. In this task,
 the inference problem is trivial, as it is assumed the target set is small enough
 to be enumerated efficiently. While this problem could be solved more efficiently
 with specialized algorithms, it nevertheless provides an initial insight into structured
-prediction algoriths.
+prediction algorithms.
 We choose the classical MNIST dataset of handwritten digits, consisting of
 60000 training images and 10000 test images of the digits zero to nine.
 \Figref{mnist_illustration} shows some examples. Each image is a $28 \times 28$
@@ -86,8 +86,8 @@ segmented input letter one of the classes ``a'' to ``z''. As the first letter
 of each word was capitalized, these were removed by \citet{taskar2003max},
 leading to somewhat odd-looking labels. The words are between three and fourteen
 letters long, and each letter is represented as a binary image of size $16
-\time 8$, with a toal of $6877$ words.
-The dataset is devided into ten folds. We consider two setups: learning
+\time 8$, with a total of $6877$ words.
+The dataset is divided into ten folds. We consider two setups: learning
 on one fold, and testing on the remaining nine folds, following \citet{taskar2003max},
 and learning on nine folds and testing on the remaining fold, following \citet{lacoste}.
 We refer to the learning on one fold as OCR-small, and learning on nine folds as OCR-big.
@@ -102,7 +102,7 @@ message passing algorithms.
 \subsection{Multi-Label Classification}
 Multi-label classification is a generalization of multi-class classification,
 in which each example can be associated with more than one class. In other
-words, the algorihm must decide for each sample and for each class whether the
+words, the algorithm must decide for each sample and for each class whether the
 sample belongs to that class or not.
 Multi-label classification was first formulated as a structured prediction problem
 in by \citet{finley2008training}, where it was used to investigate the influence of
@@ -111,7 +111,7 @@ each class is represented as a binary node in a factor graph---the states repres
 presence of absence of the class. A different factor of pairwise potentials is introduced
 between each pair of classes.
 We also consider a different model, where pairwise potentials are only
-introduced between specific nodes. Build a tree over the binary variables by
+introduced between specific nodes. We build a tree over the binary variables by
 computing the Chow-Liu Tree~\citep{chow1968approximating} of the targets. While
 this results in a less expressive model, a tree-shaped model allows for exact
 inference via message passing.
@@ -155,7 +155,7 @@ potential, and $13 \cdot 4=52$ parameters for the tree-shaped model.
 \end{figure}
 
 \subsection{2D Grid CRF (Snakes)}
-The snakes dataset is a synthetic dataset, where samples are labeld 2D grids.
+The snakes dataset is a synthetic dataset, where samples are labeled 2D grids.
 It was introduced in \citet{nowozin2011decision} to demonstrate the importance
 of learning conditional pairwise potentials. The dataset consists of ``snakes''
 of length ten traversing the 2D grid. Each grid cell that was visited is marked
@@ -278,7 +278,7 @@ track primal suboptimality and training set error during learning, as well as
 final error on the test set.
 We report suboptimality as a function of runtime, and as a function of passes
 over the training set.  Both are important to practitioners, as they give
-important insight into the workins of the algorithm.  The actual runtime is
+important insight into the working of the algorithm.  The actual runtime is
 certainly the most important factor, but also highly influenced by
 implementation details and properties of the dataset. We are particularly
 interested in cases where inference is highly non-trivial, making inference the
@@ -286,7 +286,7 @@ dominating factor of runtime.
 We define one pass over the dataset as calling prediction once for each sample.
 This way, we can get a clear picture how learning times with complexity of the
 inference task. For the subgradient and SZLJSP algorithms, learning time is linear
-in the number of passes ofver the dataset, while chaching and solving of a QP makes
+in the number of passes over the dataset, while caching and solving of a QP makes
 the learning time depend on the number of iterations in hard-to-predict ways.
 
 \subsection{Experiments using Exact Inference}
@@ -303,17 +303,17 @@ inference.
 We start our experiments with the MNIST dataset.
 The convergence of the primal objective and training set loss in terms of
 passes over the training set is shown in \Figref{mnist_iterations}.
-Several trends can be observed: the $n$-slack cutting plane algorithms are
+Several trends can be observed: the $n$-slack cutting plane algorithms
 converge fastest, with the version that recomputes the QP at every step leading
 the race. The algorithms are closely followed by the caching $1$-slack cutting
 plane algorithm.  They are followed by the significantly slower SZLJSP
 algorithm, and finally the non-caching $1$-slack cutting plane algorithm and
-subgradient descent.  These results are intiutive, as they reflect ``how much
+subgradient descent.  These results are intuitive, as they reflect ``how much
 work'' each algorithm does for each loss-augmented prediction step. More work
 towards the objective leads to faster convergence.  This ``more work'' is
 quantified in \Figref{mnist_times}.  Clearly the $1$-slack algorithms to ``to
 much'' work, leading to very slow convergence.  Also, caching does not speed up
-learing learning on this dataset, as loss-augmented predction is as fast as
+learning learning on this dataset, as loss-augmented prediction is as fast as
 querying the cache.
 
 \begin{figure}
@@ -331,7 +331,7 @@ We now consider datasets with non-trivial inference.
 The results for OCR-small are shown in \Figref{ocr_small_results}.
 The trends seen in the figures are similar to what we saw for MNIST above.
 Again, even though inference is non-trivial, the non-caching $1$-slack
-algorithm is slower than the caching one. Again, the plots against passes over the trainingset
+algorithm is slower than the caching one. Again, the plots against passes over the training set
 do not reflect the runtime complexity of the $n$-slack approach.
 
 \begin{figure}
@@ -398,7 +398,7 @@ respectively. The caching $1$-slack algorithm is much faster than the non-cachin
 
 The caching $1$-slack algorithm is the fastest algorithm to achieve the desired primal suboptimality.
 On the scene dataset, the other cutting-plane base algorithms are second fastest, while they
-lag behind the stoachastic algorithms on the larger yeast dataset. Again, initial convergence is
+lag behind the stochastic algorithms on the larger yeast dataset. Again, initial convergence is
 faster for the stochastic algorithms
 
 %, inference is much more complex than in the previous tasks.
