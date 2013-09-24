@@ -1,4 +1,5 @@
 TABLES ueber oder unterschriften?!
+4.3 neues chapter: unary potentials und pairwise potentials beschreiben
 
 korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!

@@ -209,15 +209,25 @@ fewer than 100 variables.
 Pairwise potentials were introduced for each pair of neighboring superpixels.
 We then removed all superpixels that were labeled as ``void'', together with
 their pairwise potentials.
-As unary potentials, we use the TextonBoost probabilities provided by  % FIXME this !!
-\citet{krahenbuhl2012efficient}.  We average probabilities inside each
-superpixel, yielding 21 input features for both datasets.  We also used the
-same pairwise features for the two datasets: a constant feature, a color
-contrast feature, and a feature encoding relative vertical position between
-superpixels.  Overall, the models for both datasets had $21 \cdot 21 + 21^2
-\cdot 4$ features.  It is possible to assume symmetric potentials for this
-dataset, leading to less pairwise features. We found both parametrizations
-yielded similar results.
+We use the unary and pairwise potentials described in \Secref{semantic_segmentation}:
+for the Pascal VOC dataset 21 unary potentials and 63 for the MSRC21 dataset.
+We use the same three pairwise features for both dataset: a constant, a color
+feature and a feature encoding relative vertical position.
+Overall, this results in $21 \cdot  21 + 3 \cdot 21 \cdot 21 = 1764$ parameters
+for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
+2646$ parameters for the potentials on the MSRC21 dataset.
+
+%For Pascal VOC we use the probabilities provided by
+%\citet{krahenbuhl2012efficient}, which combine low-level Texton-Boost
+%potentials with bounding-box object detectors.  We average probabilities inside
+%each superpixel, yielding 21 input features for both datasets.  We also used
+%the
+%same pairwise features for the two datasets: a constant feature, a color
+%contrast feature, and a feature encoding relative vertical position between
+%superpixels.  Overall, the models for both datasets had $21 \cdot 21 + 21^2
+%\cdot 4$ features.  It is possible to assume symmetric potentials for this
+%dataset, leading to less pairwise features. We found both parametrizations
+%yielded similar results.
 
 \begin{table}
     \caption{Summary of Datasets.\tablabel{datasets}}
@@ -234,8 +244,8 @@ yielded similar results.
     yeast-tree & 1500    & 14    & tree  & 1494  & 2\\
     yeast-full & 1500    & 14    & loopy & 1806  & 2\\
     snake      & 200     &84--168& loopy & 22275 & 11\\
-    MSRC21     & 276     & 7--113& loopy &       & 21\\
-    Pascal VOC & 964     & 8--112& loopy &       & 21\\
+    MSRC21     & 276     & 7--113& loopy &  1764 & 21\\
+    Pascal VOC & 964     & 8--112& loopy &  2646 & 21\\
     \bottomrule
 
     \end{tabu}
