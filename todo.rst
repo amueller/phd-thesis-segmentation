@@ -1,10 +1,12 @@
 LOGO!!!! 
 
+citation for ball tree?
+
 4.3 neues chapter: unary potentials und pairwise potentials beschreiben
 korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!
 
-Vladn korrekturen (zwei mails)
+Vladn korrekturen (zweite mail)
 versuche: vielleicht noch averaged SSGD?
 SSGD abkuerzung?
 

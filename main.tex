@@ -196,7 +196,7 @@ segmentation.
 
 The second part of this work proposes an algorithm for automatic segmentation
 and recognition of object classes in natural images, that learns a segmentation
-model solely from annotation in form of presence and absence of object classes
+model solely from annotation in the form of presence and absence of object classes
 in images.
 
 The third and main part of this work investigates one of the most popular
@@ -207,7 +207,7 @@ We investigate several learning algorithms, in particular in combination with
 approximate inference procedures. We show how structured models for image
 segmentation can be learned exactly in practical settings, even in the presence
 of many loops in the underlying neighborhood graphs.
-The introduced methods provide results advancing the state-of-the art on two
+The introduced methods provide results advancing the state-of-the-art on two
 complex benchmark datasets for semantic segmentation, the MSRC-21 Dataset of RGB
 images and the NYU V2 Dataset or RGB-D images of indoor scenes.
 %
@@ -233,7 +233,7 @@ many helpful discussions, and advice.
 I would also like to thank Carsten Rother for allowing me to work with him
 at Microsoft Research Cambridge and hosting me there.
 
-I have been lucky to be a part of the scikit-learn community, whose developers
+I have been lucky to be a part of the \textsc{scikit-learn} community, whose developers
 have been a constant source of encouragement and inspiration to me. My
 understanding of machine learning as well as software engineering has been
 greatly affected by the continuing exchange with Olivier Grisel, Lars Buitinck,
@@ -264,8 +264,8 @@ endeavour.
 
 \include{nyu/paper}
 
-\chapter{Conclusion and Future Direction}
-\section{Summary}
+\chapter{Conclusion}
+%\section{Summary}
 In this thesis, we explored the use of structured prediction methods for semantic
 segmentation and object class segmentation of natural images, an important
 step towards general scene understanding.
@@ -295,7 +295,7 @@ benchmarks.
 We showed that effective use of available inference mechanisms enables
 exact learning, even in the presence of loops in the underlying
 factor graph. Our methods achieve competitive performance with similar
- methods on the Pascal VOC 2010 dataset, and improve upon state-of-the art
+ methods on the Pascal VOC 2010 dataset, and improve upon state-of-the-art
  results on the MSRC-21 dataset.
 We demonstrated the power of conditional interactions by learning spatial
 interactions in an RGB-D setting. Here, our approach improves upon the state-of-the
@@ -306,7 +306,7 @@ theoretic principles. Our algorithm improves upon methods from the literature
 in finding pre-defined classes on a wide range of datasets. This indicates that
 in the task of extracting superpixels, we can also hope to achieve better
 results than the $k$-means based SLIC algorithm that we used.
-
+\enlargethispage{1cm}
 As manual annotation of images for learning semantic segmentation and object
 class recognition is laborious and error-prone, we suggested a method to
 learn object class segmentation for complex object classes from image-level

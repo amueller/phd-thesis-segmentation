@@ -9,7 +9,7 @@ Many different formulations of the clustering problem are given in the literatur
 %
 In the context of this work, clustering plays an important role in many respects:
 \begin{itemize}
-    \item Clustering, as a purely unsupervised methods is on one end of the
+    \item Clustering, as a purely unsupervised method, is on one end of the
         spectrum of algorithms we investigate.  When using per-image or
         per-pixel supervision as in the later chapters, we can use clustering
         to calibrate our expectation of what semi-supervised and supervised
@@ -82,7 +82,7 @@ $k$-Means often works well in practice, one of its main drawbacks is the
 restriction in cluster shape. 
 %
 Clusters are given by the Voronoi tessellation of the cluster means and
-therefore are always convex.  Another draw-back is the non-determinism of the
+therefore are always convex.  Another drawback is the non-determinism of the
 procedure, caused by the dependence on random initialization.
 
 Another widely used method is spectral clustering~\citep{shi2000normalized,ng2002spectral}, 
@@ -146,13 +146,13 @@ assigned labels $p(Y)$ is maximized.
 We can rewrite this objective as 
 \begin{align}
          I(X, Y)
-        &= D_{\text{KL}}(p(X, Y) \parallel p(X) p(Y)) = H(X) - \sum_{y=1}^k p(Y{=}y) H(X \given Y {=} y)
+        &= D_{\text{KL}}\bigl(p(X, Y) \parallel p(X) p(Y)\bigr) = H(X) - \sum_{y=1}^k p(Y{=}y) H(X \given Y {=} y)
 \end{align}
 where
 \begin{itemize}
-    \item $\displaystyle D_\text{KL}(p(X) \parallel q(X))\, = \int_\mathcal{X} p(X) \ln\left(\frac{p(X)}{q(X)}\right)\,dX$ is the Kullback-Leibler divergence,
-\item $\displaystyle H(X)\, = \int_\mathcal{X} p(X) \ln(p(X))\,dX$ is the differential entropy, and
-\item $\displaystyle H(X \given Y{=}y)\, = \int_\mathcal{X} p(X \given Y {=}y) \ln(p(X \given Y {=} y))\,dX$ is the conditional differential entropy.
+    \item $\displaystyle D_\text{KL}\bigl(p(X) \parallel q(X)\bigr)\, = \int_\mathcal{X} p(X) \ln\left(\frac{p(X)}{q(X)}\right)\,dX$ is the Kullback-Leibler divergence,
+    \item $\displaystyle H(X)\, = \int_\mathcal{X} p(X) \ln\bigl(p(X)\bigr)\,dX$ is the differential entropy, and
+    \item $\displaystyle H(X \given Y{=}y)\, = \int_\mathcal{X} p(X \given Y {=}y) \ln\bigl(p(X \given Y {=} y)\bigr)\,dX$ is the conditional differential entropy.
     \end{itemize}
 Expressing the mutual information in terms of the entropy is convenient, since
 the objective then decomposes over the values of $Y$. 
@@ -181,7 +181,7 @@ we have $H_{est}(\mathbf{x}_y) \approx H(X \given Y {=} y)$, leading to the clus
 \end{align}
 where the probability $p(Y{=}y)$ is given by the empirical frequency of $y$: 
 \[
-    p(Y\,{=}\,y)= \frac{n_y}{n} \text{,\quad with\quad} n_y = |\{i \mid y_i = y \}|.
+    p(Y\,{=}\,y)= \frac{n_y}{n} \text{,\quad with\quad} n_y = \bigl|\{i \mid y_i = y \}\bigr|.
 \]
 
 \subsection{Minimum Spanning Tree Based Entropy Estimation}
@@ -308,7 +308,7 @@ where $y$ enumerates the connected components $G_0, \dotsc, G_k$ of $G$, $n_y =
 |V(G_y)|$ is the number of nodes in $G_y$ and $L_{G,y} = \sum_{e \in E(G_y)}
 w(e)$ is the sum of the weights of all edges in the connected component $G_y$.
 %
-Then $\hat{I}(G) \geq \hat{I}(\mathbf{y}(G))$, by the definition of
+Then $\hat{I}(G) \geq \hat{I}\bigl(\mathbf{y}(G)\bigr)$, by the definition of
 the minimum spanning tree, and equality holds if and only if $G_y$ is the
 minimum spanning tree of its nodes for all $y$.
 %
@@ -328,8 +328,8 @@ a very fast, combinatorial optimization procedure.
 
 For the two class case, optimization of the above objective can be solved
 exactly and efficiently by searching over all of $\mathcal{G}$.
-This amounts to searching for the edge $e$ that maximizes $\hat{I}(T(\mathbf{x})
-\setminus e)$. The naive algorithm that computes the objective for each edge
+This amounts to searching for the edge $e$ that maximizes $\hat{I}\bigl(T(\mathbf{x})
+\setminus e\bigr)$. The naive algorithm that computes the objective for each edge
 separately has run time that is quadratic in the number of data points.  To
 improve upon this, we use a dynamic programming approach as described in
 function \textsc{SplitCluster} of Algorithm~\ref{overall} , which has only linear
@@ -340,22 +340,22 @@ We extend this algorithm to the case of more than two clusters in a greedy way:
 Starting with the full spanning tree of $\mathbf{x}$, we remove the edge
 yielding the lowest value of \Eqref{graphobjective} until the number of
 components equals the number of desired clusters. The overall procedure is
-summarized in Algorithm~\ref{overall}, an illustration can be found in
-\Figref{illustration}. We refer to Algorithm~\ref{overall} as \emph{Information
-Theoretic MST-based (ITM) clustering}.
+summarized in Algorithm~\ref{overall}, which we call \emph{Information
+Theoretic MST-based (ITM) clustering}.  An illustration can be found in
+\Figref{illustration}
 
 We use Prim's algorithm combined with a ball tree data structure for distance
 queries to compute the minimum spanning tree of the data.
 While this procedure has no strong runtime guarantees, we found this faster
 in practice than specialized algorithms for euclidean minimum spanning trees, 
-which achieve a better theoretical runtime of $O(n \log(n) \alpha(n))$ \citep{dtb2010}. Here
+which achieve a better theoretical runtime of $O\bigl(n \log(n) \alpha(n)\bigr)$ \citep{dtb2010}. Here
 $\alpha$ is the inverse of the Ackerman function. The dynamic programming solution of
 Algorithm~\ref{overall} has a run time of $O(n)$ per removed edge, leading to an overall
-run time of $O(n \log(n) \alpha(n)+ nk)$. The $O(nk)$ comes from a worst case
+run time of $O\bigl(n \log(n) \alpha(n)+ nk\bigr)$. The $O(nk)$ comes from a worst case
 scenario, in which each step in the hierarchical clustering procedure only
 splits off a constant number of points. In a more realistic setting, we expect
 that the individual clusters are much smaller than the original dataset. In
-this case, the $O(nk)$ factor would improve to $O(n\log(k))$.
+this case, the $O(nk)$ factor would improve to $O\bigl(n\log(k)\bigr)$.
 
 \subsection{Estimating Intrinsic Dimensionality}
 While assuming totally continuous densities is very natural from a theoretical
@@ -384,7 +384,7 @@ The final estimate $\hat{d}$ is then computed by averaging the estimates over al
 We compute the density estimate once, prior to clustering, and then plug the
 estimate $\hat{d}$ into \eqref{graphobjective} in place of $d$.
 We found this estimate to work robustly and give sensible results for all
-datasets we investigated. As we already used a ball-tree data structure to
+datasets we investigated. As we already used a ball tree data structure to
 build the minimum spanning trees, we can reuse this structure to compute $r_k$.
 Consequently, estimating the dimensionality resulted only in little
 computational overhead.
@@ -432,7 +432,7 @@ A comparison of ITM, MeanNN and the baseline methods, $k$-Means and
 single link agglomerative clustering, in terms of their objective, 
 optimization and complexity can be found in Table~\ref{nowotab}. 
 We implemented the ITM clustering procedure as well as MeanNN in Python.  We
-used the $k$-Means implementation available in the scikit-learn
+used the $k$-Means implementation available in the \textsc{scikit-learn}
 library~\citep{pedregosa2011scikit}. The source
 code is available online\footnote{\url{https://github.com/amueller/information-theoretic-mst}}.
 
@@ -458,7 +458,7 @@ $k$-Means &     $\displaystyle \sum_y \sum_{i, y_i = y} \| x_i - \mu_y \|^2$ & N
 \\
 MeanNN &    $\displaystyle \sum_y \log\left(\frac{1}{|\mathbf{x}_y|}\sum_{i,j, y_i=y_j=y} \| x_i - x_j \|^2 \right)$ & No & $O(n^2)$ per iteration\\
 Single Link &   -- &    Yes    &    $O(n\log n)$\\
-ITM & $\displaystyle \sum_{y=0}^k d p(y) \log(\bar{L}_y  ) + p(y) \log{p(y)}$ & Yes & $O(\alpha(n) n \log n + nk)$\\
+ITM & $\displaystyle \sum_{y=0}^k d p(y) \log(\bar{L}_y  ) + p(y) \log{p(y)}$ & Yes & $O\bigl(\alpha(n) n \log n + nk\bigr)$\\
 \bottomrule
 \end{tabularx}
 \caption{Comparing properties of related algorithms. Det.\ stands for Deterministic}\label{nowotab}
@@ -471,8 +471,8 @@ ITM & $\displaystyle \sum_{y=0}^k d p(y) \log(\bar{L}_y  ) + p(y) \log{p(y)}$ & 
 
 \subsection{Qualitative Results}
 \Figref{qualitative} shows qualitative results on three synthetic datasets.
-For well separated, convex clusters, all four algorithms produce the same
-clustering (see top row).  If the structure of the data is more complex, the
+For well separated, convex clusters, all four algorithms produce equivalent
+clusterings (see top row).  If the structure of the data is more complex, the
 advantage of the proposed method is apparent.  Note that there was no need to
 specify any other parameters than the number of clusters to produce these
 results.  It is also noteworthy that the results of MeanNN are very close to

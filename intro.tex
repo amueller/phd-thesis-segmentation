@@ -64,7 +64,7 @@ grass, and object class segmentation, which denotes the segmentation of very
 structured classes, such as cars, planes and people. We consider four
 different datasets in this thesis: the object class segmentation datasets
 Graz-02~\citep{marszatek2007accurate} and Pascal VOC 2010~\citep{pascal}, and the semantic segmentation datasets
-MSRC-21~\citep{shotton2006textonboost}, and NYU V2~\citep{SilbermanECCV12}.
+MSRC-21~\citep{shotton2006textonboost} and NYU V2~\citep{SilbermanECCV12}.
 %
 Both tasks have the same ultimate goal of parsing, and therefore understanding,
 images in terms of semantic classes. However they employ different mechanisms
@@ -88,7 +88,7 @@ Unfortunately, learning structured prediction in computer vision applications
 is still little understood.
 We focus on the use of conditional random fields~(CRFs), which have shown
 promising  results for computer vision applications. Using the paradigm of structural
-support vector machines, it is possible to learn conditional random fields to
+support vector machines~(SSVMs), it is possible to learn conditional random fields to
 directly minimize a loss of interest. In particular, CRFs
 allow to combine different cues, possibly produced using different paradgims in a
 principled manner. One of the main difficulties with CRF approaches to computer
@@ -198,29 +198,33 @@ Chapter~\ref{ch:structured_pystruct} and Chapter~\ref{ch:exact_learning} to the
 problem of semantic annotation with structure classes in RGB-D data. We
 demonstrate that we are able to learn meaningful spatial relations, and outperform
 state-of-the-art methods on the NYU V2 datasets.
+\pagebreak
 
 \section{Publications}
 The main material of this thesis has either been published in conference
 proceedings or has been submitted to conferences or journals. We now list the
 relevant publications.
 \begin{description}
-    \item[Chapter~\ref{ch:itm}] \emph{Information Theoretic Clustering using
-        Minimum Spanning Trees} Andreas C. M\"uller, Sebastian Nowozin and
-        Christoph H. Lampert. Published in the proceedings of the German
-        Conference on Pattern Recognition.
-    \item[Chapter~\ref{ch:semi_supervised}] \emph{Multi-Instance Methods for
-        Partially Supervised Image Segmentation} Andreas C. M\"uller and Sven
-        Behnke. Published in the proceedings of the IARP Workshop on Partially
-        Supervised Learning.
-    \item[Chapter~\ref{ch:structured_pystruct}] \emph{PyStruct - Structured
-        Prediction in Python} Andreas C. M\"uller and Sven Behnke. Submitted to
-        the Journal of Machine Learning Research, Open Source Software track.
-    \item[Chapter~\ref{ch:exact_learning}] \emph{Learning a Loopy Model for
-        Semantic Segmentation Exactly}. Andreas C. M\"uller and Sven Behnke.
-        Submitted to the International Conference on Computer Vision Theory and
-        Applications.
-    \item[Chapter~\ref{ch:nyu}] \emph{Learning Depth-Sensitive Conditional
-        Random Fields for Semantic Segmentation}. Andreas C. M\"uller and Sven
-        Behnke. Submitted to the International Conference on Robotics and
-        Automation.
+    \item[Chapter~\ref{ch:itm}]%
+        \emph{Information Theoretic Clustering using Minimum Spanning Trees}\\
+        Andreas C. M\"uller, Sebastian Nowozin and Christoph H. Lampert.
+        Published in the proceedings of the German Conference on Pattern
+        Recognition.
+    \item[Chapter~\ref{ch:semi_supervised}]%
+        \emph{Multi-Instance Methods for Partially Supervised Image
+        Segmentation}\\
+        Andreas C. M\"uller and Sven Behnke. Published in the proceedings of
+        the IARP Workshop on Partially Supervised Learning.
+    \item[Chapter~\ref{ch:structured_pystruct}]%
+        \emph{PyStruct - Structured Prediction in Python}\\
+        Andreas C. M\"uller and Sven Behnke. Submitted to the Journal of
+        Machine Learning Research, Open Source Software track.
+    \item[Chapter~\ref{ch:exact_learning}]%
+        \emph{Learning a Loopy Model for Semantic Segmentation Exactly}\\
+        Andreas C. M\"uller and Sven Behnke.  Submitted to the International
+        Conference on Computer Vision Theory and Applications.
+    \item[Chapter~\ref{ch:nyu}]%
+        \emph{Learning Depth-Sensitive Conditional Random Fields for Semantic Segmentation}\\
+        Andreas C. M\"uller and Sven Behnke. Submitted to the International
+        Conference on Robotics and Automation.
 \end{description}

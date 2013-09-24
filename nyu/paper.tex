@@ -317,7 +317,7 @@ Our approach is implemented using our \textsc{PyStruct}
 library introduced in \Secref{pystruct}.
 %
 All hyper parameters were adjusted using 5-fold cross-validation. The
-hyper parameters of the random forests were found using the \texttt{hyperopt}
+hyper parameters of the random forests were found using the \textsc{hyperopt}
 framework of \cite{bergstra2011algorithms}. For the CRF model, the only
 hyper-parameters are related to the superpixel segmentation, and the single
 hyper-parameter $C$ of the structural SVM formulation. These were adjusted
@@ -340,7 +340,7 @@ The random forest prediction, as reported in \citet{stueckler2013} is already qu
 Grouping into superpixels slightly improves performance, by removing
 high-frequency noise and snapping to object boundaries. Somewhat surprisingly,
 using a standard unstructured SVM with rescaled loss already advances the mean
-accuracy decidedly above the previous state-of-the art. We
+accuracy decidedly above the previous state-of-the-art. We
 attribute this mostly to the ability of the SVM to exploit correlation between
 classes and uncertainty within the superpixels.
 Additionally, the SVM has access to the ``height'' feature, that was not
@@ -458,7 +458,7 @@ of structure classes in \mbox{RGB-D} images. We base our model in the output of 
 of random forest, and model spatial neighborhood using a superpixel-based approach.
 We combine color, depth and 3D orientation features into an energy function
 that is learned using the SSVM approach. By explicitly modeling 3D relations in
-a fully learned framework, we improve the state-of-the art on the NYU V2
+a fully learned framework, we improve the state-of-the-art on the NYU V2
 dataset for semantic annotation of structure classes.
 
 

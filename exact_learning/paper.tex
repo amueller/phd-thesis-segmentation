@@ -15,7 +15,7 @@ image segmentation. We show that despite inference being deemed intractable in
 loopy superpixel models, we are able to learn a pairwise conditional random
 field model using a structured support vector machine exactly for this task.
 We evaluate our approach on the popular MSRC-21 and Pascal VOC datasets. Our
-approach improves upon the state-of-the art on the MSRC-21 dataset, and is
+approach improves upon the state-of-the-art on the MSRC-21 dataset, and is
 competative with comparable approaches on the Pascal VOC dataset.% and nyu?
 
 The contribution of this chapter are:
@@ -29,7 +29,7 @@ The contribution of this chapter are:
         inference methods, we can learn an SSVM exactly in a practical
         application, even in the presence of loopy graphs.
     \item We show that even using a strong approximate inference procedure can
-        improve upon the state-of-the art on the MSRC-21 dataset.
+        improve upon the state-of-the-art on the MSRC-21 dataset.
     % also fusion moves is pretty good?
 \end{itemize}
 
@@ -565,9 +565,9 @@ objective or compute meaningful duality gaps.
 \subsection{Implementation Details}
 We implemented the described procedure in \pystruct.
 We used the SLIC implementation provided by \citet{achanta2012slic} to extract superpixels and
-the SIFT implementation in the \texttt{vlfeat} package~\citep{vedaldi08vlfeat}.
+the SIFT implementation in the \textsc{vlfeat} package~\citep{vedaldi08vlfeat}.
 For clustering visual words, piecewise training of unary potentials and the
-approximation to the $\chi^2$-kernel, we made use of the \texttt{scikit-learn}
+approximation to the $\chi^2$-kernel, we made use of the \textsc{scikit-learn}
 machine learning package~\citep{pedregosa2011scikit}.
 %TODO implementation details here?
 The we implement fusion moves with the help of the QPBO-I

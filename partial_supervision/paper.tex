@@ -25,12 +25,12 @@ constrained parametric min-cuts~\citep{carreira2010constrained}.  The procedure 
 segments that are overlapping, object-like regions which serve as candidates
 for object locations.
 
+\enlargethispage{10mm}
 We formulate weakly supervised multi-class image segmentation as a
 multi-instance problem based on these candidate segments.  In multi-instance
 learning~\citep{dietterich1997solving} each training example is given as a
 multi-set of instances, called a bag.  Each instance is represented as a
 feature vector $x$ and a label $y$.
-
 A bag is labeled positive if it contains at least one positive example and
 negative otherwise.  During training only the labels of the training bags, not
 of the instances inside the bags, are known.  The goal is to learn a classifier
@@ -55,7 +55,6 @@ go a step further and apply multi-instance learning to the task of object-class
 segmentation in natural images by also classifying instances, not only bags.
 In this we follow the work of \citet{liconvex2010} and \citet{zha2008joint}, who not
 only learned $f_{MI}$, but also $f_{I}$.
-
 In our model each image forms a bag, while the candidate segments correspond
 to the instances contained in the bag. During learning only presence of object
 classes is needed as bag-level supervision. By learning $f_{I}$, we are then
@@ -80,12 +79,12 @@ The method performed well on a variety of datasets, building the basis of
 a very successful entry to the Pascal VOC segmentation
 challenge~\citep{li2010object}. A similar approach to whole-object segment
 proposals was investigated by \citet{endres2010category}, but they did not compare
-their results with the state-of-the-art approach of \citep{carreira2010constrained}.
+their results with the state-of-the-art approach of \citet{carreira2010constrained}.
 %Brendel and Todorovic~\citet{NIPS2010_0122} also use a set of candidate segments is used, though all of these are kept throughout the whole 
 %algorithm.
 
 \subsection{Multi-Instance Methods}
-Multi-instance learning was formally introduced in \citet{dietterich1997solving}.
+Multi-instance learning was formally introduced by \citet{dietterich1997solving}.
 Since then, many algorithms were proposed to solve the multi-instance learning problem
 \citep{andrews2003support,gaertner2002multi,zhou2009multi,li2009convex,zhang2002dd,mangasarian2008multiple,leistner2010miforests,chen2006miles}.
 We discuss only those that are relevant to the present treatment.
@@ -244,15 +243,15 @@ classes, making classification particularly efficient.
 The framework described above yields an image-level and a segment-level
 classification.  To obtain a pixel-level object-class segmentation, we have to
 combine these.  Since we do not make use of the ground truth segmentation
-during training, we cannot learn an optimal combination as in
-\citet{li2010object} but perform a simple majority vote instead.  We merge
+during training, we cannot learn an optimal combination as
+\citet{li2010object} did, but perform a simple majority vote instead.  We merge
 segments into pixel-level class labels by setting the label $y_x$ of a pixel
-$x$ according to
+$x$ according to:
 \begin{equation}
-    y_x = \argmax_{y \in Y} \#\{S_i | x \in S_i \land y_{S_i}=y \},
+    y_x = \argmax_{y \in Y} |\{S_i | x \in S_i \land y_{S_i}=y \}|,
 \end{equation}
-where $Y$ is the set of possible object classes, $S_i$ enumerates all segments within an
-image and $y_{S_i}$ is the label of segment $S_i$. In words: each pixel is
+Here $Y$ is the set of possible object classes, $S_i$ enumerates all segments within an
+image and $y_{S_i}$ is the label of segment $S_i$. In other words each pixel is
 assigned the class with the highest number of class segments containing it.
 This simple heuristic yields good results in practice.
 
