@@ -215,13 +215,33 @@ Overall, the models for both datasets had $21 \cdot 21 + 21^2 \cdot 4$ features.
 It is possible to assume symmetric potentials for this dataset, leading to less
 pairwise features. We found both parametrizations yielded similar results.
 
+\begin{table}
+    \caption{Summary of Datasets.\tablabel{datasets}}
+    \begin{tabu} to \linewidth{@{}XXXXXX@{}}
+    %\multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\
+    \toprule
+    Dataset    & samples & nodes & edges & dim w & labels\\
+    \cmidrule{1-6}
+    MNIST      & 60000   & 1     & none  &       & 10\\
+    OCR-small  & 704     & 3--14 & chain &       & 26\\
+    OCR-large  & 6173    & 3--14 & chain &       & 26\\
+    scene-tree & 1211    & 6     & tree  &       & 2\\
+    scene-full & 1211    & 6     & loopy &       & 2\\
+    yeast-tree & 1500    & 14    & tree  &       & 2\\
+    yeast-full & 1500    & 14    & loopy &       & 2\\
+    snake      & 200     &84--168& loopy &       & 11\\
+    MSRC21     & 276     & 7--113& loopy &       & 21\\
+    Pascal VOC & 964     & 8--112& loopy &       & 21\\
+    \bottomrule
+
+    \end{tabu}
+\end{table}
+
 \section{Experiments}
 We compare the following algorithms on the above models:
 \begin{itemize}
     \item Stochastic Subgradient Descent using the Pegasos schedule: %TODO
-    \item Stochastic Subgradient Descent using a momentum heuristic:
-    %\item Stochastic Subgradient Descent using a momentum heuristic: AVERAGING
-    %\item Stochastic Subgradient Descent using a momentum heuristic: AVERAGING
+    %\item Stochastic Subgradient Descent using the Pegasos schedule: AVERAGING
     \item The $1$-slack cutting plane algorithm without constraint caching.
     \item The $1$-slack cutting plane algorithm with constraint caching. For
             each sample, the last $50$ inference results are stored.
@@ -284,6 +304,7 @@ as loss-augmented predction is as fast as querying the cache.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
+    \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
     \includegraphics[width=\linewidth]{evaluation/images/letters_small_log}&%
     \includegraphics[width=\linewidth]{evaluation/images/letters_small_log_time}
     \end{tabu}
@@ -321,8 +342,9 @@ objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
-    \includegraphics[width=\linewidth]{evaluation/images/letter_big_log}&%
-    \includegraphics[width=\linewidth]{evaluation/images/letter_big_log_time}
+    \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
+    \includegraphics[width=\linewidth]{evaluation/images/letters_big_log}&%
+    \includegraphics[width=\linewidth]{evaluation/images/letters_big_log_time}
     \end{tabu}
 \caption{%
    Convergence of the primal objective on OCR-large. 
@@ -338,17 +360,20 @@ is faster at high precision and faster in certifying the desired duality gap.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
+    \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
     \includegraphics[width=\linewidth]{evaluation/images/scene_tree_log}&%
     \includegraphics[width=\linewidth]{evaluation/images/scene_tree_log_time}\\
     \includegraphics[width=\linewidth]{evaluation/images/scene_full_log}&%
     \includegraphics[width=\linewidth]{evaluation/images/scene_full_log_time}\\
     \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log}&%
-    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log_time}
     \end{tabu}
 \caption{%
-   Convergence of the primal objective on the multi-label datasets. From top to bottom: the scene dataset using a tree model,
-   the scene dataset using a full pairwise model, the yeast dataset using a tree model and the yeast dataset using a full pairwise model.
-\figlabel{yeast_tree}}
+   Convergence of the primal objective on the multi-label datasets. From top to
+   bottom: the scene dataset using a tree model, the scene dataset using a full
+   model, the yeast dataset using a tree model, and the yeast dataset using a
+   full model.
+\figlabel{multi-label-results}}
 \end{figure}
 
 Next, we consider the multi-label task, starting with the tree-shaped models.
