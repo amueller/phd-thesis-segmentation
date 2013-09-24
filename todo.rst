@@ -1,4 +1,8 @@
-mehr ueber superpixel und crf based approaches bei "Exact learning"
+korrektur lesen neues chapter ueber CRFs!!!!
+unsere relation betonen!!
+Vladn korrekturen
+image bei slic / CRF...
+
 mehr related work ueber image segmentation
 redundanz vermeiden
 bounding the objective teil raus? STINKT!!!

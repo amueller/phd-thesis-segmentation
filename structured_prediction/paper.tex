@@ -507,7 +507,9 @@ In pixel-based CRFs edges are usually introduced between adjacent pixels, that i
 either 4-neighborhoods or 8-neighborhoods. Superpixel-based approaches introduce
 edges between adjacent superpixels, that is those that share a boundary.
 %TODO images of superpixels!
-%TODO looooppsss!!!!
+By nature, both approaches create graphs with a large number of loops. This
+complicates prediction and learning, and is the central topic of
+Chapter~\ref{ch:exact_learning}.
 
 The motivation for using superpixels is that it is often easy to group nearby
 pixels that belong to the same object just based on local color or texture cues.
@@ -530,6 +532,16 @@ object boundaries.  The main disadvantage of superpixel-based approaches is
 that the initial oversegmentation can not be influenced by later reasoning.
 This can be a problem if fine structures need to be segmented for which local
 evidence does not suffice.
+
+We use the SLIC~\citep{achanta2012slic} algorithm to create superpixel for all
+our experiments.  It has been shown to provide competative results with a
+minimum of computational complexity.  Algorithmically, SLIC simply computes a
+$k$-means clustering over pixels. Each pixels is represented as 5D point, using
+three color channels and the $x$ and $y$ coordinates in the image.  In a
+post-processing step, small segments are removed. To make clustering of so many
+points feasible, the search for the nearest cluster in $k$-means is restricted
+to a local neighborhood in the image.
+
 
 % about algorithms, slic?
 % hierarchical\dots has superpixels and pixels?
@@ -562,7 +574,6 @@ machine approach to learn unary and pairwise parameters. They use the classical
 graph cut approach of \citet{boykov2001fast} for inference.  However, graph-cut
 inference is only applicable to submular energies, and therefore severly
 restricts the expressivity of the resulting model.
-
 \citet{lucchi2011spatial} investigated the importance of global constraints,
 using an approach similar to \citet{szummer2008learning}, but also learning
 global interactions---however, these did not improve performance, compared to

@@ -284,8 +284,8 @@ as loss-augmented predction is as fast as querying the cache.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
-    \includegraphics[width=\linewidth]{evaluation/images/letters_small}&%
-    \includegraphics[width=\linewidth]{evaluation/images/letters_small_time}
+    \includegraphics[width=\linewidth]{evaluation/images/letters_small_log}&%
+    \includegraphics[width=\linewidth]{evaluation/images/letters_small_log_time}
     \end{tabu}
 \caption{%
    Convergence of the primal objective on OCR-small. 
@@ -321,8 +321,8 @@ objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
-    \includegraphics[width=\linewidth]{evaluation/images/letters_big}&%
-    \includegraphics[width=\linewidth]{evaluation/images/letters_big_time}
+    \includegraphics[width=\linewidth]{evaluation/images/letter_big_log}&%
+    \includegraphics[width=\linewidth]{evaluation/images/letter_big_log_time}
     \end{tabu}
 \caption{%
    Convergence of the primal objective on OCR-large. 
@@ -335,24 +335,20 @@ in terms of passes through the dataset, but $n$-slack cutting plane is impractic
 with respect to runtime. The SZLJSP algorithm converges fast intially, but the $1$-slack cutting plane
 is faster at high precision and faster in certifying the desired duality gap.
 %TODO initially 1-slack is beaten by ssgd
-\begin{figure}
-    \begin{tabu} to \linewidth{@{}XX@{}}
-    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree}&%
-    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_time}
-    \end{tabu}
-\caption{%
-   Convergence of the primal objective on the multi-label yeast dataset with a tree-shaped model.
-\figlabel{yeast_tree}}
-\end{figure}
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
-    \includegraphics[width=\linewidth]{evaluation/images/scene_tree}&%
-    \includegraphics[width=\linewidth]{evaluation/images/scene_tree_time}
+    \includegraphics[width=\linewidth]{evaluation/images/scene_tree_log}&%
+    \includegraphics[width=\linewidth]{evaluation/images/scene_tree_log_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/scene_full_log}&%
+    \includegraphics[width=\linewidth]{evaluation/images/scene_full_log_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log}&%
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log_time}\\
     \end{tabu}
 \caption{%
-   Convergence of the primal objective on the multi-label scene dataset with a tree-shaped model.
-   \figlabel{scene_tree}}
+   Convergence of the primal objective on the multi-label datasets. From top to bottom: the scene dataset using a tree model,
+   the scene dataset using a full pairwise model, the yeast dataset using a tree model and the yeast dataset using a full pairwise model.
+\figlabel{yeast_tree}}
 \end{figure}
 
 Next, we consider the multi-label task, starting with the tree-shaped models.
