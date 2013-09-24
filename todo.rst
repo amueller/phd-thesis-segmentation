@@ -1,6 +1,10 @@
+TABLES ueber oder unterschriften?!
+
 korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!
+
 Vladn korrekturen
+
 image bei slic / CRF...
 
 mehr related work ueber image segmentation

@@ -92,7 +92,7 @@ on one fold, and testing on the remaining nine folds, following \citet{taskar200
 and learning on nine folds and testing on the remaining fold, following \citet{lacoste}.
 We refer to the learning on one fold as OCR-small, and learning on nine folds as OCR-big.
 We use a simple chain model with a single constant pairwise feature.
-This means the unary potential has $16 \cdot 8 \cdot 26$ parameters, one for each input
+This means the unary potential has $16 \cdot 8 \cdot 26 = 768$ parameters, one for each input
 feature and output class. The pairwise potential consists of a matrix of
 transition potentials with $26 \cdot 26=676$ entries.
 It is well-known that efficient exact inference in chains is possible using
@@ -120,15 +120,15 @@ and yeast datasets. We choose these two as these are real-world datasets for
 which the pairwise approach outlined above actually improves upon the
 baseline~\citep{finley2008training}.
 The scene dataset has six labels, 294 input features, 1211 training samples and
-1196 test samples. This leads to $204 \cdot 6$ parameters for the unary potentials,
-$3 \cdot 5 \cdot 4$ parameters for the full pairwise potentials (four for each edge), and
-$5 \cdot 4$ parameters for the pairwise potentials of the tree-shaped model.
+1196 test samples. This leads to $204 \cdot 6 = 1224$ parameters for the unary potentials,
+$3 \cdot 5 \cdot 4 = 60$ parameters for the full pairwise potentials (four for each edge), and
+$5 \cdot 4 = 20$ parameters for the pairwise potentials of the tree-shaped model.
 Using four parameters for each edge is a slight over-parametrization that
 simplifies writing out the model.
 The yeast dataset has 14 labels, 103 features, 1500 training samples and 971
-test samples. The resulting numbers of parameters are $14 \cdot 103$ parameters
-for the unary potentials, $7 \cdot 13 \cdot 4$ parameters for the full pairwise
-potential, and $13 \cdot 4$ parameters for the tree-shaped model.
+test samples. The resulting numbers of parameters are $14 \cdot 103=1442$ parameters
+for the unary potentials, $7 \cdot 13 \cdot 4=364$ parameters for the full pairwise
+potential, and $13 \cdot 4=52$ parameters for the tree-shaped model.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XXXXXXX@{}}
@@ -181,7 +181,7 @@ input of the 8-neighborhood of the node---using a 4-neighborhood would most
 likely yield better results, but we do not want to encode too much
 task-knowledge into our model.
 Using the one-hot encoding of the input, this leads to $9 \dot 5 = 45$ unary features.
-With 11 output classes, the unary potential has $11 \cdot 9 \cdot 5$ parameters.
+With 11 output classes, the unary potential has $11 \cdot 9 \cdot 5=495$ parameters.
 Features for the pairwise potentials are constructed by concatenating the features
 of the two neighboring nodes, taking the direction of the edge into account.
 The pairwise feature therefore has dimensionality $45 \cdot 4$, with the first
@@ -189,7 +189,7 @@ $45$ entries corresponding to the feature of the ``top'' node, the second $45$
 entries to the features ``bottom'' node, followed bye the ``left'' and
 ``right'' nodes. As each edge is either horizontal \emph{or} vertical, only two
 of these parts will be non-zero for any given edge.  With $45 \cdot 4$ edge
-features, the pairwise potentials has $45 \cdot 4 \cdot 11^2$ parameters.
+features, the pairwise potentials have $45 \cdot 4 \cdot 11^2 =21780$ parameters.
 
 
 \subsection{Superpixel CRFs for Semantic Segmentation}
@@ -197,23 +197,27 @@ Our main attention is devoted to the use of conditional random fields for
 semantic segmentation.  We use the Pascal VOC and MSRC datasets. A detailed
 description of the method will be given in Chapter~\ref{ch:exact_learning}.
 %TODO will it?
-The Pascal VOC has \ldots training and \ldots test images, each having
-around 100 superpixels. There are 20 object categories, plus background. The % TODO check!
+The Pascal VOC has \ldots training and \ldots validation images, each having
+around 100 superpixels. There are 20 object categories, plus background. The % TODO check! refer to other part
 MSRC dataset has \ldots training and \ldots test images, also segmented in
 around 100 superpixels each. We use the MSRC-21 dataset, which has 21 target
 classes.
 Each superpixel is represented as an output variable, with the ground truth obtained
-by majority vote over the pixel belonging to the superpixel.
+by majority vote over the pixel belonging to the superpixel. We removed all
+superpixels which were mostly ``void'', leading to some samples haven much
+fewer than 100 variables.
 Pairwise potentials were introduced for each pair of neighboring superpixels.
 We then removed all superpixels that were labeled as ``void'', together with
 their pairwise potentials.
-As unary potentials, we use the TextonBoost probabilities provided by \citet{krahenbuhl2012efficient}.
-We average probabilities inside each superpixel, yielding 21 input features for both datasets.
-We also used the same pairwise features for the two datasets: a constant feature,
-a color contrast feature, and a feature encoding relative vertical position between superpixels.
-Overall, the models for both datasets had $21 \cdot 21 + 21^2 \cdot 4$ features.
-It is possible to assume symmetric potentials for this dataset, leading to less
-pairwise features. We found both parametrizations yielded similar results.
+As unary potentials, we use the TextonBoost probabilities provided by  % FIXME this !!
+\citet{krahenbuhl2012efficient}.  We average probabilities inside each
+superpixel, yielding 21 input features for both datasets.  We also used the
+same pairwise features for the two datasets: a constant feature, a color
+contrast feature, and a feature encoding relative vertical position between
+superpixels.  Overall, the models for both datasets had $21 \cdot 21 + 21^2
+\cdot 4$ features.  It is possible to assume symmetric potentials for this
+dataset, leading to less pairwise features. We found both parametrizations
+yielded similar results.
 
 \begin{table}
     \caption{Summary of Datasets.\tablabel{datasets}}
@@ -222,14 +226,14 @@ pairwise features. We found both parametrizations yielded similar results.
     \toprule
     Dataset    & samples & nodes & edges & dim w & labels\\
     \cmidrule{1-6}
-    MNIST      & 60000   & 1     & none  &       & 10\\
-    OCR-small  & 704     & 3--14 & chain &       & 26\\
-    OCR-large  & 6173    & 3--14 & chain &       & 26\\
-    scene-tree & 1211    & 6     & tree  &       & 2\\
-    scene-full & 1211    & 6     & loopy &       & 2\\
-    yeast-tree & 1500    & 14    & tree  &       & 2\\
-    yeast-full & 1500    & 14    & loopy &       & 2\\
-    snake      & 200     &84--168& loopy &       & 11\\
+    MNIST      & 60000   & 1     & none  & 7840  & 10\\
+    OCR-small  & 704     & 3--14 & chain & 1444  & 26\\
+    OCR-large  & 6173    & 3--14 & chain & 1444  & 26\\
+    scene-tree & 1211    & 6     & tree  & 1244  & 2\\
+    scene-full & 1211    & 6     & loopy & 1284  & 2\\
+    yeast-tree & 1500    & 14    & tree  & 1494  & 2\\
+    yeast-full & 1500    & 14    & loopy & 1806  & 2\\
+    snake      & 200     &84--168& loopy & 22275 & 11\\
     MSRC21     & 276     & 7--113& loopy &       & 21\\
     Pascal VOC & 964     & 8--112& loopy &       & 21\\
     \bottomrule
