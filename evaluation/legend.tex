@@ -2,7 +2,8 @@
 \usepackage{color}
 \usepackage{tikz}
 
-%\definecolor{structure}{RGB}{185, 202, 202}
+%%\definecolor{structure}{RGB}{185, 202, 202}
+\definecolor{DarkOrange}{RGB}{255, 140, 0}
 %\definecolor{prop}{RGB}{227, 172, 0}
 %\definecolor{furniture}{RGB}{255, 94, 28}
 %\definecolor{ground}{RGB}{9, 68, 83}
@@ -10,24 +11,29 @@
 
 \begin{document}
     \begin{tikzpicture}
-        \matrix [column sep=.1cm]{%
-        \node [rectangle, fill=cyan, minimum width=.5cm,minimum height=.5cm] {};&
-        \node [rectangle] {SZJLSP};&
-        \node [rectangle, minimum width=.3cm] {};&
-        \node [rectangle, fill=green!50!black, minimum width=.5cm,minimum height=.5cm] {};&
-        \node [rectangle] {SSGD};&
-        \node [rectangle, minimum width=.3cm] {};&
-        \node [rectangle, fill=red, minimum width=.5cm,minimum height=.5cm] {};&
-        \node [draw=none] {$1$-slack};&
-        \node [rectangle, minimum width=.3cm] {};&
-        \node [rectangle, fill=blue, minimum width=.5cm,minimum height=.5cm] {};&
-        \node [draw=none] {caching $1$-slack};&
-        \node [rectangle, minimum width=.3cm] {};&
-        \node [rectangle, fill=magenta, minimum width=.5cm,minimum height=.5cm] {};&
-        \node [draw=none] {$n$-slack 100};&
-        \node [rectangle, minimum width=.3cm] {};&
-        \node [rectangle, fill=yellow!90!black, minimum width=.5cm,minimum height=.5cm] {};&
-        \node [draw=none] {$n$-slack every};\\
+        \matrix []{%
+        \draw[ultra thick, cyan] (0, 0 ) -- (.4, 0);&
+        \node [](a) {SZJLSP};&
+        \node [rectangle, minimum width=.2cm] {};&
+        \draw[ultra thick, green!50!black] (0, 0 ) -- (.4, 0);&
+        %\node [rectangle, fill=green!50!black, minimum width=.5cm,minimum height=.2cm] {};&
+        \node [] {SSGD};&
+        \node [rectangle, minimum width=.2cm] {};&
+        \draw[ultra thick, red] (0, 0 ) -- (.4, 0);&
+        %\node [rectangle, fill=red, minimum width=.5cm,minimum height=.5cm] {};&
+        \node [] {$1$-slack};&
+        \node [rectangle, minimum width=.2cm] {};&
+        \draw[ultra thick, blue] (0, 0 ) -- (.4, 0);&
+        %\node [rectangle, fill=blue, minimum width=.5cm,minimum height=.5cm] {};&
+        \node [] {caching $1$-slack};&
+        \node [rectangle, minimum width=.2cm] {};&
+        \draw[ultra thick, magenta!90!blue] (0, 0 ) -- (.4, 0);&
+        %\node [rectangle, fill=magenta, minimum width=.5cm,minimum height=.5cm] {};&
+        \node [] {$n$-slack 100};&
+        \node [rectangle, minimum width=.2cm] {};&
+        \draw[ultra thick, DarkOrange] (0, 0 ) -- (.4, 0);&
+        %\node [rectangle, fill=yellow!90!black, minimum width=.5cm,minimum height=.5cm] {};&
+        \node [] {$n$-slack every};\\
     };
     \end{tikzpicture}
 \end{document}
