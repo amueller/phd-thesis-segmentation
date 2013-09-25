@@ -6,7 +6,12 @@ letters-large: n-slack?
 fuer approximate inference: plot primal vs dual! explain!
 
 plot validation error statt training error?
+
 snake AD3 n-slack! training error for SZLJSP!
+================================================
+
+test set performance of all models?
+
 yeast tree n-slack?
 
 accuracy in semi-supervised table needs units <- vladn. I fixed that, didn't I?

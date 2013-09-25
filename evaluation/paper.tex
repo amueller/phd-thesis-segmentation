@@ -435,22 +435,26 @@ longer the inference takes.
 %, inference is much more complex than in the previous tasks.
 
 \subsection{Experiments using Approximate Inference}
-For the remaining tasks of the snakes dataset and image segmentation, exact
+For the remaining tasks, the snakes dataset and image segmentation, exact
 inference is intractable for learning.
-
+%
 We use two different approximate inference algorithms, fusion moves, a fast
 local search procedure, and the linear programming relaxation provided by AD$^3$,
-not using branch-and-bound.
+not using branch-and-bound, in contrast to the multi-label setup above.
 
 Evaluation of algorithms where exact inference is not possible is much harder,
 as it is usually not possible to evaluate the exact objective. When using AD$^3$,
 we can still consider the relaxed task, which will be solved exactly in the
 majority of cases (AD$^3$ can fail to find the primal solution to the LP
 relaxation).
-When using fusion moves, there is no obvious interpretation of the produced
+When using fusion moves, there is no obvious interpretation of the approximate
 primal objective, other than that it provides a lower bound of the actual
 objective. Nevertheless, we find it informative to analyze the behavior of this
-lower bound.
+lower bound. In contrast to the previous section, we show primal and dual objective
+values instead of the primal suboptimality when using approximate inference.
+The dual values do provide lower bounds
+to the exact objective, and are therefore somewhat more informative here, see
+Chapter~\ref{ch:exact_learning} for a discussion.
 
 For both inference algorithms, we also evaluate the predictive performance on
 the training set.  We explicitly do not consider the relaxed problem
@@ -460,8 +464,22 @@ the ``prediction machine'' given by the learned model together with the
 inference algorithm is.
 
 \Figref{snakes_results} shows the results on the snakes dataset.
-The top row shows the objective when learning with fusion-moves, the next row the training set loss.
-First, we notice that even the approximate 
+The top row shows the objective when learning with fusion-moves, the next row
+the training set loss.  First, we observe that using fusion-moves even the
+approximate objective does not reach the desired optimality gap for the
+$1$-slack and SZLJSP algorithms. This is caused by the algorithms not finding
+any further constraints. The $n$-slack algorithm fairs a bit better and
+achieves a higher dual value. Looking at the loss, it is clear that the stochastic
+algorithms have an advantage, possibly caused by not breaking to early.
+Still all algorithms ultimately fail to solve the task.
+
+The situation is very different when using the linear programming relaxation.
+Looking at the four plots at the bottom of \Figref{snakes_results}, we see that all
+algorithms are able to solve the task perfectly. %FIXME more details!
+Surprisingly, SSGD was very successful on this dataset, even faster then the non-caching $n$-slack
+algorithm. Caching provides nearly an order of magnitude speed-up on the dataset.
+
+Using branch-and-bound to obtain exact results was not feasible on this dataset.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -477,14 +495,21 @@ First, we notice that even the approximate
     \end{tabu}
 \caption{%
     Results on the snakes dataset. The top four plots show results using fusion
-    move inference, the bottom four plots using AD$^3$. The training set error shows
-    that none of the algorithms is able to solve the task using fusion moves.
-    The objective values for fusion move inference are only approximate, giving
-    an upper bound on the true primal objective, while the objective for AD$^3$
-    is the true objective for the relaxed task.
+    move inference, the bottom four plots using AD$^3$. Dashed lines indicate the dual objective.
 \figlabel{snakes_results}}
 \end{figure}
 
+The last set of experiments is on the segmentation dataset MSRC-21 and Pascal
+VOC\@.  Because of the large number of labels and samples, it is only feasible
+to use the fusion move inference algorithms. The results are shown in
+figure~\cite{msrc_pascal_curves}, with the top four plots showing results on
+MSRC-21, and the bottom four plots showing results on Pascal VOC.
+
+In both datasets, the $1$-slack algorithm is somewhat slow in minimizing the
+training set error, and the $n$-slack and stochastic algorithms are much
+faster. All algorithms achieve the desired suboptimality, at least in the
+approximate objective. This suggests that inference is somewhat easier for this
+task.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -501,9 +526,8 @@ First, we notice that even the approximate
 \caption{%
     Objective and traning set loss on the segmentation task. The top four plots
     show results for the MSRC-21 dataset, the bottom four plots for the Pascal
-    VOC dataset. As approximate inference was used, the shown objective values
-    are only lower bounds on the actual primal objective.
-\figlabel{msrc_pascal}}
+    VOC dataset.
+\figlabel{msrc_pascal_curves}}
 \end{figure}
 
 
@@ -553,7 +577,5 @@ For the segmentation datasets, the approximate inference seem to be less of a
 problem, as most algorithms achieve the desired approximate duality gap (which
 is not the actual duality gap, see Chapter~\ref{ch:exact_learning} for a
 discussion).
-The large label space made using the linear programming relaxation intractable,
-though, and we can not draw a final conclusion here. In the next chapter,
-Chapter~\ref{ch:exact_learning}, we will demonstrate how we can learn exactly,
-even in this setting.
+In the next chapter, Chapter~\ref{ch:exact_learning}, we will demonstrate how
+we can learn exactly, even in this setting.
