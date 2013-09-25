@@ -484,7 +484,9 @@ convergence.
 \enlargethispage{10mm}
 The detailed procedure as given by \citet{lacoste2012block} is shown in Algorithm~\ref{alg_szljsp}.
 
+
 \section{CRFs for Semantic Segmentation}\seclabel{semantic_segmentation}
+%
 Structured models based on factor graphs, as described in \Secref{factor_graphs} are often
 referred to as Conditional Random Fields (CRFs), pointing to their
 probabilistic interpretation.
@@ -532,6 +534,19 @@ object boundaries.  The main disadvantage of superpixel-based approaches is
 that the initial oversegmentation can not be influenced by later reasoning.
 This can be a problem if fine structures need to be segmented for which local
 evidence does not suffice.
+%
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \includegraphics[width=\linewidth]{structured_prediction/images/scene_sp_org}&%
+    \includegraphics[width=\linewidth]{structured_prediction/images/scene_sp}\\
+    \includegraphics[width=\linewidth]{structured_prediction/images/scene_sp_graph}&%
+    \includegraphics[width=\linewidth]{structured_prediction/images/scene_sp_gt}
+\end{tabu}
+\caption{%
+    Schematic of CRFs over superpixels. From left to right: input image, superpixel segmentation
+    using SLIC into about 100 superpixels, pairwise potential in the CRF, and desired labeling.
+\figlabel{superpixel_illustration}}
+\end{figure}
 
 We use the SLIC~\citep{achanta2012slic} algorithm to create superpixel for all
 our experiments.  It has been shown to provide competative results with a
@@ -586,7 +601,10 @@ object localization and semantic segmentation.  Their work is based on
 optimization problem.
 
 %TODO where does that leave us now?
-In Chapter~\ref{exact_learning} and Chapter~\ref{nyu}, we investigate
-superpixel-based conditional random fields learned with conditional random
-fields. Our emphasis is on understanding the learning, and how to cope with the
-complexity of inference in loopy models.
+In Chapter~\ref{ch:exact_learning} and Chapter~\ref{ch:nyu}, we investigate
+superpixel-based conditional random fields learned using structural support
+vector machines. The emphasis of Chapter~\ref{ch:exact_learning} is on
+understanding the learning, and how to cope with the complexity of inference in
+loopy models, while Chapter~\ref{ch:nyu} extends the approach to RGB-D images
+and shows how we can learn spatial relations using parametric pairwise
+potentials.

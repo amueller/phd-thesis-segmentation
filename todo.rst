@@ -1,10 +1,13 @@
-LOGO!!!! 
 page layout NYU uebelst haesslich!
+page layout intro! meh!
+
+letters-large: n-slack?
 
 fuer approximate inference: plot primal vs dual! explain!
 
 plot validation error statt training error?
 snake AD3 n-slack! training error for SZLJSP!
+yeast tree n-slack?
 
 accuracy in semi-supervised table needs units <- vladn. I fixed that, didn't I?
 
@@ -28,12 +31,9 @@ read logfile :)
 
 more related work!
 
-future work: n-slack fast? caching bcfw?
-
 
 future / present tense?!?!?
 include more images
-most important parts: intros and conclusions!
 Give detailed results for MSRC and Pascal
 Visualize Weights wherever possible!
 bibliography consistency! (first names?)

@@ -37,8 +37,7 @@ capabilities to model interactions or relations.  We believe that
 objects, and therefore understanding scenes. Therefore, we target dense
 labeling of scenes, taking object relations into account.  The task of densely
 labeling image pixels into classes is called object class segmentation or
-semantic segmentation.
-\pagebreak
+semantic segmentation.\pagebreak\\
 
 We choose this task in particular for following reasons:
 \begin{itemize*}
@@ -63,8 +62,9 @@ which usually distinguishes unstructured ``stuff'' classes such as road and
 grass, and object class segmentation, which denotes the segmentation of very
 structured classes, such as cars, planes and people. We consider four
 different datasets in this thesis: the object class segmentation datasets
-Graz-02~\citep{marszatek2007accurate} and Pascal VOC 2010~\citep{pascal}, and the semantic segmentation datasets
-MSRC-21~\citep{shotton2006textonboost} and NYU V2~\citep{SilbermanECCV12}.
+Graz-02~\citep{marszatek2007accurate} and Pascal VOC 2010~\citep{pascal}, and
+the semantic segmentation datasets MSRC-21~\citep{shotton2006textonboost} and
+NYU V2~\citep{SilbermanECCV12}. Examples can be found in \Figref{pascal_msrc}.
 %
 Both tasks have the same ultimate goal of parsing, and therefore understanding,
 images in terms of semantic classes. However they employ different mechanisms
@@ -78,6 +78,24 @@ on pixel level is scarce and only available through laborious manual annotation.
 Chapter~\ref{ch:semi_supervised} introduces an approach to cope with this
 shortcoming of object class segmentation approaches by introducing a method to
 learn segmentation automatically from image level annotations.
+
+\begin{figure}[t]
+    \begin{center}
+    \begin{tabu} to 0.8\linewidth{@{}XX@{}}
+    \includegraphics[width=\linewidth]{msrc_scene}&%
+    \includegraphics[width=\linewidth]{msrc_scene_GT}\\
+    \includegraphics[width=\linewidth]{pascal}&%
+    \includegraphics[width=\linewidth]{pascal_gt}
+    \end{tabu}
+    \end{center}
+\caption{%
+    Examples from the MSRC-21 (top) and Pascal VOC (bottom) datasets with
+    ground-truth annotation. MSRC-21 contains mostly texture classes, such as
+    tree, building, street and sky, but also objects, like cars in this example.
+    Pascal VOC contains only object classes, such as person, cat, table and
+    bottle, and an additional background class (black).
+\figlabel{pascal_msrc}}
+\end{figure}
 
 The main part of this thesis investigates the use of structured learning~\citep{taskar2003max, tsochantaridis2006large}
 algorithms to the task of semantic image segmentation. Both topics have received
@@ -198,7 +216,6 @@ Chapter~\ref{ch:structured_pystruct} and Chapter~\ref{ch:exact_learning} to the
 problem of semantic annotation with structure classes in RGB-D data. We
 demonstrate that we are able to learn meaningful spatial relations, and outperform
 state-of-the-art methods on the NYU V2 datasets.
-\pagebreak
 
 \section{Publications}
 The main material of this thesis has either been published in conference
@@ -221,7 +238,7 @@ relevant publications.
         Machine Learning Research, Open Source Software track.
     \item[Chapter~\ref{ch:exact_learning}]%
         \emph{Learning a Loopy Model for Semantic Segmentation Exactly}\\
-        Andreas C. M\"uller and Sven Behnke\@. arXiv preprint 1309.4061, Submitted to the International
+        Andreas C. M\"uller and Sven Behnke.\ arXiv preprint 1309.4061, Submitted to the International
         Conference on Computer Vision Theory and Applications.
     \item[Chapter~\ref{ch:nyu}]%
         \emph{Learning Depth-Sensitive Conditional Random Fields for Semantic Segmentation}\\
