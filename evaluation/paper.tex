@@ -288,6 +288,7 @@ This way, we can get a clear picture how learning times with complexity of the
 inference task. For the subgradient and SZLJSP algorithms, learning time is linear
 in the number of passes over the dataset, while caching and solving of a QP makes
 the learning time depend on the number of iterations in hard-to-predict ways.
+All algorithms were run on a single core i7 processor.
 
 \subsection{Experiments using Exact Inference}
 In this section, we present results on multi-class classification, sequence
@@ -365,12 +366,12 @@ objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 \figlabel{ocr_large_results}}
 \end{figure}
 
-The results for the OCR-large dataset are shown in \Figref{ocr_large_results}
+The results for the OCR-large dataset are shown in \Figref{ocr_large_results}. It was not feasible to run the $n$-slack
+algorithm when solving the QP at every step here.
 The trends are the same as for the smaller dataset: $n$-slack and caching $1$-slack cutting plane are very fast
 in terms of passes through the dataset, but $n$-slack cutting plane is impractical slow
 with respect to runtime. The SZLJSP algorithm converges fast intially, but the $1$-slack cutting plane
 is faster at high precision and faster in certifying the desired duality gap.
-%TODO initially 1-slack is beaten by ssgd
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -394,12 +395,15 @@ is faster at high precision and faster in certifying the desired duality gap.
 
 Next, we consider the multi-label task, starting with the tree-shaped models.
 The results for the yeast and scene datasets are shown in \Figref{multi-label-results},
-respectively. The caching $1$-slack algorithm is much faster than the non-caching one on both datasets.
+respectively. The caching $1$-slack algorithm is much faster than the
+non-caching one on both datasets. While the two variants of the $n$-slack algorithm are equally
+fast with respect to passes over the training data, solving the QP every 100 steps is among the
+fastest algorithms, while solving the QP every step is among the slowest.
 
 The caching $1$-slack algorithm is the fastest algorithm to achieve the desired primal suboptimality.
 On the scene dataset, the other cutting-plane base algorithms are second fastest, while they
 lag behind the stochastic algorithms on the larger yeast dataset. Again, initial convergence is
-faster for the stochastic algorithms
+faster for the stochastic algorithms.
 
 %, inference is much more complex than in the previous tasks.
 
@@ -413,33 +417,39 @@ relaxation of the inference problem.
 Evaluation of algorithms where exact inference is not possible is much harder,
 as it is usually not possible to evaluate the exact objective. When using AD$^3$,
 we can still consider the relaxed task, which will be solved exactly in the
-majority of cases (AD$^3$ sometimes fails to find the primal solution to the LP
-relaxation). %TODO is this happening?
+majority of cases (AD$^3$ can fail to find the primal solution to the LP
+relaxation).
 When using fusion moves, there is no obvious interpretation of the produced
 primal objective, other than that it provides a lower bound of the actual
-objective. Nevertheless, we find it informative to analyze the behavior of this lower bound.
+objective. Nevertheless, we find it informative to analyze the behavior of this
+lower bound.
 
 For both inference algorithms, we also evaluate the predictive performance on
 the training set.  We explicitly do not consider the relaxed problem
-here---instead we round possible fractional results.
-While the training error does not directly reflect the objective, it provides
-a measure of how effective the ``prediction machine'' given by the learned model
-together with the inference algorithm is.
+here---instead we round possible fractional results. While the training error
+does not directly reflect the objective, it provides a measure of how effective
+the ``prediction machine'' given by the learned model together with the
+inference algorithm is.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
     \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
-    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3}&%
-    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time}\\
-    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_loss}&%
-    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time_loss}\\
     \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo}&%
     \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo_time}\\
     \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo_loss}&%
-    \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo_time_loss}
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_qpbo_time_loss}\\
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_loss}&%
+    \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time_loss}
     \end{tabu}
 \caption{%
-    Snakes
+    Results on the snakes dataset. The top four plots show results using fusion
+    move inference, the bottom four plots using AD$^3$. The training set error shows
+    that none of the algorithms is able to solve the task using fusion moves.
+    The objective values for fusion move inference are only approximate, giving
+    an upper bound on the true primal objective, while the objective for AD$^3$
+    is the true objective for the relaxed task.
 \figlabel{snakes_results}}
 \end{figure}
 
@@ -451,21 +461,65 @@ together with the inference algorithm is.
     \includegraphics[width=\linewidth]{evaluation/images/msrc_time}\\
     \includegraphics[width=\linewidth]{evaluation/images/msrc_loss}&%
     \includegraphics[width=\linewidth]{evaluation/images/msrc_time_loss}\\
-    \includegraphics[width=\linewidth]{evaluation/images/msrc}&%
-    \includegraphics[width=\linewidth]{evaluation/images/msrc_time}\\
-    \includegraphics[width=\linewidth]{evaluation/images/msrc_loss}&%
-    \includegraphics[width=\linewidth]{evaluation/images/msrc_time_loss}
+    \includegraphics[width=\linewidth]{evaluation/images/pascal}&%
+    \includegraphics[width=\linewidth]{evaluation/images/pascal_time}\\
+    \includegraphics[width=\linewidth]{evaluation/images/pascal_loss}&%
+    \includegraphics[width=\linewidth]{evaluation/images/pascal_time_loss}
     \end{tabu}
 \caption{%
-    MSRC, Pascal VOC
+    Objective and traning set loss on the segmentation task. The top four plots
+    show results for the MSRC-21 dataset, the bottom four plots for the Pascal
+    VOC dataset. As approximate inference was used, the shown objective values
+    are only lower bounds on the actual primal objective.
 \figlabel{msrc_pascal}}
 \end{figure}
 
 
-\section{Discussion}
+\section{Summary}
 From the experiments above, it is clear there is currently \emph{no single best algorithm}.
-We can say, however, that the stochastic subgradient descent algorithm with
-pegasos step-size always converged slower, both in terms of learning time and
-in passes over the dataset, as the SZLJSP algorithm.
-Together with the fact that stochastic subgradient descent has no good stopping
-criterion, there seems to be no reason to use the stochastic gradient descent.
+However, there are some clear trends:
+\begin{itemize}
+    \item SZJLSP always converges faster than SSGD, with each iteration having
+        the same time complexity.  This indicates that SZJLSP should be
+        preferred over SSGD, apart from settings with strong memory
+        constraints.
+    \item In nearly all experiments, caching significantly improved performance
+        of the 1-slack cutting plane algorithm.
+    \item Initially SZJLSP and even SSGD converge faster than the 1-slack
+        cutting plane algorithm, while the 1-slack cutting plane algorithm was
+        faster in achieving high precision solutions and guaranteeing low
+        duality gap.
+    \item The n-slack cutting plane algorithm was often fastest to converge in
+        terms of passes over the training set, but often slow in terms of
+        runtime. The caching $1$-slack algorithm converged faster in terms of
+        cpu-time on almost all datasets.
+\end{itemize}
+There are however some caveats with our analysis, in particular with respect to
+the cutting plane solvers. The performance of the cutting plane algorithms
+depends not only on the performance of the QP solver used (in our case
+quadratic cone programming), but also on heuristics for pruning variables from
+the QP, caching constraints (for the $1$-slack algorithm) and deciding how
+often to solve the QP (for the $n$-slack algorithm). Better heuristics could
+have a beneficial effect on these algorithms. On the other hand, it is
+remarkable how competative the SZLJSP algorithm is, without the need for any
+such implementation tricks. This makes the SZJLSP algorithm very attractive for
+the practitioner who does not want to spend much time tuning the
+implementation.
+
+We do not consider SSGD using averaging here, but found it so produce similar
+results in tentative experiments. In particular, it was never faster than SZLJSP.
+
+With respect to approximate learning, we found that the inference algorithm has
+a stronger impact on the performance than the learning algorithm.
+While the SSGD and SZJLSP algorithms have somewhat lower training error on the snakes than
+the cutting-plane algorithm when using fusion-move inference, they, too, fail at solving the task.
+Using the linear programming relaxation, on the other hand, all algorithms are able to solve the
+task near perfect.
+For the segmentation datasets, the approximate inference seem to be less of a
+problem, as most algorithms achieve the desired approximate duality gap (which
+is not the actual duality gap, see Chapter~\ref{ch:exact_learning} for a
+discussion).
+The large label space made using the linear programming relaxation intractable,
+though, and we can not draw a final conclusion here. In the next chapter,
+Chapter~\ref{ch:exact_learning}, we will demonstrate how we can learn exactly,
+even in this setting.

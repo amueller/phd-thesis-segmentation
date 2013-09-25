@@ -1,4 +1,10 @@
 LOGO!!!! 
+page layout NYU uebelst haesslich!
+
+plot validation error statt training error?
+snake AD3 n-slack! training error for SZLJSP!
+
+accuracy in semi-supervised table needs units <- vladn. I fixed that, didn't I?
 
 citation for ball tree?
 
@@ -6,7 +12,6 @@ citation for ball tree?
 korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!
 
-Vladn korrekturen (zweite mail)
 versuche: vielleicht noch averaged SSGD?
 SSGD abkuerzung?
 
