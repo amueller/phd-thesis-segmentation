@@ -109,7 +109,7 @@ Offenbach am Main\\
 Bonn, September 2013\\[10mm]
 
 \end{center}
-\hspace{2.4cm}\includegraphics[height=2.0cm]{ais_uni_logo}
+\hspace{3.4cm}\includegraphics[height=2.0cm]{ais_uni_logo}
 \end{titlepage}
 %
 %\thispagestyle{empty}
@@ -318,6 +318,7 @@ of our approach on the challenging Graz-02 dataset of street scenes.
 \section{Future Directions}
 There are several directions for future research that we think would be
 interesting to pursue as an extension of the presented results:
+%
 \paragraph{Large-Scale Weakly Supervised Object Class Segmentation}
 We demonstrated a new method for object class segmentation using only weak
 supervision. One of the main advantages of such a method is that it is
@@ -325,6 +326,23 @@ potentially able to exploit the large amount of weakly labeled data that
 is available on the internet. Using additional, weakly labeled training data,
 and evaluating on the given, manually annotated data, is therefore a promising
 path for improving the presented results.
+%
+\paragraph{Cached Inference for SZLJSP}
+We saw in Chapter~\ref{ch:comparison} that the $1$-slack cutting plane algorithm
+benefits immensely from caching inference results during training. Therefore, investigating
+the influence of caching for SZLJSP seems a promising topic for future research.
+%
+\paragraph{Theoretical Analysis of $n$-slack Algorithm}
+As we have seen in Chapter~\ref{ch:comparison}, the $n$-slack algorithm often
+converges very fast in terms of passes over the training data This is in stark
+contrast to the known theoretical convergence guarantee, which is the slowest
+of all the algorithms we considered with
+$O(\frac{1}{\epsilon^2})$\footnote{This is in terms of calls to the QP\@. We are
+not aware of any analysis in terms of inference calls or passes over the
+training set.}. It seem as if the approach of \citet{lacoste2012block} can
+yield a better convergence guarantee, but it is also worth investigating the
+direction pursued by \citet{shalev2012proximal}.
+%
 \paragraph{Inference Machines}
 Recently \citet{stoyanov2011empirical} started a new trend in structured
 prediction, which is sometimes called ``inference machines''. The basic
@@ -333,7 +351,7 @@ procedure} is viewed as a feed-forward method for prediction, and parameters of 
 prediction process are optimized directly using empirical risk minimization. The work of
 \citet{stoyanov2011empirical} used loopy belief propagation as their inference
 algorithm and the optimization is carried out simply using gradient descent on
-the non-convex but differentiable loss function.  Other recent work in this
+the non-convex but differentiable loss function. Other recent work in this
 direction includes \citet{krahenbuhlparameter}, who used mean-field inference
 in a fully connected conditional random field and \citet{jancsarylearning}, who
 used closed form inference in a Gaussian CRF\@.
@@ -343,6 +361,7 @@ if exact traditional learning is possible in a model, it is uncertain how much
 in accuracy and efficiency can be gained by direct empirical risk minimization.
 Only limited empirical comparison is available, and we are not aware of theoretical
 work in this direction, leaving much room for future investigation.
+%
 \paragraph{Non-Linear Models}
 In this work, we only considered models that are linear in the input features---though
 features are highly non-linear in the original input pixels. Allowing non-linear
@@ -361,7 +380,7 @@ graphs for image processing, but not for higher-level tasks such as semantic
 segmentation. If it is possible to include context in a meaningful way, it
 might be possible to address even object-centric tasks such as object class
 segmentation with DTFs.
-
+%
 \paragraph{Higher Order Potentials and Latent Variable Models}
 While non-linear potentials would allow for more complex interactions between
 inputs and labelings, introducing higher order potentials or latent variables
@@ -377,7 +396,7 @@ attention, while approaches using latent variables are often limited by
 the non-convexity of learning.  It would be interesting to compare current
 methods using latent variable and higher order approaches, and see how these
 interact with different inference and learning schemes.
-
+%
 \paragraph{Feature Design}
 This work mostly focused on learning methods, and less on the input---with
 the exception of Chapter~\ref{ch:nyu}, which explores the use of 3D features
