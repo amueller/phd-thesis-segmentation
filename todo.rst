@@ -1,6 +1,8 @@
 LOGO!!!! 
 page layout NYU uebelst haesslich!
 
+fuer approximate inference: plot primal vs dual! explain!
+
 plot validation error statt training error?
 snake AD3 n-slack! training error for SZLJSP!
 
