@@ -292,31 +292,38 @@ All algorithms were run on a single core i7 processor.
 
 \subsection{Experiments using Exact Inference}
 In this section, we present results on multi-class classification, sequence
-labeling and multi-label prediction. In these
-tasks, exact inference is possible, and we can compute the exact objective of
-the various algorithms easily. We use the dynamic programming algorithm
-implemented in \textsc{OpenGM} for experiments for the tree and chain models.
+labeling and multi-label prediction. In these tasks, exact inference is
+possible, and we can compute the exact objective of the various algorithms
+easily. We use the dynamic programming algorithm implemented in \textsc{OpenGM}
+for experiments for the tree and chain models.
 For the full pairwise multi-label model, we use branch-and-bound together with the %FIXME AD3 solver description?
 We found that using the linear programming relaxation on the scene dataset is
 often tight, and there was no need to resort to approximate inference. Inference
 on the yeast dataset was more complex, and on the verge of being non-practical.
-We use this dataset as an example for very cosly inference.
+We use this dataset as an example for very costly inference.
+
+\begin{figure}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
+    \includegraphics[width=\linewidth]{evaluation/images/mnist}&%
+    \includegraphics[width=\linewidth]{evaluation/images/mnist_loss}
+    \end{tabu}
+\caption{%
+   Convergence of the primal suboptimality and training set loss on MNIST. 
+\figlabel{mnist_curves}}
+\end{figure}
 
 We start our experiments with the MNIST dataset.
-The convergence of the primal objective and training set loss in terms of
-passes over the training set is shown in \Figref{mnist_iterations}.
-Several trends can be observed: the $n$-slack cutting plane algorithms
-converge fastest, with the version that recomputes the QP at every step leading
-the race. The algorithms are closely followed by the caching $1$-slack cutting
-plane algorithm.  They are followed by the significantly slower SZLJSP
-algorithm, and finally the non-caching $1$-slack cutting plane algorithm and
-subgradient descent.  These results are intuitive, as they reflect ``how much
-work'' each algorithm does for each loss-augmented prediction step. More work
-towards the objective leads to faster convergence.  This ``more work'' is
-quantified in \Figref{mnist_times}.  Clearly the $1$-slack algorithms to ``to
-much'' work, leading to very slow convergence.  Also, caching does not speed up
-learning learning on this dataset, as loss-augmented prediction is as fast as
-querying the cache.
+The convergence of the primal suboptimality and training set loss in terms of
+passes over the training set is shown in \Figref{mnist_curves}. While inference
+is trivial, this is by far the largest dataset, making the $n$-slack algorithms
+not feasible. We see that the stochastic algorithms are much faster than the
+cutting plane algorithm, in particular initially, even in terms of iterations,
+with the SZLJSP is clearly leading the way. Interestingly, the $1$-slack algorithm
+catches up near the desired suboptimality. Looking at the training set loss,
+it is clear that the high precision we demanded was not necessary, and we could have
+terminated the stochastic algorithms much earlier.
+
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -325,35 +332,49 @@ querying the cache.
     \includegraphics[width=\linewidth]{evaluation/images/letters_small_log_time}
     \end{tabu}
 \caption{%
-   Convergence of the primal objective on OCR-small. 
+   Convergence of the primal suboptimality on OCR-small. 
 \figlabel{ocr_small_results}}
 \end{figure}
 
 We now consider datasets with non-trivial inference.
 The results for OCR-small are shown in \Figref{ocr_small_results}.
-The trends seen in the figures are similar to what we saw for MNIST above.
-Again, even though inference is non-trivial, the non-caching $1$-slack
-algorithm is slower than the caching one. Again, the plots against passes over the training set
-do not reflect the runtime complexity of the $n$-slack approach.
+Considering the plot against passes over the dataset on the left, several
+trends can be observed: the $n$-slack cutting plane algorithms converge
+fastest, with the version that recomputes the QP at every step leading the
+race. The algorithms are closely followed by the caching $1$-slack cutting
+plane algorithm.  They are followed by the significantly slower SZLJSP
+algorithm, and finally the non-caching $1$-slack cutting plane algorithm and
+subgradient descent.  These results are intuitive, as they reflect ``how much
+work'' each algorithm does for each loss-augmented prediction step. More work
+towards the objective leads to faster convergence.  This ``more work'' is
+quantified on the right hand side, where the suboptimality is plotted against time.
+Clearly the $1$-slack algorithms to ``to much'' work, leading to very slow
+convergence.  Also, caching does not speed up learning learning on this
+dataset.
+
+%The trends seen in the figures are similar to what we saw for MNIST above.
+%Again, even though inference is non-trivial, the non-caching $1$-slack
+%algorithm is slower than the caching one. Again, the plots against passes over the training set
+%do not reflect the runtime complexity of the $n$-slack approach.
 
 \begin{figure}
     \begin{center}
     \includegraphics[width=.5\linewidth]{evaluation/images/letters_small_dual}
 \end{center}
 \caption{%
-   Convergence of the primal objective on OCR-small. 
+    Primal and dual objectives for SZLJSP and $1$-slack cutting plane on OCR-small.
 \figlabel{ocr_small_dual}}
 \end{figure}
 
-There is one interesting phenomenon to be seen here: The cutting-plane algorithms stop immediately
+We want to highlight an interesting phenomenon here: The cutting-plane algorithms stop immediately
 when reaching the desired suboptimality of $0.1$. The SZLJSP algorithm, on the other hand, keeps
 on learning much longer---even longer than it took to get to the desired suboptimality. This is caused
 by a much looser bound given by the dual. Remember that the stopping criterion for both cutting-plane 
 and SZLJSP are given by the duality gap. It seems that while the primal objective converges much
 faster in the SZLJSP algorithm than in the non-caching $1$-slack algorithm, the dual does not.
-This means that in for this practical experiment, the non-caching $1$-slack algorithm was \emph{faster}
+This means that in this practical experiment, the non-caching $1$-slack algorithm was \emph{faster}
 in guaranteeing the desired suboptimality.
-\Figref{ocr_small_dual} illustrates this point by ploting primal and dual
+\Figref{ocr_small_dual} illustrates this point by plotting primal and dual
 objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 
 \begin{figure}
@@ -363,7 +384,7 @@ objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
     \includegraphics[width=\linewidth]{evaluation/images/letters_big_log_time}
     \end{tabu}
 \caption{%
-   Convergence of the primal objective on OCR-large. 
+   Convergence of the primal suboptimality on OCR-large. 
 \figlabel{ocr_large_results}}
 \end{figure}
 
@@ -371,7 +392,7 @@ The results for the OCR-large dataset are shown in \Figref{ocr_large_results}. I
 algorithm when solving the QP at every step here.
 The trends are the same as for the smaller dataset: $n$-slack and caching $1$-slack cutting plane are very fast
 in terms of passes through the dataset, but $n$-slack cutting plane is impractical slow
-with respect to runtime. The SZLJSP algorithm converges fast intially, but the $1$-slack cutting plane
+with respect to runtime. The SZLJSP algorithm converges fast initially, but the $1$-slack cutting plane
 is faster at high precision and faster in certifying the desired duality gap.
 
 \begin{figure}
@@ -383,8 +404,8 @@ is faster at high precision and faster in certifying the desired duality gap.
     \includegraphics[width=\linewidth]{evaluation/images/scene_full_log_time}\\
     \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log}&%
     \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log_time}\\
-    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log}&%
-    \includegraphics[width=\linewidth]{evaluation/images/yeast_tree_log_time}
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_full}&%
+    \includegraphics[width=\linewidth]{evaluation/images/yeast_full_time}
     \end{tabu}
 \caption{%
    Convergence of the primal objective on the multi-label datasets. From top to
@@ -395,17 +416,21 @@ is faster at high precision and faster in certifying the desired duality gap.
 \end{figure}
 
 Next, we consider the multi-label task.  The results for the yeast and scene
-datasets are shown in \Figref{multi-label-results}, respectively. The caching
-$1$-slack algorithm is much faster than the non-caching one on both datasets.
+datasets are shown in \Figref{multi-label-results}. The caching $1$-slack
+algorithm is much faster than the non-caching one on both datasets and both
+graph structures.
 While the two variants of the $n$-slack algorithm are equally fast with respect
 to passes over the training data, solving the QP every 100 steps is among the
 fastest algorithms, while solving the QP every step is among the slowest.
+We applied this method only to the smaller scene dataset, as applying it on the
+yeast dataset was not practicable.
 
 The caching $1$-slack algorithm is the fastest algorithm to achieve the desired
-primal suboptimality.  On the scene dataset, the other cutting-plane base
-algorithms are second fastest, while they lag behind the stochastic algorithms
-on the larger yeast dataset. Again, initial convergence is faster for the
-stochastic algorithms.
+primal suboptimality for tree-structured graphs, while it is out-performed by
+the $n$-slack cutting plane algorithm for the full graphs. This is intuitive,
+as the additional work the $n$-slack algorithm does becomes more valuable, the
+longer the inference takes. 
+
 
 %, inference is much more complex than in the previous tasks.
 
@@ -486,7 +511,7 @@ First, we notice that even the approximate
 From the experiments above, it is clear there is currently \emph{no single best algorithm}.
 However, there are some clear trends:
 \begin{itemize}
-    \item SZJLSP always converges faster than SSGD, with each iteration having
+    \item SZLJSP always converges faster than SSGD, with each iteration having
         the same time complexity.  This indicates that SZJLSP should be
         preferred over SSGD, apart from settings with strong memory
         constraints.
@@ -496,10 +521,11 @@ However, there are some clear trends:
         cutting plane algorithm, while the 1-slack cutting plane algorithm was
         faster in achieving high precision solutions and guaranteeing low
         duality gap.
-    \item The n-slack cutting plane algorithm was often fastest to converge in
+    \item The $n$-slack cutting plane algorithm was often fastest to converge in
         terms of passes over the training set, but often slow in terms of
-        runtime. The caching $1$-slack algorithm converged faster in terms of
-        cpu-time on almost all datasets.
+        runtime. For problems with very slow inference, the $n$-slack algorithm
+        might be a better choice than the others---if the interval between re-solving
+        the QP is chosen right.
 \end{itemize}
 There are however some caveats with our analysis, in particular with respect to
 the cutting plane solvers. The performance of the cutting plane algorithms
@@ -508,17 +534,18 @@ quadratic cone programming), but also on heuristics for pruning variables from
 the QP, caching constraints (for the $1$-slack algorithm) and deciding how
 often to solve the QP (for the $n$-slack algorithm). Better heuristics could
 have a beneficial effect on these algorithms. On the other hand, it is
-remarkable how competative the SZLJSP algorithm is, without the need for any
-such implementation tricks. This makes the SZJLSP algorithm very attractive for
+remarkable how competitive the SZLJSP algorithm is, without the need for any
+such implementation tricks. This makes the SZLJSP algorithm very attractive for
 the practitioner who does not want to spend much time tuning the
 implementation.
 
-We do not consider SSGD using averaging here, but found it so produce similar
-results in tentative experiments. In particular, it was never faster than SZLJSP.
+We do not consider SSGD with averaging~\cite{lacoste2012simpler} here, but
+found it so produce similar results in tentative experiments. In particular, it
+never outperformed SZLJSP.
 
 With respect to approximate learning, we found that the inference algorithm has
 a stronger impact on the performance than the learning algorithm.
-While the SSGD and SZJLSP algorithms have somewhat lower training error on the snakes than
+While the SSGD and SZLJSP algorithms have somewhat lower training error on the snakes than
 the cutting-plane algorithm when using fusion-move inference, they, too, fail at solving the task.
 Using the linear programming relaxation, on the other hand, all algorithms are able to solve the
 task near perfect.
