@@ -422,7 +422,7 @@ to make the algorithm more efficient:
 %TODO BMRM?
  
 \subsection{The SZLJSP Algorithm}\seclabel{dual_coordinate_descent}
-\begin{algorithm*}[t]
+\begin{algorithm}[tp]
     \caption{Shalev-Shwartz Zhang Lacoste-Julien Jaggi Schmidt Pletscher\label{alg_szljsp}}
     \begin{doublespacing}
     \begin{algorithmic}[1]
@@ -451,7 +451,7 @@ to make the algorithm more efficient:
         \Statex where $\theta_s$ and $\ell_s$ are recomputed over the whole dataset.
     \end{algorithmic}
     \end{doublespacing}
-\end{algorithm*}
+\end{algorithm}
 
 Very recently, two groups independently derived a very performant new algorithm.
 \citet{shalev2012proximal} investigated stochastic dual coordinate descent applied
@@ -485,38 +485,41 @@ convergence.
 The detailed procedure as given by \citet{lacoste2012block} is shown in Algorithm~\ref{alg_szljsp}.
 
 
-\section{CRFs for Semantic Segmentation}\seclabel{semantic_segmentation}
+\section{Conditional Random Fields for Semantic Segmentation}\seclabel{semantic_segmentation}
 %
+\subsection{Fundamentals of Conditional Random Fields}
 Structured models based on factor graphs, as described in \Secref{factor_graphs} are often
 referred to as Conditional Random Fields (CRFs), pointing to their
 probabilistic interpretation.
-Conditional Random Fields have been established as an important tool in many
-areas of computer vision. Applications include dense stereo, optical flow, 
-inpainting, de-noising, image editing, low-level segmentation and semantic segmentation.
+CRFs have been established as an important tool in many areas of computer
+vision. Applications include dense stereo, optical flow, inpainting,
+denoising, image editing, low-level segmentation and semantic segmentation.
 
-Most conditional random fields only apply unary and pairwise potential functions. In this case, FIXME equation 4.4
-becomes
+Most conditional random fields only apply unary and pairwise potential
+functions. In this case, \Eqref{log_factor_graph} becomes
 \begin{equation}\eqlabel{energy_crf}
     g(x, y) = \sum_{v \in V} \psi_v(x, y_v) + \sum_{(v, w) \in E} \psi_{v,w}(x, y_{v}, y_{w}).
 \end{equation}
-Here $V$ enumerates variables, and $E\subset V \times V$ is a set of edges,
-representing pairwise factors.
+Here $V$ enumerates variables and $E\subset V \times V$ is a set of edges which
+represent pairwise factors.
 
 There are broadly two types of models that are used: models in which each pixel
 in an image is represented as a variable, and models in which pixels are first
-grouped together into superpixels and each superpixel is represented as a variable.
-In pixel-based CRFs edges are usually introduced between adjacent pixels, that is using
-either 4-neighborhoods or 8-neighborhoods. Superpixel-based approaches introduce
-edges between adjacent superpixels, that is those that share a boundary.
-%TODO images of superpixels!
-By nature, both approaches create graphs with a large number of loops. This
-complicates prediction and learning, and is the central topic of
-Chapter~\ref{ch:exact_learning}.
+grouped together into superpixels and each superpixel is represented as a
+variable.  In pixel-based CRFs edges are usually introduced between adjacent
+pixels, that is using either 4-neighborhoods or 8-neighborhoods.
+Superpixel-based approaches introduce edges between adjacent superpixels, that
+is those that share a boundary. \Figref{superpixel_illustration} shows a
+sample image together with extracted superpixels and the neighborhood graph.
+
+By nature, models over pixels and models over superpixels create graphs with a
+large number of loops. This complicates prediction and learning, and is the
+central topic of Chapter~\ref{ch:exact_learning}.
 
 The motivation for using superpixels is that it is often easy to group nearby
 pixels that belong to the same object just based on local color or texture cues.
 While it is hard to even define what makes a sensible segmentation of an image,
-it is much easier to define, and also to compute an \emph{over-segmentation}.
+it is much easier to define an \emph{over-segmentation}.
 The only requirement for an over-segmentation is that each segment only
 contains pixels belonging to the same entity.
 
@@ -548,21 +551,10 @@ evidence does not suffice.
 \figlabel{superpixel_illustration}}
 \end{figure}
 
-We use the SLIC~\citep{achanta2012slic} algorithm to create superpixel for all
-our experiments.  It has been shown to provide competative results with a
-minimum of computational complexity.  Algorithmically, SLIC simply computes a
-$k$-means clustering over pixels. Each pixels is represented as 5D point, using
-three color channels and the $x$ and $y$ coordinates in the image.  In a
-post-processing step, small segments are removed. To make clustering of so many
-points feasible, the search for the nearest cluster in $k$-means is restricted
-to a local neighborhood in the image.
-
-
-% about algorithms, slic?
 % hierarchical\dots has superpixels and pixels?
 
 % submodular/non-submodular? higher order?
-
+\subsection{Previous Work}
 Conditional random fields were first used in the context of semantic
 segmentation by \citet{he2004multiscale}.  Who used contrastive divergence for
 learning parameters. Many other early models, such as the one of
@@ -574,15 +566,16 @@ the pixels.
 
 This smoothing approach was improved upon by \citet{kohli2009robust}, who
 introduces higher order potentials to enforce label consistency within larger
-regions. Later, \citet{ladicky2009associative} proposed a hierarchical model,
-including the higher order potentials of \citet{kohli2009robust}, and
-additional lateral and hierarchical connections. A similar approach, using
-superpixels as the finest resolution, and additionally modelling object class
-coocurrences was suggested by \citet{gonfaus2010harmony}.  However, all these
-models did not learn the potentials of the CRF model in a principled manner.
-The above approaches all learned unary potentials using a non-structured
-approach, for example SVMs or boosting, and then set pairwise and higher order
-potentials in the model by hand.
+regions. Later, \citet{ladicky2009associative} proposed a hierarchical model
+over pixels and superpixels, including the higher order potentials of
+\citet{kohli2009robust} and additional lateral and hierarchical connections. A
+similar approach, using superpixels as the finest resolution, and additionally
+modelling object class coocurrences was suggested by
+\citet{gonfaus2010harmony}.  However, all these models did not learn the
+potentials of the CRF model in a principled manner.  The above approaches all
+learned unary potentials using a non-structured approach, for example SVMs or
+boosting, and then set pairwise and higher order potentials in the model by
+hand.
 
 \citet{szummer2008learning} on the other hand used a structured support vector
 machine approach to learn unary and pairwise parameters. They use the classical
@@ -600,11 +593,39 @@ object localization and semantic segmentation.  Their work is based on
 \citet{hazan2010primal}, who integrate learning and inference in a joint
 optimization problem.
 
-%TODO where does that leave us now?
-In Chapter~\ref{ch:exact_learning} and Chapter~\ref{ch:nyu}, we investigate
-superpixel-based conditional random fields learned using structural support
-vector machines. The emphasis of Chapter~\ref{ch:exact_learning} is on
-understanding the learning, and how to cope with the complexity of inference in
-loopy models, while Chapter~\ref{ch:nyu} extends the approach to RGB-D images
-and shows how we can learn spatial relations using parametric pairwise
-potentials.
+\subsection{Data, Features and Superpixels}
+When evaluating learning algorithms in Chapter~\ref{ch:evaluation} and
+Chapter~\ref{ch:exact_learning} we use the well-established Pascal VOC 2010 and
+MSRC-21 datasets, shown in the introduction in \Figref{pascal_msrc}.
+As we focus on the learning algorithms in these chapters, we use features for
+unary potentials from the literature.
+
+For both datasets we use the TextonBoost class probablities provided by
+\citet{krahenbuhl2012efficient}. For the Pascal VOC dataset, the potentials
+provided by \citet{krahenbuhl2012efficient} also include the responses of
+object detectors~\citet{}, to better capture the complex object classes.
+We average the potentials inside superpixels and use the resulting feature
+as input to our unary potentials.
+For the MSRC-21 dataset, we compute TextonBoost on two different scales, as
+suggested by \citet{mottaghianalyzing}. We additionally extract SIFT and color descriptors and create
+bag-of-word descriptors for each superpixel. Following the approach of
+\citet{lucchi2011spatial} we augment these with a global bag-of-word descriptor
+for each image. We train a linear SVM using an approximation to the additive
+$\chi^2$ kernel~\citet{vedaldi2010efficient} and use the response as an
+additional input to our CRF\@. This \emph{piecewise training} simplifies
+learning and was found to have little effect on
+accuracy~\citet{nowozin2010parameter}. In total, there are $63$ features
+for the MSRC-21 dataset, $21$ for each scale of TextonBoost and an additional
+$21$ for the bag-of-word model using an SVM.
+
+We use the SLIC~\citep{achanta2012slic} algorithm to create superpixel for all
+our experiments.  It has been shown to provide competative results with a
+minimum of computational complexity.  Algorithmically, SLIC simply computes a
+$k$-means clustering over pixels. Each pixels is represented as 5D point, using
+three color channels and the $x$ and $y$ coordinates in the image.  In a
+post-processing step, small segments are removed. To make clustering of so many
+points feasible, the search for the nearest cluster in $k$-means is restricted
+to a local neighborhood in the image. The superpixels shown in
+\Figref{superpixels_illustration} are computed using SLIC.
+
+

@@ -1,5 +1,3 @@
-snake AD3 n-slack!
-==================
 ocr-small n-slack, n-slack every?
 
 update figures for yeast?
@@ -10,6 +8,7 @@ MNIST
 korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!
 
+wo werden die datensets eingefuehrt? in der intro?
 
 plot validation error statt training error?
 test set performance of all models?
@@ -25,7 +24,7 @@ citation for ball tree?
 versuche: vielleicht noch averaged SSGD?
 SSGD abkuerzung?
 
-mehr related work ueber image segmentation
+mehr related work ueber image segmentation: cristian und sparse coding und detector-based
 redundanz vermeiden
 bounding the objective teil raus? STINKT!!!
 
