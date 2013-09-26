@@ -503,13 +503,17 @@ The last set of experiments is on the segmentation dataset MSRC-21 and Pascal
 VOC\@.  Because of the large number of labels and samples, it is only feasible
 to use the fusion move inference algorithms. The results are shown in
 figure~\cite{msrc_pascal_curves}, with the top four plots showing results on
-MSRC-21, and the bottom four plots showing results on Pascal VOC.
-
+MSRC-21, and the bottom four plots showing results on Pascal VOC\@.
+First, we notice that all algorithms achieve low (approximate) duality gap, and none
+of the algorithms terminates prematurely. Also, all algorithms achieve a similar dual value.
+All algorithms achieve similar training errors after convergence.
 In both datasets, the $1$-slack algorithm is somewhat slow in minimizing the
 training set error, and the $n$-slack and stochastic algorithms are much
-faster. All algorithms achieve the desired suboptimality, at least in the
-approximate objective. This suggests that inference is somewhat easier for this
-task.
+faster. Solving the QP only every 100 steps in the $n$-slack algorithm significantly slows
+down learning here. This is in contrast to the yeast datasets, where the converse was true,
+even though both datasets have a similar number of training examples.
+Given the outcome described above, we suspect that learning was not affected by approximate
+inference too much. We leave a more detailed analysis for Chapter~\ref{ch:exact_learning}.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -564,8 +568,8 @@ the practitioner who does not want to spend much time tuning the
 implementation.
 
 We do not consider SSGD with averaging~\cite{lacoste2012simpler} here, but
-found it so produce similar results in tentative experiments. In particular, it
-never outperformed SZLJSP.
+found it so produce results similar to plain SSGD in tentative experiments. In
+particular, it never outperformed SZLJSP.
 
 With respect to approximate learning, we found that the inference algorithm has
 a stronger impact on the performance than the learning algorithm.
