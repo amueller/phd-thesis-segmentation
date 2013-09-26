@@ -16,7 +16,7 @@ loopy superpixel models, we are able to learn a pairwise conditional random
 field model using a structured support vector machine exactly for this task.
 We evaluate our approach on the popular MSRC-21 and \textsc{Pascal VOC} datasets. Our
 approach improves upon the state-of-the-art on the MSRC-21 dataset, and is
-competative with comparable approaches on the \textsc{Pascal VOC} dataset.% and nyu?
+competative with comparable approaches on the \textsc{Pascal VOC} dataset.
 
 The contribution of this chapter are:
 \begin{itemize}
@@ -36,8 +36,9 @@ The contribution of this chapter are:
 While empirically exact learning yields results comparable to those using
 approximate inference alone, certification of optimality allows treating
 learning as a black-box, enabling the researcher to focus attention on
-designing the model for the application at hand.
-
+designing the model for the application at hand. It also makes research more
+reproducible, as the particular optimization methods that are used become less
+relevant to the result.
 
 \section{Related Work}
 
@@ -101,11 +102,11 @@ on real-world applications.
         \Repeat
             \State \label{line_restricted}
             \vspace{-5mm}
-            \begin{align*}
-                (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi\\
-            &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:\\
-            &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi
-            \end{align*}
+            \begin{flalign*}
+            \quad\quad    (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi&\\
+            &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:&\\
+            &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi&
+            \end{flalign*}
             \For {i=1, \dots, k}
                 \State
             $\hat{y}\hoch{i} \leftarrow \hat{I}(x\hoch{i}, y\hoch{i}, \theta) \approx \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
@@ -133,7 +134,7 @@ Algorithm~\ref{alg_one_slack_again}, with the additional input of an inference a
 line~\ref{get_cutting_plane_again}. We investigate algorithms $\hat{I}$ (often called
 separation
 oracles in the context) that do not yield the exact maximum here.
-There are two groups of inference procedures, as identified in
+There are two groups of inference procedures, as identified by
 \citet{finley2008training}: under-generating and over-generating approaches.
 An under-generating approach satisfies $\hat{I}(x^i, y^i, \theta) \in
 \mathcal{Y}$, but does not guarantee maximality in line~\ref{get_cutting_plane_again}
@@ -150,7 +151,7 @@ Even using approximate inference procedures, several statements
 about the original exact objective (\Eqref{oneslack_again}) can be
 obtained.
 
-Let $o_{\W}(\theta)$ denote objective \Eqref{oneslack_again} with
+Let $o_{\W}(\theta)$ denote the objective in \Eqref{oneslack_again} with
 given parameters $\theta$ restricted to a working set $\W$, as computed in
 line~\ref{line_restricted} of Algorithm~\ref{alg_one_slack_again} and  let
 \[
@@ -273,7 +274,7 @@ worst case.
 As a fast under-generating inference algorithm, we used fusion
 moves~\citep{rother2007optimizing, lempitsky2010fusion}. Fusion moves are a local
 search procedure, using moves that are generated using an auxiliar binary problem,
-which is solved using QPBO~\cite{rother2007optimizing}.
+which is solved using QPBO~\citep{rother2007optimizing}.
 
 For inference with optimality certificate, we use the recently developed
 Alternating Direction Dual Decomposition (AD$^3$) method of
@@ -340,13 +341,13 @@ reaching essentially the same objective.
 
 \Figref{caching} shows a visual comparison that highlights the differences
 between the methods. Note that neither $o^Q$ nor $o^C$ provide valid upper bounds on the objective,
-which is particularly visible for $o^C$ using the method of \cite{joachims2009cutting}.
+which is particularly visible for $o^C$ using the method of \citet{joachims2009cutting}.
 Using no cache leads to a relatively smooth, but slow convergence, as inference is run often.
 Using the method of \citet{joachims2009cutting}, each run of the separation oracle is followed by
 quick progress of the dual objective $o_\W$, which flattens out quickly. Much time is then spent adding
 constraints that do not improve the dual solution.
 Our heuristic instead probes the cache, and only proceeds using cached constraints if the resulting
-$o^C$ is not to far from $o^Q$.
+$o^C$ is not too far from $o^Q$.
 
 \begin{figure*}
 \centering
@@ -444,7 +445,7 @@ in using the official ``validation'' set as our evaluation set, and splitting th
 We use the unary potentials provided by the same work, and compare only against methods
 using the same setup and potentials, \citet{krahenbuhlparameter} and \citet{dann2012pottics}.
 Note that state-of-the-art approaches, some not build on the CRF framework, obtain
-around a Jaccard Index (also call VOC score) of 40\% , notably \cite{xia2012segmentation}, who 
+around a Jaccard Index (also call VOC score) of 40\% , notably \citet{xia2012segmentation}, who 
 evaluate on the \textsc{Pascal} VOC 2010 ``test'' set.
 
 

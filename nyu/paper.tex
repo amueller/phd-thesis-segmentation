@@ -109,7 +109,7 @@ a real-time system for online learning and prediction of semantic classes.
 Their method use a GPU implementation of random forests, and integrate 3D scene
 information in an online fashion. They evaluated their approach on the dataset
 of \citet{SilbermanECCV12} with promising results.  We use the implementation
-of random forest provided by \citet{stueckler2013}, but instead of integrating
+of random forests provided by \citet{stueckler2013}, but instead of integrating
 predictions over time, we focus on exploiting the structure within a single
 frame.
 
@@ -318,7 +318,7 @@ library introduced in \Secref{pystruct}.
 %
 All hyper parameters were adjusted using 5-fold cross-validation. The
 hyper parameters of the random forests were found using the \textsc{hyperopt}
-framework of \cite{bergstra2011algorithms}. For the CRF model, the only
+framework of \citet{bergstra2011algorithms}. For the CRF model, the only
 hyper-parameters are related to the superpixel segmentation, and the single
 hyper-parameter $C$ of the structural SVM formulation. These were adjusted
 using grid-search.
@@ -471,7 +471,7 @@ as done by \citet{SilbermanECCV12}. Finally, we could also combine our
 single-frame approach with the approach of \citet{stueckler2013}, which fuses
 individual views in 3D to exploit temporal coherence.
 
-We did not explicitly address real time application, the random
+We did not explicitly address real time application; the random
 forest implementation that we build upon allows for real-time
 processing~\citep{stueckler2013}. The SLIC superpixel algorithm can also be
 implemented on GPU in real-time, as was demonstrated by \citep{ren2011gslic}, and similarly
