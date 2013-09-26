@@ -31,10 +31,10 @@ to be enumerated efficiently. While this problem could be solved more efficientl
 with specialized algorithms, it nevertheless provides an initial insight into structured
 prediction algorithms.
 We choose the classical MNIST dataset of handwritten digits, consisting of
-60000 training images and 10000 test images of the digits zero to nine.
-\Figref{mnist_illustration} shows some examples. Each image is a $28 \times 28$
+$60000$ training images and $10000$ test images of the digits zero to nine.
+\Figref{mnist_illustration} shows some examples. Each image is a $28{\times}28$
 grey-level image, resulting in a $784$-dimensional feature vector. We normalize
-the feature to lie between $0$ and $1$.
+the features between $0$ and $1$.
 %
 \enlargethispage{15mm}
 The model we use for multi-class classification is the Crammer-Singer
@@ -81,8 +81,8 @@ parameters in the model.
 A classical application of structured prediction is sequence labeling.
 We choose the ``OCR'' dataset introduced in the seminal work of \citet{taskar2003max}.
 Each input consists of the segmented handwritten letters of a word in lower
-case. The task is to classify all letters in a word, that is assign each
-segmented input letter one of the classes ``a'' to ``z''. As the first letter
+case. The task is to classify all letters in a word, that is, assign each
+segmented input letter to one of the classes ``a'' to ``z''. As the first letter
 of each word was capitalized, these were removed by \citet{taskar2003max},
 leading to somewhat odd-looking labels. The words are between three and fourteen
 letters long, and each letter is represented as a binary image of size $16
@@ -92,7 +92,7 @@ on one fold, and testing on the remaining nine folds, following \citet{taskar200
 and learning on nine folds and testing on the remaining fold, following \citet{lacoste2012block}.
 We refer to the learning on one fold as OCR-small, and learning on nine folds as OCR-big.
 We use a simple chain model with a single constant pairwise feature.
-This means the unary potential has $16 \cdot 8 \cdot 26 = 768$ parameters, one for each input
+This means that the unary potential has $16 \cdot 8 \cdot 26 = 768$ parameters, one for each input
 feature and output class. The pairwise potential consists of a matrix of
 transition potentials with $26 \cdot 26=676$ entries.
 It is well-known that efficient exact inference in chains is possible using
@@ -108,7 +108,7 @@ Multi-label classification was first formulated as a structured prediction probl
 in by \citet{finley2008training}, who used to investigate the influence of
 approximate inference on the $n$-slack cutting plane algorithm. In their formulation
 each class is represented as a binary node in a factor graph---the states representing
-presence of absence of the class. A different factor of pairwise potentials is introduced
+presence or absence of the class. A different factor of pairwise potentials is introduced
 between each pair of classes.
 We also consider a different model, where pairwise potentials are only
 introduced between specific nodes. We build a tree over the binary variables by
@@ -161,7 +161,7 @@ of learning conditional pairwise potentials. The dataset consists of ``snakes''
 of length ten traversing the 2D grid. Each grid cell that was visited is marked
 as the snake heading out towards the top, bottom, left, or right, while
 unvisited cells are marked as background.  The goal is to predict a labeling of
-the snake from ``head'' to ``tail'', that is assigning numbers from zero to
+the snake from ``head'' to ``tail'', that is, assigning numbers from zero to
 nine to the cells that are occupied by the snake.  \Figref{snakes_illustration}
 illustrates the principle.
 Local evidence for the target label is weak except
@@ -169,7 +169,7 @@ around head and tail, making this a challenging task, requiring strong pairwise
 potentials. The dataset is noise-free in the sense that given the above
 description, a human could easily produce the desired labeling without making
 any mistake. The dataset is also interesting as the model of
-\citet{nowozin2011decision} produced notoriously hard to optimize energy
+\citet{nowozin2011decision} produced notoriously hard-to-optimize energy
 functions.
 
 In \citet{nowozin2011decision}, the input was encoded into five RGB colors
@@ -181,7 +181,7 @@ We use a grid CRF model for this task. Unary potentials for each node are given 
 input of the 8-neighborhood of the node---using a 4-neighborhood would most
 likely yield better results, but we do not want to encode too much
 task-knowledge into our model.
-Using the one-hot encoding of the input, this leads to $9 \dot 5 = 45$ unary features.
+Using the one-hot encoding of the input, this leads to $9 \cdot 5 = 45$ unary features.
 With 11 output classes, the unary potential has $11 \cdot 9 \cdot 5=495$ parameters.
 Features for the pairwise potentials are constructed by concatenating the features
 of the two neighboring nodes, taking the direction of the edge into account.
@@ -196,18 +196,18 @@ features, the pairwise potentials have $45 \cdot 4 \cdot 11^2 =21780$ parameters
 \subsection{Superpixel CRFs for Semantic Segmentation}
 Our main attention is devoted to the use of conditional random fields for
 semantic segmentation.  We use the Pascal VOC and MSRC datasets.
-The Pascal VOC has 964 training images, each having
-around 100 superpixels. There are 20 object categories, plus background. The % TODO check! refer to other part
+The Pascal VOC has 964 training images, each divided into
+around 100 superpixels. There are 20 object categories, and an additional background class. The % TODO check! refer to other part
 MSRC-21 dataset has 276 training images, also segmented in around 100 superpixels
 each. There are 21 classes in the MSRC-21 dataset.
 Each superpixel is represented as an output variable, with the ground truth
-obtained by majority vote over the pixel belonging to the superpixel. We
-removed all superpixels which were mostly ``void'', leading to some samples
+obtained by majority vote over the pixels belonging to the superpixel. We
+removed all superpixels in which the majority of pixels is labeled ``void'', leading to some samples
 having much fewer than 100 variables.
 Pairwise potentials are introduced for each pair of neighboring superpixels.
 We use the unary and pairwise potentials described in \Secref{semantic_segmentation}:
 for the Pascal VOC dataset 21 unary potentials and 63 for the MSRC-21 dataset.
-We use the same three pairwise features for both dataset: a constant feature, a color
+We use the same three pairwise features for both datasets: a constant feature, a color
 feature and a feature encoding relative vertical position.
 Overall, this results in $21 \cdot  21 + 3 \cdot 21 \cdot 21 = 1764$ parameters
 for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
@@ -249,19 +249,18 @@ for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
 \section{Experiments}
 We compare the following algorithms on the above models (see \Secref{learning_algorithms} for details):
 \begin{itemize}
-    \item Stochastic Subgradient Descent (SSGD) using the Pegasos schedule for step-sizes.
+    \item Stochastic Subgradient Descent (SSGD) using the Pegasos schedule for step-sizes
     %\item Stochastic Subgradient Descent using the Pegasos schedule: AVERAGING
-    \item The $1$-slack cutting plane algorithm without constraint caching.
-    \item The $1$-slack cutting plane algorithm with constraint caching. For
-            each sample, the last $50$ inference results are stored.
-            Details of the caching strategy can be found in Chapter~\ref{ch:exact_learning}.
-            %TODO
+    \item The $1$-slack cutting plane algorithm without inference caching
+    \item The $1$-slack cutting plane algorithm with caching the last 50
+        inference results for each sample (see Chapter~\ref{ch:exact_learning}
+        for details)
     \item The $n$-slack cutting plane algorithm, where the QP is solved after each sample
-    \item The $n$-slack cutting plane algorithm, where the QP is solved every 100 samples.
-    \item The SZLJSP algorithm with weighted averaging.
+    \item The $n$-slack cutting plane algorithm, where the QP is solved every 100 samples
+    \item The SZLJSP algorithm with weighted averaging
 \end{itemize}
 
-All algorithm take a $C$ parameter, which we adjusted on a fully trained model
+All algorithms take a $C$ parameter, which we adjusted on a fully trained model
 on a validation set (experiments not reported here) and held constant for all
 models.  We found, however, that the algorithms and models are quite robust to
 the choice of $C$ within one or two orders of magnitude.
@@ -271,7 +270,7 @@ noting that the quadratic programming based algorithms have additional
 hyper-parameters that we do not discuss here in detail, such as the threshold
 for removing a constraint as inactive, how often inactive constraints are
 removed, and parameters of the underlying QP solver. On the other hand, the
-SZLJSP, for example, has no hyper-parameters except for the stopping criterion.
+SZLJSP algorithm, has no hyper-parameters except for the stopping criterion.
 
 Our ultimate evaluation criterion is how fast the learning algorithms converge,
 and how robust they are to approximate inference.  To quantify our goals, we
@@ -298,7 +297,7 @@ possible, and we can compute the exact objective of the various algorithms
 easily. We use the dynamic programming algorithm implemented in \textsc{OpenGM}
 for experiments for the tree and chain models.
 For the full pairwise multi-label model, we use branch-and-bound together with
-the AD$^3$ algorithm.%FIXME AD3 solver description?
+the AD$^3$ algorithm. %FIXME AD3 solver description?
 We found that using the linear programming relaxation on the scene dataset is
 often tight, and there was no need to resort to approximate inference. Inference
 on the yeast dataset was more complex, and on the verge of being non-practical.
@@ -477,13 +476,13 @@ inference algorithm is.
 
 \Figref{snakes_results} shows the results on the snakes dataset.
 The top row shows the objective when learning with fusion moves, the next row
-the training set loss.  First, we observe that using fusion moves even the
+the training set loss.  First, we observe that using fusion moves, even the
 approximate objective does not reach the desired optimality gap for the
 $1$-slack and SZLJSP algorithms. This is caused by the algorithms not finding
 any further constraints. The $n$-slack algorithm fares a bit better and
 achieves a higher dual value. Looking at the training set loss, it is clear that the stochastic
 algorithms have an advantage, possibly caused by not stopping too early.
-Still all algorithms ultimately fail to solve the task.
+Still, all algorithms ultimately fail to solve the task.
 
 The situation is very different when using the linear programming relaxation.
 Looking at the four plots at the bottom of \Figref{snakes_results}, we see that all
@@ -517,7 +516,7 @@ VOC\@.  Because of the large number of labels and samples, it is only feasible
 to use the fusion move inference algorithm. The results are shown in
 \Figref{msrc_pascal_curves}, with the top four plots showing results on
 MSRC-21, and the bottom four plots showing results on Pascal VOC\@.
-First, we notice that all algorithms achieve low (approximate) duality gap, and none
+First, we notice that all algorithms achieve low (approximate) duality gaps, and none
 of the algorithms terminates prematurely. Also, all algorithms achieve a
 similar dual objectives and similar training errors after convergence.
 In both datasets, the $1$-slack algorithm is somewhat slow in minimizing the
@@ -566,9 +565,9 @@ However, there are some clear trends:
         terms of passes over the training set, but slow in terms of
         runtime. For problems with very slow inference, the $n$-slack algorithm
         might be a better choice than the others---if the interval between re-solving
-        the QP is chosen right.
+        the QP is chosen appropriately.
 \end{itemize}
-There are however some caveats with our analysis, in particular with respect to
+There are however some caveats to our analysis, in particular with respect to
 the cutting plane solvers. The performance of the cutting plane algorithms
 depends not only on the performance of the QP solver used (in our case
 quadratic cone programming), but also on heuristics for pruning variables from
@@ -580,8 +579,8 @@ such implementation tricks. This makes the SZLJSP algorithm very attractive for
 the practitioner who does not want to spend much time tuning the
 implementation.
 
-We do not consider SSGD with averaging~\citep{lacoste2012simpler} here, but
-found it so produce results similar to plain SSGD in tentative experiments. In
+We do not present results for SSGD with averaging~\citep{lacoste2012simpler} here, but
+found it to produce results similar to plain SSGD in tentative experiments. In
 particular, it never outperformed SZLJSP.
 
 With respect to approximate learning, we found that the inference algorithm has
@@ -589,8 +588,8 @@ a stronger impact on the performance than the learning algorithm.
 While the SSGD and SZLJSP algorithms have somewhat lower training error on the snakes dataset than
 the cutting-plane algorithm when using fusion-move inference, they, too, fail at solving the task.
 Using the linear programming relaxation, on the other hand, all algorithms are able to solve the
-task near perfectly.
-For the segmentation datasets, it is harder to judge the outcome, though there seems to be little difference
-between the learning algorithms in terms of the final result.
-In the next chapter, we will demonstrate how
-we can learn exactly, even in this setting.
+task nearly perfectly.
+For the segmentation datasets, it is harder to judge the outcome, though there
+seems to be little difference between the learning algorithms in terms of the
+final result.  In the next chapter, we will demonstrate how we can learn
+exactly, even with the complex models used for semantic segmentation.

@@ -3,6 +3,7 @@ ocr-small n-slack, n-slack every?
 update figures for yeast?
 
 MNIST
+AD3 solver description!
 
 4.3 neues chapter: unary potentials und pairwise potentials beschreiben
 korrektur lesen neues chapter ueber CRFs!!!!
@@ -31,33 +32,23 @@ bounding the objective teil raus? STINKT!!!
 read logfile :)
 [links to algorithm lines don't work -- also links to algorithm doesn't work]
 
-more related work!
-
-
-future / present tense?!?!?
 include more images
 Give detailed results for MSRC and Pascal
 Visualize Weights wherever possible!
 bibliography consistency! (first names?)
-Datasets? Ganz an den Anfang hinter die introduction?
-Superpixels!!?
 
 appendix on datasets?
 
-MSRC state of the art?
-
 definiere ich unary und pairwise terms?
 
-STRUKTUR: YU?
-Erstmal modelle, auswerten, ... dann am schluss: so haben wir das exakt gemacht.
-oder erst exakt, dann "gut mal, das ist wichtig bei den modellen", dann nyu?
 
-SQUARED AVERAGING!
-
-
+re-check
+==========
+future / present tense?!?!?
 s/learning rate/step size/g  Done (check again later)
 1-slack und n-slack consistent (one/1, n, $n$)  (done, check again later)
 kommata!
+digits in math-mode, datasets in smallcaps
 
 INTRO
 ======

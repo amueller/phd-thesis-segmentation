@@ -14,7 +14,7 @@ and structure classes allows for a detailed reasoning about the scene.
 %these low-level cues to a consistent interpretation of the scene.
 
 We thereby extend the success of learned CRF models for semantic segmentation
-in RGB images as considered in Chapter~\ref{exact_learning} to the domain of 3D scenes.
+in RGB images as considered in Chapter~\ref{ch:exact_learning} to the domain of 3D scenes.
 Our emphasis lies on exploiting the additional depth and 3D information in all
 processing steps, while relying on \emph{learning} to create a model that 
 is adjusted to the properties of the sensor input and environment.
@@ -173,7 +173,7 @@ to learn the SSVM to optimality \emph{exactly}.
 \subsection{Low Level Segmentation}
 We take a super-pixel based approach to semantic segmentation.
 Our superpixel generation is based on the SLIC
-algorithm~\citep{achanta2012slic}, as in Chapter~\ref{exact_learning}. We
+algorithm~\citep{achanta2012slic} described in \Secref{semantic_segmentation}. We
 extend the standard SLIC algorithm, which works on the Lab space, to also
 include depth information. The resulting algorithm is a localized $k$-Means in
 Lab-D-XY space.
