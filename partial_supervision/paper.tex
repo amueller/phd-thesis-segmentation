@@ -72,11 +72,11 @@ method we use for generating candidate segments is Constraint Parametric
 Min-Cuts (CPMC) from \citet{carreira2010constrained}.  This method creates a
 wide variety of overlapping segments. Support vector regression (SVR) is
 trained on these segments to estimate the overlap of segments with ground truth
-object-class labeling from the Pascal VOC dataset~\citep{pascal}. This provides
+object-class labeling from the \textsc{Pascal} VOC dataset~\citep{pascal}. This provides
 a ranking of candidate segments according to how ``object-like'' they are,
 which allows for selecting only a limited number of very object-like segments.
 The method performed well on a variety of datasets, building the basis of
-a very successful entry to the Pascal VOC segmentation
+a very successful entry to the \textsc{Pascal} VOC segmentation
 challenge~\citep{li2010object}. A similar approach to whole-object segment
 proposals was investigated by \citet{endres2010category}, but they did not compare
 their results with the state-of-the-art approach of \citet{carreira2010constrained}.
@@ -330,7 +330,7 @@ while Musk2 contains significantly larger bags, more similar to the
 \subsection{Partially Supervised Image Segmentation on Graz-02}
 
 We evaluate the performance of the proposed algorithm for object-class
-segmentation on the challenging Graz-02 dataset~\citep{marszatek2007accurate}.  This dataset contains 1096
+segmentation on the challenging \textsc{Graz}-02 dataset~\citep{marszatek2007accurate}.  This dataset contains 1096
 images of three object classes, bike, car and person.  Each image may contain
 multiple instances of the same class, but only one class is present per image.
 
@@ -354,7 +354,7 @@ described in \Secref{combiningsegments}.
         \includegraphics[width=35mm]{images/person1_pos.png}\hspace*{0.7ex}
         \includegraphics[width=35mm]{images/person1_neg.png}
 	\end{center}
-        \caption{Qualitative results on on the Graz-02 dataset. Top: Results on
+    \caption{Qualitative results on on the \textsc{Graz}-02 dataset. Top: Results on
         category ``car''. Bottom: Results on category ``person''. From left to
         right: original image, ground truth segmentation, segment votes for
         correct class, segment votes against correct class (red many, blue few votes).}
@@ -371,7 +371,7 @@ described in \Secref{combiningsegments}.
         Best strongly supervised approaches~\citep{fulkerson2009class,schulz2011}&   0.72&  0.72&  0.66 \\
     \bottomrule
     \end{tabularx}
-    \caption{Pixel-level accuracy on the Graz-02 dataset.
+    \caption{Pixel-level accuracy on the \textsc{Graz}-02 dataset.
         \tablabel{tab:graz}}
 \end{table}
 
@@ -394,6 +394,6 @@ kernel method to instance level while remaining competitive with the
 state-of-the-art in bag label prediction.
 
 We evaluated the proposed object-class segmentation method on the challenging
-Graz-02 dataset. While not reaching the performance of methods using strong
+\textsc{Graz}-02 dataset. While not reaching the performance of methods using strong
 supervision, our result can work as a baseline for further research into weakly
 supervised object-class segmentation.

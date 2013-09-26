@@ -3,7 +3,11 @@ ocr-small n-slack, n-slack every?
 update figures for yeast?
 
 MNIST
-AD3 solver description!
+AD3 solver description!!!! and fusion moves!
+==============================
+
+VLAD
+=====
 
 4.3 neues chapter: unary potentials und pairwise potentials beschreiben
 korrektur lesen neues chapter ueber CRFs!!!!

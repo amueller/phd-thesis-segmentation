@@ -500,7 +500,7 @@ Table~\ref{results} summarizes the results. The two entropy-based methods
 (MeanNN, ITM) have a clear advantage of the other methods, with ITM finding 
 better clusterings than MeanNN in the majority of cases.
 We see that ITM does well when the intrinsic dimensionality of the data matches
-the feature dimension, but degraded otherwise (see ``faces'' and ``usps'').
+the feature dimension, but degraded otherwise (see \textsc{faces} and \textsc{usps}).
 Estimating the intrinsic dimensionality of the data overcomes this weakness,
 and improves results in most cases. For all but one dataset, either ITM or ITM with
 estimated intrinsic dimensionality gives the best results of all considered
@@ -525,14 +525,14 @@ of the MST of the data.
 \cmidrule{5-9}
 Description &     n &    d &   k &  $k$-Means      & MeanNN        & SL            &   ITM        & ITM ID \\
 \cmidrule{1-4}                   \cmidrule{5-5}    \cmidrule{6-6}  \cmidrule{7-7} \cmidrule{8-8} \cmidrule{9-9}
-digits      &$ 1797$&$  64$&$ 10$& $    0.62 $&     $0.67$           &$0.10$         &$\mathbf{0.85}$       &$0.73$\\ 
-faces       &$  400$&$4096$&$ 40$& $    0.41 $&     $0.49$           &$0.08$         &$0.02$           &$\B{0.54}$\\ 
-iris        &$  150$&$   4$&$  3$& $    0.72 $&     $0.75$           &$0.55$         &$\B{0.88}$       &$0.88$\\
-usps        &$ 9298$&$ 256$&$ 10$& $    0.52 $&     $0.54$           &$0.00$         &$   0.44$        &$\B{0.64}$\\ 
-vehicle     &$  846$&$  18$&$  4$& $    0.10 $&     $0.09$           &$0.00$         &$\B{0.10}$       &$0.10$\\
-vowel       &$  990$&$  10$&$ 11$& $    0.17 $&     $0.19$           &$0.00$         &$\B{0.20}$       &$0.19$\\
-waveform    &$ 5000$&$  21$&$  2$& $\B{0.37} $&     $0.30$           &$0.00$         &$   0.23 $       &$0.23$\\
-mnist       &$70000$&$ 784$&$ 10$& $    0.37 $&     N/A$^\dagger$    &$0.00$         &$   0.50$        &$\B{0.77}$\\
+\textsc{digits}      &$ 1797$&$  64$&$ 10$& $    0.62 $&     $0.67$           &$0.10$         &$\mathbf{0.85}$       &$0.73$\\ 
+\textsc{faces}       &$  400$&$4096$&$ 40$& $    0.41 $&     $0.49$           &$0.08$         &$0.02$           &$\B{0.54}$\\ 
+\textsc{iris}        &$  150$&$   4$&$  3$& $    0.72 $&     $0.75$           &$0.55$         &$\B{0.88}$       &$0.88$\\
+\textsc{usps}        &$ 9298$&$ 256$&$ 10$& $    0.52 $&     $0.54$           &$0.00$         &$   0.44$        &$\B{0.64}$\\ 
+\textsc{vehicle}     &$  846$&$  18$&$  4$& $    0.10 $&     $0.09$           &$0.00$         &$\B{0.10}$       &$0.10$\\
+\textsc{vowel}       &$  990$&$  10$&$ 11$& $    0.17 $&     $0.19$           &$0.00$         &$\B{0.20}$       &$0.19$\\
+\textsc{waveform}    &$ 5000$&$  21$&$  2$& $\B{0.37} $&     $0.30$           &$0.00$         &$   0.23 $       &$0.23$\\
+\textsc{MNIST}       &$70000$&$ 784$&$ 10$& $    0.37 $&     N/A$^\dagger$    &$0.00$         &$   0.50$        &$\B{0.77}$\\
 \bottomrule
 \end{tabularx}
 \caption{Adjusted Rand Index of $k$-Means, MeanNN, single link agglomerative

@@ -14,9 +14,9 @@ approximations in the $1$-slack cutting-plane learning algorithm in the context 
 image segmentation. We show that despite inference being deemed intractable in
 loopy superpixel models, we are able to learn a pairwise conditional random
 field model using a structured support vector machine exactly for this task.
-We evaluate our approach on the popular MSRC-21 and Pascal VOC datasets. Our
+We evaluate our approach on the popular MSRC-21 and \textsc{Pascal VOC} datasets. Our
 approach improves upon the state-of-the-art on the MSRC-21 dataset, and is
-competative with comparable approaches on the Pascal VOC dataset.% and nyu?
+competative with comparable approaches on the \textsc{Pascal VOC} dataset.% and nyu?
 
 The contribution of this chapter are:
 \begin{itemize}
@@ -312,7 +312,7 @@ programming relaxation, which we use as the basis for branch-and-bound.
 \subsection{Semantic Image Segmentation}
 % TODO reference auf davor / intro?
 Our main application is of course semantic segmentation and object class
-segmentation. We evaluate the proposed learning approach on Pascal VOC 2013 and
+segmentation. We evaluate the proposed learning approach on \textsc{Pascal} VOC 2013 and
 MSRC-21
 
 We use the same model and pairwise features for the two datasets.
@@ -390,7 +390,7 @@ validation split.
     \bottomrule
     \end{tabularx}
     \end{center}
-    \caption{Accuracies on the Pascal VOC Dataset. We compare our approach
+    \caption{Accuracies on the \textsc{Pascal} VOC Dataset. We compare our approach
     against approaches using the same unary potentials.\tablabel{pascalacc}}
     
 \end{table}
@@ -439,13 +439,13 @@ validation split.
 
 
 \subsubsection{Pascal VOC 2010}
-For the Pascal VOC 2010 dataset, we follow the procedure from \citet{krahenbuhl2012efficient}
+For the \textsc{Pascal} VOC 2010 dataset, we follow the procedure from \citet{krahenbuhl2012efficient}
 in using the official ``validation'' set as our evaluation set, and splitting the training set again.
 We use the unary potentials provided by the same work, and compare only against methods
 using the same setup and potentials, \citet{krahenbuhlparameter} and \citet{dann2012pottics}.
 Note that state-of-the-art approaches, some not build on the CRF framework, obtain
 around a Jaccard Index (also call VOC score) of 40\% , notably \cite{xia2012segmentation}, who 
-evaluate on the Pascal VOC 2010 ``test'' set.
+evaluate on the \textsc{Pascal} VOC 2010 ``test'' set.
 
 
 \begin{table}
@@ -524,7 +524,7 @@ Learning the structured prediction model using move-making inference alone
 takes 4 minutes, while guaranteeing optimality up to  $\epsilon=10^{-4}$
 takes only 18 minutes.
 
-Results on the Pascal-VOC dataset are shown in \Tabref{pascalacc}.
+Results on the \textsc{Pascal} VOC dataset are shown in \Tabref{pascalacc}.
 We compare against several approaches using the same unary potentials.
 For completeness, we also list state-of-the-art approaches not based on CRF models.
 Notably, out model matches or exceeds the performance of the much more involved approaches of
@@ -557,7 +557,7 @@ objective or compute meaningful duality gaps.
     \bottomrule
     \end{tabularx}
     \end{center}
-    \caption{Objective function values on the Pascal Dataset.}
+    \caption{Objective function values on the \textsc{Pascal} VOC Dataset.}
     \tablabel{pascal_objective}
 \end{table}
 

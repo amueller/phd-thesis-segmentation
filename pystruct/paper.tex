@@ -124,7 +124,7 @@ Package        &Multi-Class &  Multi-Label & Chain & Graph & LSVM  &LDCRF \\
      implementations is important to allow fast prototyping and scaling to
      large datasets. \pystruct achieves the same runtime performance
      as the popular \svmstruct model for cutting plane algorithms, and
-     provides implementations of the BCFW and Subgradient methods that scale to
+     provides implementations of the SZLJSP and Subgradient methods that scale to
      large datasets.
 
 \paragraph{Documentation and Examples}
@@ -170,7 +170,7 @@ Package        &Multi-Class &  Multi-Label & Chain & Graph & LSVM  &LDCRF \\
 
 We demonstrate the use of \pystruct on the task of semantic image segmentation,
 the main focus of this work. The example shows how to learn an $n$-slack support
-vector machine on a superpixel-based CRF on the Pascal dataset. Details of the experiment
+vector machine on a superpixel-based CRF on the \textsc{Pascal VOC} dataset. Details of the experiment
 can be found in Section~\secref{semantic_segmentation}.
 Each sample (corresponding on one entry of the list \texttt{X}) is represented as a
 tuple consisting of input features and a graph representation.

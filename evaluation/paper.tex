@@ -90,7 +90,7 @@ letters long, and each letter is represented as a binary image of size $16
 The dataset is divided into ten folds. We consider two setups: learning
 on one fold, and testing on the remaining nine folds, following \citet{taskar2003max},
 and learning on nine folds and testing on the remaining fold, following \citet{lacoste2012block}.
-We refer to the learning on one fold as OCR-small, and learning on nine folds as OCR-big.
+We refer to the learning on one fold as \textsc{OCR-small}, and learning on nine folds as OCR-big.
 We use a simple chain model with a single constant pairwise feature.
 This means that the unary potential has $16 \cdot 8 \cdot 26 = 768$ parameters, one for each input
 feature and output class. The pairwise potential consists of a matrix of
@@ -105,7 +105,7 @@ in which each example can be associated with more than one class. In other
 words, the algorithm must decide for each sample and for each class whether the
 sample belongs to that class or not.
 Multi-label classification was first formulated as a structured prediction problem
-in by \citet{finley2008training}, who used to investigate the influence of
+by \citet{finley2008training}, who used to investigate the influence of
 approximate inference on the $n$-slack cutting plane algorithm. In their formulation
 each class is represented as a binary node in a factor graph---the states representing
 presence or absence of the class. A different factor of pairwise potentials is introduced
@@ -115,17 +115,17 @@ introduced between specific nodes. We build a tree over the binary variables by
 computing the Chow-Liu Tree~\citep{chow1968approximating} of the targets. While
 this results in a less expressive model, a tree-shaped model allows for exact
 inference via message passing.
-We use two of the datasets used in \citet{finley2008training}, the scene
-and yeast datasets. We choose these two as these are real-world datasets for
+We use two of the datasets used in \citet{finley2008training}, the \textsc{scene}
+and \textsc{yeast} datasets. We choose these two as these are real-world datasets for
 which the pairwise approach outlined above actually improves upon the
 baseline~\citep{finley2008training}.
-The scene dataset has six labels, 294 input features, 1211 training samples and
+The \textsc{scene} dataset has six labels, 294 input features, 1211 training samples and
 1196 test samples. This leads to $204 \cdot 6 = 1224$ parameters for the unary potentials,
 $3 \cdot 5 \cdot 4 = 60$ parameters for the full pairwise potentials (four for each edge), and
 $5 \cdot 4 = 20$ parameters for the pairwise potentials of the tree-shaped model.
 Using four parameters for each edge is a slight over-parametrization that
 simplifies writing out the model.
-The yeast dataset has 14 labels, 103 features, 1500 training samples and 971
+The \textsc{yeast} dataset has 14 labels, 103 features, 1500 training samples and 971
 test samples. The resulting numbers of parameters are $14 \cdot 103=1442$ parameters
 for the unary potentials, $7 \cdot 13 \cdot 4=364$ parameters for the full pairwise
 potential, and $13 \cdot 4=52$ parameters for the tree-shaped model.
@@ -148,15 +148,15 @@ potential, and $13 \cdot 4=52$ parameters for the tree-shaped model.
     \includegraphics[width=\linewidth]{evaluation/images/snake_label_0007}
     \end{tabu}
 \caption{%
-    Visualization of the snakes dataset. The top row shows input patterns, the bottom row the corresponding
+    Visualization of the \textsc{snakes} dataset. The top row shows input patterns, the bottom row the corresponding
     labels. The colors in the image showing the labels correspond to dark blue for background, and encoding
     the length of the snake from head (red) to tail (blue).
 \figlabel{snakes_illustration}}
 \end{figure}
 
 \subsection{2D Grid CRF (Snakes)}
-The snakes dataset is a synthetic dataset where samples are labeled 2D grids.
-It was introduced in \citet{nowozin2011decision} to demonstrate the importance
+The \textsc{snakes} dataset is a synthetic dataset where samples are labeled 2D grids.
+It was introduced by \citet{nowozin2011decision} to demonstrate the importance
 of learning conditional pairwise potentials. The dataset consists of ``snakes''
 of length ten traversing the 2D grid. Each grid cell that was visited is marked
 as the snake heading out towards the top, bottom, left, or right, while
@@ -168,11 +168,11 @@ Local evidence for the target label is weak except
 around head and tail, making this a challenging task, requiring strong pairwise
 potentials. The dataset is noise-free in the sense that given the above
 description, a human could easily produce the desired labeling without making
-any mistake. The dataset is also interesting as the model of
+any mistake. The dataset is also interesting as the model proposed by
 \citet{nowozin2011decision} produced notoriously hard-to-optimize energy
 functions.
 
-In \citet{nowozin2011decision}, the input was encoded into five RGB colors
+Originally, the input is encoded into five RGB colors
 (``up'', ``down'', ``left'', ``right'', ``background'').  To encode the input
 more suitably for our linear methods, we convert this representation to a
 one-hot encoding of the five states.
@@ -195,8 +195,8 @@ features, the pairwise potentials have $45 \cdot 4 \cdot 11^2 =21780$ parameters
 
 \subsection{Superpixel CRFs for Semantic Segmentation}
 Our main attention is devoted to the use of conditional random fields for
-semantic segmentation.  We use the Pascal VOC and MSRC datasets.
-The Pascal VOC has 964 training images, each divided into
+semantic segmentation.  We use the \textsc{Pascal VOC} and MSRC datasets.
+The \textsc{Pascal VOC} has 964 training images, each divided into
 around 100 superpixels. There are 20 object categories, and an additional background class. The % TODO check! refer to other part
 MSRC-21 dataset has 276 training images, also segmented in around 100 superpixels
 each. There are 21 classes in the MSRC-21 dataset.
@@ -206,11 +206,11 @@ removed all superpixels in which the majority of pixels is labeled ``void'', lea
 having much fewer than 100 variables.
 Pairwise potentials are introduced for each pair of neighboring superpixels.
 We use the unary and pairwise potentials described in \Secref{semantic_segmentation}:
-for the Pascal VOC dataset 21 unary potentials and 63 for the MSRC-21 dataset.
+21 unary features for the \textsc{Pascal VOC} dataset and 63 unary features for the MSRC-21 dataset.
 We use the same three pairwise features for both datasets: a constant feature, a color
 feature and a feature encoding relative vertical position.
 Overall, this results in $21 \cdot  21 + 3 \cdot 21 \cdot 21 = 1764$ parameters
-for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
+for the potentials on \textsc{Pascal VOC} and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
 2646$ parameters for the potentials on the MSRC-21 dataset.
 
 %For Pascal VOC we use the probabilities provided by
@@ -229,18 +229,18 @@ for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
     \begin{tabu} to \linewidth{@{}X[1,l]YX[1,c]X[1,c]YY@{}}
     %\multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\
     \toprule
-    Dataset    & {samples} & variables & graph & {dim $\theta$} & {labels}\\
+    Dataset             & {samples} & variables & graph & {dim $\theta$} & {labels}\\
     \cmidrule{1-6}
-    MNIST      & 60000   & 1     & none  & 7840  & 10\\
-    OCR-small  & 704     & 3--14 & chain & 1444  & 26\\
-    OCR-large  & 6173    & 3--14 & chain & 1444  & 26\\
-    scene-tree & 1211    & 6     & tree  & 1244  & 2\\
-    scene-full & 1211    & 6     & loopy & 1284  & 2\\
-    yeast-tree & 1500    & 14    & tree  & 1494  & 2\\
-    yeast-full & 1500    & 14    & loopy & 1806  & 2\\
-    snake      & 200     &84--168& loopy & 22275 & 11\\
-    MSRC-21     & 276     & 7--113& loopy &  1764 & 21\\
-    Pascal VOC & 964     & 8--112& loopy &  2646 & 21\\
+    MNIST               & 60000   & 1     & none  & 7840  & 10\\
+    \textsc{OCR-small}  & 704     & 3--14 & chain & 1444  & 26\\
+    \textsc{OCR-large}  & 6173    & 3--14 & chain & 1444  & 26\\
+    \textsc{scene-tree} & 1211    & 6     & tree  & 1244  & 2\\
+    \textsc{scene-full} & 1211    & 6     & loopy & 1284  & 2\\
+    \textsc{yeast-tree} & 1500    & 14    & tree  & 1494  & 2\\
+    \textsc{yeast-full} & 1500    & 14    & loopy & 1806  & 2\\
+    \textsc{snakes}     & 200     &84--168& loopy & 22275 & 11\\
+    MSRC-21             & 276     & 7--113& loopy &  1764 & 21\\
+    \textsc{Pascal VOC} & 964     & 8--112& loopy &  2646 & 21\\
     \bottomrule
     \end{tabu}
     \caption{Summary of datasets used in the evaluation. \tablabel{datasets}}
@@ -298,9 +298,9 @@ easily. We use the dynamic programming algorithm implemented in \textsc{OpenGM}
 for experiments for the tree and chain models.
 For the full pairwise multi-label model, we use branch-and-bound together with
 the AD$^3$ algorithm. %FIXME AD3 solver description?
-We found that using the linear programming relaxation on the scene dataset is
+We found that using the linear programming relaxation on the \textsc{scene} dataset is
 often tight, and there was no need to resort to approximate inference. Inference
-on the yeast dataset was more complex, and on the verge of being non-practical.
+on the \textsc{yeast} dataset was more complex, and on the verge of being non-practical.
 We use this dataset as an example for very costly inference.
 
 \begin{figure}
@@ -353,7 +353,7 @@ objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 \end{figure}
 
 We now consider datasets with non-trivial inference.
-The results for OCR-small are shown in \Figref{ocr_small_results}.
+The results for \textsc{OCR-small} are shown in \Figref{ocr_small_results}.
 Considering the plot against passes over the dataset on the left, several
 trends can be observed: the $n$-slack cutting plane algorithms converge
 fastest, with the version that recomputes the QP at every step leading the
@@ -384,7 +384,7 @@ iterations) because of a tighter dual.  A detailed view is shown in
     \includegraphics[width=\linewidth]{evaluation/images/letters_small_duality_gap}
     \end{tabu}
 \caption{%
-    Primal objective and dual objective (dashed lines) for SZLJSP and $1$-slack cutting plane on MNIST (left) and OCR-small (right).
+    Primal objective and dual objective (dashed lines) for SZLJSP and $1$-slack cutting plane on MNIST (left) and \textsc{OCR-small} (right).
 \figlabel{ocr_small_dual}}
 \end{figure}
 
@@ -420,21 +420,21 @@ is faster at high precision and faster in certifying the desired duality gap.
     \end{tabu}
 \caption{%
    Convergence of the primal suboptimality on the multi-label datasets. From top to
-   bottom: the scene dataset using a tree model, the scene dataset using a full
-   model, the yeast dataset using a tree model, and the yeast dataset using a
+   bottom: the \textsc{scene} dataset using a tree model, the \textsc{scene} dataset using a full
+   model, the \textsc{yeast} dataset using a tree model, and the \textsc{yeast} dataset using a
    full model.
 \figlabel{multi-label-results}}
 \end{figure}
 
-Next, we consider the multi-label task.  The results for the yeast and scene
+Next, we consider the multi-label task.  The results for the \textsc{yeast} and \textsc{scene}
 datasets are shown in \Figref{multi-label-results}. The caching $1$-slack
 algorithm is much faster than the non-caching one on both datasets and both
 graph structures.
 While the two variants of the $n$-slack algorithm are equally fast with respect
 to passes over the training data, solving the QP every 100 steps is among the
 fastest algorithms, while solving the QP at every step is among the slowest.
-We applied this method only to the smaller scene dataset, as applying it on the
-yeast dataset was not practicable.
+We applied this method only to the smaller \textsc{scene} dataset, as applying it on the
+\textsc{yeast} dataset was not practicable.
 
 The caching $1$-slack algorithm is the fastest algorithm to achieve the desired
 primal suboptimality for tree-structured graphs, while it is out-performed by
@@ -446,7 +446,7 @@ longer the inference takes.
 %, inference is much more complex than in the previous tasks.
 
 \subsection{Experiments using Approximate Inference}
-For the remaining tasks, the snakes dataset and image segmentation, exact
+For the remaining tasks, the \textsc{snakes} dataset and image segmentation, exact
 inference is intractable for learning.
 %
 We use two different approximate inference algorithms, fusion moves, a fast
@@ -474,7 +474,7 @@ does not directly reflect the objective, it provides a measure of how effective
 the ``prediction machine'' given by the learned model together with the
 inference algorithm is.
 
-\Figref{snakes_results} shows the results on the snakes dataset.
+\Figref{snakes_results} shows the results on the \textsc{snakes} dataset.
 The top row shows the objective when learning with fusion moves, the next row
 the training set loss.  First, we observe that using fusion moves, even the
 approximate objective does not reach the desired optimality gap for the
@@ -506,24 +506,24 @@ Using branch-and-bound to obtain exact results was not feasible on this dataset.
     \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time_loss}
     \end{tabu}
 \caption{%
-    Results on the snakes dataset. The top four plots show results using fusion
+    Results on the \textsc{snakes} dataset. The top four plots show results using fusion
     move inference, the bottom four plots using AD$^3$. Dashed lines indicate the dual objective.
 \figlabel{snakes_results}}
 \end{figure}
 
-The last set of experiments is on the segmentation dataset MSRC-21 and Pascal
-VOC\@.  Because of the large number of labels and samples, it is only feasible
+The last set of experiments is on the segmentation dataset MSRC-21 and \textsc{Pascal
+VOC}.  Because of the large number of labels and samples, it is only feasible
 to use the fusion move inference algorithm. The results are shown in
 \Figref{msrc_pascal_curves}, with the top four plots showing results on
-MSRC-21, and the bottom four plots showing results on Pascal VOC\@.
+MSRC-21, and the bottom four plots showing results on \textsc{Pascal VOC}.
 First, we notice that all algorithms achieve low (approximate) duality gaps, and none
 of the algorithms terminates prematurely. Also, all algorithms achieve a
 similar dual objectives and similar training errors after convergence.
 In both datasets, the $1$-slack algorithm is somewhat slow in minimizing the
 training set error, and the $n$-slack and stochastic algorithms are much
 faster. Solving the QP only every 100 steps in the $n$-slack algorithm significantly slows
-down learning on both datasets. This is in contrast to the yeast datasets, where the converse was true,
-even though yeast has a similar number of training examples to Pascal VOC.
+down learning on both datasets. This is in contrast to the \textsc{yeast} datasets, where the converse was true,
+even though \textsc{yeast} has a similar number of training examples to \textsc{Pascal VOC}.
 
 Given the outcome described above, we suspect that learning was not affected by approximate
 inference too much. We leave a more detailed analysis for Chapter~\ref{ch:exact_learning}.\pagebreak\\
@@ -542,8 +542,8 @@ inference too much. We leave a more detailed analysis for Chapter~\ref{ch:exact_
     \end{tabu}
 \caption{%
     Objective and traning set loss on the segmentation task. The top four plots
-    show results for the MSRC-21 dataset, the bottom four plots for the Pascal
-    VOC dataset.
+    show results for the MSRC-21 dataset, the bottom four plots for the \textsc{Pascal
+    VOC} dataset.
 \figlabel{msrc_pascal_curves}}
 \end{figure}
 
@@ -585,7 +585,7 @@ particular, it never outperformed SZLJSP.
 
 With respect to approximate learning, we found that the inference algorithm has
 a stronger impact on the performance than the learning algorithm.
-While the SSGD and SZLJSP algorithms have somewhat lower training error on the snakes dataset than
+While the SSGD and SZLJSP algorithms have somewhat lower training error on the \textsc{snakes} dataset than
 the cutting-plane algorithm when using fusion-move inference, they, too, fail at solving the task.
 Using the linear programming relaxation, on the other hand, all algorithms are able to solve the
 task nearly perfectly.
