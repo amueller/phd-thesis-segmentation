@@ -321,24 +321,11 @@ is trivial, this is by far the largest dataset, making the $n$-slack algorithms
 not feasible. We see that the stochastic algorithms are much faster than the
 cutting plane algorithm, in particular initially, even in terms of iterations,
 with the SZLJSP clearly leading the way.
-%Interestingly, the $1$-slack algorithm
-%catches up near the desired suboptimality and is faster in achieving the desired duality gap--even though
-%the primal objective is always above SZLJSP\@. A zoom-in can be found in
-%\Figref{ocr_small_duality}, right hand side.
+Interestingly, the $1$-slack algorithm catches up near the desired
+suboptimality.  Looking at the training set loss in \Figref{mnist_curves}
+suggests that the high precision we demanded was not necessary, and we could
+have terminated the stochastic algorithms much earlier.
 
-We want to highlight an interesting phenomenon here: The cutting-plane algorithms stop immediately
-when reaching the desired suboptimality of $0.1$. The SZLJSP algorithm, on the other hand, keeps
-on learning much longer---even though the primal of the $1$-slack algorithms is
-always above the primal of the SZLJSP\@. This is caused by a looser bound
-given by the dual. Remember that the stopping criterion for both cutting-plane 
-and SZLJSP are given by the duality gap. It seems that while the primal objective converges much
-faster in the SZLJSP algorithm than in the non-caching $1$-slack algorithm, the dual does not.
-This means that in this practical experiment, the non-caching $1$-slack algorithm was \emph{faster}
-in guaranteeing the desired suboptimality. \Figref{ocr_small_dual} illustrates this point by plotting primal and dual
-objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
- Looking at the training set loss in \Figref{mnist_curves} suggests that the
- high precision we demanded was not necessary, and we could have terminated the
- stochastic algorithms much earlier.
 
 
 \begin{figure}
@@ -367,10 +354,21 @@ quantified on the right hand side of \Figref{ocr_small_results}, where the subop
 Clearly the $n$-slack algorithms do ``too much'' work, leading to very slow
 convergence.  Also, caching does not speed up learning learning on this
 dataset.
-%
-As on MNIST, the $1$-slack algorithm stops before the SZLJSP (in terms of
-iterations) because of a tighter dual.  A detailed view is shown in
-\Figref{ocr_small_dual} on the right.
+ 
+We want to highlight an interesting phenomenon here: The cutting-plane
+algorithms stop immediately when reaching the desired suboptimality of $0.1$.
+The SZLJSP algorithm, on the other hand, keeps on learning much longer---even
+though the primal of the $1$-slack algorithms is always above the primal of the
+SZLJSP\@. This is caused by a looser bound given by the dual. Remember that the
+stopping criterion for both cutting-plane and SZLJSP are given by the duality
+gap. It seems that while the primal objective converges much faster in the
+SZLJSP algorithm than in the non-caching $1$-slack algorithm, the dual does
+not. This means that in this practical experiment, the non-caching $1$-slack
+algorithm was \emph{faster} in guaranteeing the desired suboptimality, and
+therefore in terminating.  \Figref{ocr_small_dual} illustrates this point by
+plotting primal and dual objectives for the $1$-slack cutting plane and the
+SZLJSP algorithms. Taking a closer look, we find that the same behavior
+occurred for MNIST, which is also shown in \Figref{ocr_small_dual}.
 
 %The trends seen in the figures are similar to what we saw for MNIST above.
 %Again, even though inference is non-trivial, the non-caching $1$-slack
