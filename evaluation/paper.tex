@@ -89,7 +89,7 @@ letters long, and each letter is represented as a binary image of size $16
 \time 8$, with a total of $6877$ words.
 The dataset is divided into ten folds. We consider two setups: learning
 on one fold, and testing on the remaining nine folds, following \citet{taskar2003max},
-and learning on nine folds and testing on the remaining fold, following \citet{lacoste}.
+and learning on nine folds and testing on the remaining fold, following \citet{lacoste2012block}.
 We refer to the learning on one fold as OCR-small, and learning on nine folds as OCR-big.
 We use a simple chain model with a single constant pairwise feature.
 This means the unary potential has $16 \cdot 8 \cdot 26 = 768$ parameters, one for each input
@@ -105,8 +105,8 @@ in which each example can be associated with more than one class. In other
 words, the algorithm must decide for each sample and for each class whether the
 sample belongs to that class or not.
 Multi-label classification was first formulated as a structured prediction problem
-in by \citet{finley2008training}, where it was used to investigate the influence of
-approximate inference on the $n$-slack cutting plane algorithm. In this formulation,
+in by \citet{finley2008training}, who used to investigate the influence of
+approximate inference on the $n$-slack cutting plane algorithm. In their formulation
 each class is represented as a binary node in a factor graph---the states representing
 presence of absence of the class. A different factor of pairwise potentials is introduced
 between each pair of classes.
@@ -155,28 +155,29 @@ potential, and $13 \cdot 4=52$ parameters for the tree-shaped model.
 \end{figure}
 
 \subsection{2D Grid CRF (Snakes)}
-The snakes dataset is a synthetic dataset, where samples are labeled 2D grids.
+The snakes dataset is a synthetic dataset where samples are labeled 2D grids.
 It was introduced in \citet{nowozin2011decision} to demonstrate the importance
 of learning conditional pairwise potentials. The dataset consists of ``snakes''
 of length ten traversing the 2D grid. Each grid cell that was visited is marked
 as the snake heading out towards the top, bottom, left, or right, while
 unvisited cells are marked as background.  The goal is to predict a labeling of
 the snake from ``head'' to ``tail'', that is assigning numbers from zero to
-nine to the cells that are occupied by the snake.  \Figref{snakes_illustration} illustrates the
-principle.
+nine to the cells that are occupied by the snake.  \Figref{snakes_illustration}
+illustrates the principle.
 Local evidence for the target label is weak except
-around head and tail, making this a challenging task. Pairwise potentials are necessary to solve the
-task. The dataset is noise-free in the sense that given the above description, a
-human could easily produce the desired labeling without making any mistake.
-The dataset is also interesting as the model of \citet{nowozin2011decision} produced
-notoriously hard to optimize energy functions.
+around head and tail, making this a challenging task, requiring strong pairwise
+potentials. The dataset is noise-free in the sense that given the above
+description, a human could easily produce the desired labeling without making
+any mistake. The dataset is also interesting as the model of
+\citet{nowozin2011decision} produced notoriously hard to optimize energy
+functions.
 
 In \citet{nowozin2011decision}, the input was encoded into five RGB colors
 (``up'', ``down'', ``left'', ``right'', ``background'').  To encode the input
-more suitable for our linear methods, we convert this representation to a
+more suitably for our linear methods, we convert this representation to a
 one-hot encoding of the five states.
 
-We use a grid CRF model for this task. Unary for each node are given by the
+We use a grid CRF model for this task. Unary potentials for each node are given by the
 input of the 8-neighborhood of the node---using a 4-neighborhood would most
 likely yield better results, but we do not want to encode too much
 task-knowledge into our model.
@@ -186,7 +187,7 @@ Features for the pairwise potentials are constructed by concatenating the featur
 of the two neighboring nodes, taking the direction of the edge into account.
 The pairwise feature therefore has dimensionality $45 \cdot 4$, with the first
 $45$ entries corresponding to the feature of the ``top'' node, the second $45$
-entries to the features ``bottom'' node, followed bye the ``left'' and
+entries to the features ``bottom'' node, followed by the ``left'' and
 ``right'' nodes. As each edge is either horizontal \emph{or} vertical, only two
 of these parts will be non-zero for any given edge.  With $45 \cdot 4$ edge
 features, the pairwise potentials have $45 \cdot 4 \cdot 11^2 =21780$ parameters.
@@ -195,22 +196,22 @@ features, the pairwise potentials have $45 \cdot 4 \cdot 11^2 =21780$ parameters
 \subsection{Superpixel CRFs for Semantic Segmentation}
 Our main attention is devoted to the use of conditional random fields for
 semantic segmentation.  We use the Pascal VOC and MSRC datasets.
-The Pascal VOC has 964 training, each having
+The Pascal VOC has 964 training images, each having
 around 100 superpixels. There are 20 object categories, plus background. The % TODO check! refer to other part
 MSRC-21 dataset has 276 training images, also segmented in around 100 superpixels
 each. There are 21 classes in the MSRC-21 dataset.
-Each superpixel is represented as an output variable, with the ground truth obtained
-by majority vote over the pixel belonging to the superpixel. We removed all
-superpixels which were mostly ``void'', leading to some samples haven much
-fewer than 100 variables.
-Pairwise potentials were introduced for each pair of neighboring superpixels.
+Each superpixel is represented as an output variable, with the ground truth
+obtained by majority vote over the pixel belonging to the superpixel. We
+removed all superpixels which were mostly ``void'', leading to some samples
+having much fewer than 100 variables.
+Pairwise potentials are introduced for each pair of neighboring superpixels.
 We use the unary and pairwise potentials described in \Secref{semantic_segmentation}:
-for the Pascal VOC dataset 21 unary potentials and 63 for the MSRC21 dataset.
-We use the same three pairwise features for both dataset: a constant, a color
+for the Pascal VOC dataset 21 unary potentials and 63 for the MSRC-21 dataset.
+We use the same three pairwise features for both dataset: a constant feature, a color
 feature and a feature encoding relative vertical position.
 Overall, this results in $21 \cdot  21 + 3 \cdot 21 \cdot 21 = 1764$ parameters
 for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
-2646$ parameters for the potentials on the MSRC21 dataset.
+2646$ parameters for the potentials on the MSRC-21 dataset.
 
 %For Pascal VOC we use the probabilities provided by
 %\citet{krahenbuhl2012efficient}, which combine low-level Texton-Boost
@@ -238,7 +239,7 @@ for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
     yeast-tree & 1500    & 14    & tree  & 1494  & 2\\
     yeast-full & 1500    & 14    & loopy & 1806  & 2\\
     snake      & 200     &84--168& loopy & 22275 & 11\\
-    MSRC21     & 276     & 7--113& loopy &  1764 & 21\\
+    MSRC-21     & 276     & 7--113& loopy &  1764 & 21\\
     Pascal VOC & 964     & 8--112& loopy &  2646 & 21\\
     \bottomrule
     \end{tabu}
@@ -246,7 +247,7 @@ for the potentials on Pascal VOC and $63 \cdot  21 + 3 \cdot 21 \cdot 21 =
 \end{table}
 
 \section{Experiments}
-We compare the following algorithms on the above models:
+We compare the following algorithms on the above models (see \Secref{learning_algorithms} for details):
 \begin{itemize}
     \item Stochastic Subgradient Descent (SSGD) using the Pegasos schedule for step-sizes.
     %\item Stochastic Subgradient Descent using the Pegasos schedule: AVERAGING
@@ -255,9 +256,9 @@ We compare the following algorithms on the above models:
             each sample, the last $50$ inference results are stored.
             Details of the caching strategy can be found in Chapter~\ref{ch:exact_learning}.
             %TODO
-    \item The $n$-slack cutting plane algorithm, where the QP is solved after each training.
-    \item The $n$-slack cutting plane algorithm, where the QP is solved every 100 training samples.
-    \item The SZLJSP algorithm.
+    \item The $n$-slack cutting plane algorithm, where the QP is solved after each sample
+    \item The $n$-slack cutting plane algorithm, where the QP is solved every 100 samples.
+    \item The SZLJSP algorithm with weighted averaging.
 \end{itemize}
 
 All algorithm take a $C$ parameter, which we adjusted on a fully trained model
@@ -274,17 +275,17 @@ SZLJSP, for example, has no hyper-parameters except for the stopping criterion.
 
 Our ultimate evaluation criterion is how fast the learning algorithms converge,
 and how robust they are to approximate inference.  To quantify our goals, we
-track primal suboptimality and training set error during learning, as well as
-final error on the test set.
-We report suboptimality as a function of runtime, and as a function of passes
-over the training set.  Both are important to practitioners, as they give
+track primal suboptimality and training set error during learning.
+%, as well as final error on the test set. FIXME?
+We report primal suboptimality as a function of runtime, and as a function of passes
+over the training set.  Both are informative to practitioners, as they give
 important insight into the working of the algorithm.  The actual runtime is
-certainly the most important factor, but also highly influenced by
+arguably the most relevant factor, but also highly influenced by
 implementation details and properties of the dataset. We are particularly
-interested in cases where inference is highly non-trivial, making inference the
-dominating factor of runtime.
+interested in cases where inference is highly non-trivial, making it the
+dominating factor with respect to runtime.
 We define one pass over the dataset as calling prediction once for each sample.
-This way, we can get a clear picture how learning times with complexity of the
+This way, we can get a clear picture of how learning times scale with complexity of the
 inference task. For the subgradient and SZLJSP algorithms, learning time is linear
 in the number of passes over the dataset, while caching and solving of a QP makes
 the learning time depend on the number of iterations in hard-to-predict ways.
@@ -296,7 +297,8 @@ labeling and multi-label prediction. In these tasks, exact inference is
 possible, and we can compute the exact objective of the various algorithms
 easily. We use the dynamic programming algorithm implemented in \textsc{OpenGM}
 for experiments for the tree and chain models.
-For the full pairwise multi-label model, we use branch-and-bound together with the %FIXME AD3 solver description?
+For the full pairwise multi-label model, we use branch-and-bound together with
+the AD$^3$ algorithm.%FIXME AD3 solver description?
 We found that using the linear programming relaxation on the scene dataset is
 often tight, and there was no need to resort to approximate inference. Inference
 on the yeast dataset was more complex, and on the verge of being non-practical.
@@ -319,10 +321,25 @@ passes over the training set is shown in \Figref{mnist_curves}. While inference
 is trivial, this is by far the largest dataset, making the $n$-slack algorithms
 not feasible. We see that the stochastic algorithms are much faster than the
 cutting plane algorithm, in particular initially, even in terms of iterations,
-with the SZLJSP is clearly leading the way. Interestingly, the $1$-slack algorithm
-catches up near the desired suboptimality. Looking at the training set loss,
-it is clear that the high precision we demanded was not necessary, and we could have
-terminated the stochastic algorithms much earlier.
+with the SZLJSP clearly leading the way.
+%Interestingly, the $1$-slack algorithm
+%catches up near the desired suboptimality and is faster in achieving the desired duality gap--even though
+%the primal objective is always above SZLJSP\@. A zoom-in can be found in
+%\Figref{ocr_small_duality}, right hand side.
+
+We want to highlight an interesting phenomenon here: The cutting-plane algorithms stop immediately
+when reaching the desired suboptimality of $0.1$. The SZLJSP algorithm, on the other hand, keeps
+on learning much longer---even though the primal of the $1$-slack algorithms is
+always above the primal of the SZLJSP\@. This is caused by a looser bound
+given by the dual. Remember that the stopping criterion for both cutting-plane 
+and SZLJSP are given by the duality gap. It seems that while the primal objective converges much
+faster in the SZLJSP algorithm than in the non-caching $1$-slack algorithm, the dual does not.
+This means that in this practical experiment, the non-caching $1$-slack algorithm was \emph{faster}
+in guaranteeing the desired suboptimality. \Figref{ocr_small_dual} illustrates this point by plotting primal and dual
+objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
+ Looking at the training set loss in \Figref{mnist_curves} suggests that the
+ high precision we demanded was not necessary, and we could have terminated the
+ stochastic algorithms much earlier.
 
 
 \begin{figure}
@@ -347,10 +364,14 @@ algorithm, and finally the non-caching $1$-slack cutting plane algorithm and
 subgradient descent.  These results are intuitive, as they reflect ``how much
 work'' each algorithm does for each loss-augmented prediction step. More work
 towards the objective leads to faster convergence.  This ``more work'' is
-quantified on the right hand side, where the suboptimality is plotted against time.
-Clearly the $1$-slack algorithms to ``to much'' work, leading to very slow
+quantified on the right hand side of \Figref{ocr_small_results}, where the suboptimality is plotted against time.
+Clearly the $n$-slack algorithms do ``too much'' work, leading to very slow
 convergence.  Also, caching does not speed up learning learning on this
 dataset.
+%
+As on MNIST, the $1$-slack algorithm stops before the SZLJSP (in terms of
+iterations) because of a tighter dual.  A detailed view is shown in
+\Figref{ocr_small_dual} on the right.
 
 %The trends seen in the figures are similar to what we saw for MNIST above.
 %Again, even though inference is non-trivial, the non-caching $1$-slack
@@ -358,24 +379,16 @@ dataset.
 %do not reflect the runtime complexity of the $n$-slack approach.
 
 \begin{figure}
-    \begin{center}
-    \includegraphics[width=.5\linewidth]{evaluation/images/letters_small_dual}
-\end{center}
+    \begin{tabu} to \linewidth{@{}XX@{}}
+    \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
+    \includegraphics[width=\linewidth]{evaluation/images/mnist_duality_gap}&%
+    \includegraphics[width=\linewidth]{evaluation/images/letters_small_duality_gap}
+    \end{tabu}
 \caption{%
-    Primal and dual objectives for SZLJSP and $1$-slack cutting plane on OCR-small.
+    Primal objective and dual objective (dashed lines) for SZLJSP and $1$-slack cutting plane on MNIST (left) and OCR-small (right).
 \figlabel{ocr_small_dual}}
 \end{figure}
 
-We want to highlight an interesting phenomenon here: The cutting-plane algorithms stop immediately
-when reaching the desired suboptimality of $0.1$. The SZLJSP algorithm, on the other hand, keeps
-on learning much longer---even longer than it took to get to the desired suboptimality. This is caused
-by a much looser bound given by the dual. Remember that the stopping criterion for both cutting-plane 
-and SZLJSP are given by the duality gap. It seems that while the primal objective converges much
-faster in the SZLJSP algorithm than in the non-caching $1$-slack algorithm, the dual does not.
-This means that in this practical experiment, the non-caching $1$-slack algorithm was \emph{faster}
-in guaranteeing the desired suboptimality.
-\Figref{ocr_small_dual} illustrates this point by plotting primal and dual
-objectives for the $1$-slack cutting plane and the SZLJSP algorithms.
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -394,7 +407,6 @@ The trends are the same as for the smaller dataset: $n$-slack and caching $1$-sl
 in terms of passes through the dataset, but $n$-slack cutting plane is impractical slow
 with respect to runtime. The SZLJSP algorithm converges fast initially, but the $1$-slack cutting plane
 is faster at high precision and faster in certifying the desired duality gap.
-
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
     \multicolumn{2}{@{}c@{}}{\includegraphics[width=\linewidth]{evaluation/legend.pdf}}\\[-3mm]
@@ -408,7 +420,7 @@ is faster at high precision and faster in certifying the desired duality gap.
     \includegraphics[width=\linewidth]{evaluation/images/yeast_full_time}
     \end{tabu}
 \caption{%
-   Convergence of the primal objective on the multi-label datasets. From top to
+   Convergence of the primal suboptimality on the multi-label datasets. From top to
    bottom: the scene dataset using a tree model, the scene dataset using a full
    model, the yeast dataset using a tree model, and the yeast dataset using a
    full model.
@@ -421,7 +433,7 @@ algorithm is much faster than the non-caching one on both datasets and both
 graph structures.
 While the two variants of the $n$-slack algorithm are equally fast with respect
 to passes over the training data, solving the QP every 100 steps is among the
-fastest algorithms, while solving the QP every step is among the slowest.
+fastest algorithms, while solving the QP at every step is among the slowest.
 We applied this method only to the smaller scene dataset, as applying it on the
 yeast dataset was not practicable.
 
@@ -439,7 +451,7 @@ For the remaining tasks, the snakes dataset and image segmentation, exact
 inference is intractable for learning.
 %
 We use two different approximate inference algorithms, fusion moves, a fast
-local search procedure, and the linear programming relaxation provided by AD$^3$,
+local search procedure, and the linear programming relaxation provided by AD$^3$
 not using branch-and-bound, in contrast to the multi-label setup above.
 
 Evaluation of algorithms where exact inference is not possible is much harder,
@@ -464,21 +476,22 @@ the ``prediction machine'' given by the learned model together with the
 inference algorithm is.
 
 \Figref{snakes_results} shows the results on the snakes dataset.
-The top row shows the objective when learning with fusion-moves, the next row
-the training set loss.  First, we observe that using fusion-moves even the
+The top row shows the objective when learning with fusion moves, the next row
+the training set loss.  First, we observe that using fusion moves even the
 approximate objective does not reach the desired optimality gap for the
 $1$-slack and SZLJSP algorithms. This is caused by the algorithms not finding
-any further constraints. The $n$-slack algorithm fairs a bit better and
-achieves a higher dual value. Looking at the loss, it is clear that the stochastic
-algorithms have an advantage, possibly caused by not breaking to early.
+any further constraints. The $n$-slack algorithm fares a bit better and
+achieves a higher dual value. Looking at the training set loss, it is clear that the stochastic
+algorithms have an advantage, possibly caused by not stopping too early.
 Still all algorithms ultimately fail to solve the task.
 
 The situation is very different when using the linear programming relaxation.
 Looking at the four plots at the bottom of \Figref{snakes_results}, we see that all
-algorithms are able to solve the task perfectly. %FIXME more details!
+algorithms are able to solve the task perfectly. Evaluating on the test-set, all algorithms
+achieve an accuracy of around 99.5\%, confirming the models actually learned the task.
 Surprisingly, SSGD was very successful on this dataset, even faster then the non-caching $n$-slack
 algorithm. Caching provides nearly an order of magnitude speed-up on the dataset.
-
+%
 Using branch-and-bound to obtain exact results was not feasible on this dataset.
 
 \begin{figure}
@@ -501,19 +514,20 @@ Using branch-and-bound to obtain exact results was not feasible on this dataset.
 
 The last set of experiments is on the segmentation dataset MSRC-21 and Pascal
 VOC\@.  Because of the large number of labels and samples, it is only feasible
-to use the fusion move inference algorithms. The results are shown in
-figure~\cite{msrc_pascal_curves}, with the top four plots showing results on
+to use the fusion move inference algorithm. The results are shown in
+\Figref{msrc_pascal_curves}, with the top four plots showing results on
 MSRC-21, and the bottom four plots showing results on Pascal VOC\@.
 First, we notice that all algorithms achieve low (approximate) duality gap, and none
-of the algorithms terminates prematurely. Also, all algorithms achieve a similar dual value.
-All algorithms achieve similar training errors after convergence.
+of the algorithms terminates prematurely. Also, all algorithms achieve a
+similar dual objectives and similar training errors after convergence.
 In both datasets, the $1$-slack algorithm is somewhat slow in minimizing the
 training set error, and the $n$-slack and stochastic algorithms are much
 faster. Solving the QP only every 100 steps in the $n$-slack algorithm significantly slows
-down learning here. This is in contrast to the yeast datasets, where the converse was true,
-even though both datasets have a similar number of training examples.
+down learning on both datasets. This is in contrast to the yeast datasets, where the converse was true,
+even though yeast has a similar number of training examples to Pascal VOC.
+
 Given the outcome described above, we suspect that learning was not affected by approximate
-inference too much. We leave a more detailed analysis for Chapter~\ref{ch:exact_learning}.
+inference too much. We leave a more detailed analysis for Chapter~\ref{ch:exact_learning}.\pagebreak\\
 
 \begin{figure}
     \begin{tabu} to \linewidth{@{}XX@{}}
@@ -534,23 +548,22 @@ inference too much. We leave a more detailed analysis for Chapter~\ref{ch:exact_
 \figlabel{msrc_pascal_curves}}
 \end{figure}
 
-
 \section{Summary}
 From the experiments above, it is clear there is currently \emph{no single best algorithm}.
 However, there are some clear trends:
 \begin{itemize}
     \item SZLJSP always converges faster than SSGD, with each iteration having
-        the same time complexity.  This indicates that SZJLSP should be
+        the same time complexity.  This indicates that SZLJSP should be
         preferred over SSGD, apart from settings with strong memory
         constraints.
     \item In nearly all experiments, caching significantly improved performance
         of the 1-slack cutting plane algorithm.
-    \item Initially SZJLSP and even SSGD converge faster than the 1-slack
+    \item Initially SZLJSP and even SSGD converge faster than the 1-slack
         cutting plane algorithm, while the 1-slack cutting plane algorithm was
         faster in achieving high precision solutions and guaranteeing low
         duality gap.
     \item The $n$-slack cutting plane algorithm was often fastest to converge in
-        terms of passes over the training set, but often slow in terms of
+        terms of passes over the training set, but slow in terms of
         runtime. For problems with very slow inference, the $n$-slack algorithm
         might be a better choice than the others---if the interval between re-solving
         the QP is chosen right.
@@ -567,19 +580,17 @@ such implementation tricks. This makes the SZLJSP algorithm very attractive for
 the practitioner who does not want to spend much time tuning the
 implementation.
 
-We do not consider SSGD with averaging~\cite{lacoste2012simpler} here, but
+We do not consider SSGD with averaging~\citep{lacoste2012simpler} here, but
 found it so produce results similar to plain SSGD in tentative experiments. In
 particular, it never outperformed SZLJSP.
 
 With respect to approximate learning, we found that the inference algorithm has
 a stronger impact on the performance than the learning algorithm.
-While the SSGD and SZLJSP algorithms have somewhat lower training error on the snakes than
+While the SSGD and SZLJSP algorithms have somewhat lower training error on the snakes dataset than
 the cutting-plane algorithm when using fusion-move inference, they, too, fail at solving the task.
 Using the linear programming relaxation, on the other hand, all algorithms are able to solve the
-task near perfect.
-For the segmentation datasets, the approximate inference seem to be less of a
-problem, as most algorithms achieve the desired approximate duality gap (which
-is not the actual duality gap, see Chapter~\ref{ch:exact_learning} for a
-discussion).
-In the next chapter, Chapter~\ref{ch:exact_learning}, we will demonstrate how
+task near perfectly.
+For the segmentation datasets, it is harder to judge the outcome, though there seems to be little difference
+between the learning algorithms in terms of the final result.
+In the next chapter, we will demonstrate how
 we can learn exactly, even in this setting.

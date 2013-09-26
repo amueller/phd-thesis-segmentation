@@ -1,31 +1,29 @@
-page layout NYU uebelst haesslich!
-page layout intro! meh!
+snake AD3 n-slack!
+==================
+ocr-small n-slack, n-slack every?
 
-letters-large: n-slack?
+update figures for yeast?
 
-fuer approximate inference: plot primal vs dual! explain!
-
-plot validation error statt training error?
-
-snake AD3 n-slack! training error for SZLJSP!
-================================================
-
-test set performance of all models?
-
-yeast tree n-slack?
-
-accuracy in semi-supervised table needs units <- vladn. I fixed that, didn't I?
-
-citation for ball tree?
+MNIST
 
 4.3 neues chapter: unary potentials und pairwise potentials beschreiben
 korrektur lesen neues chapter ueber CRFs!!!!
 unsere relation betonen!!
 
+
+plot validation error statt training error?
+test set performance of all models?
+
+
+accuracy in semi-supervised table needs units <- vladn. I fixed that, didn't I?
+
+page layout NYU uebelst haesslich!
+page layout intro! meh!
+
+citation for ball tree?
+
 versuche: vielleicht noch averaged SSGD?
 SSGD abkuerzung?
-
-image bei slic / CRF...
 
 mehr related work ueber image segmentation
 redundanz vermeiden
