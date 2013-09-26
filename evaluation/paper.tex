@@ -295,9 +295,9 @@ In this section, we present results on multi-class classification, sequence
 labeling and multi-label prediction. In these tasks, exact inference is
 possible, and we can compute the exact objective of the various algorithms
 easily. We use the dynamic programming algorithm implemented in \textsc{OpenGM}
-for experiments for the tree and chain models.
+for experiments using the tree and chain models.
 For the full pairwise multi-label model, we use branch-and-bound together with
-the AD$^3$ algorithm. %FIXME AD3 solver description?
+the AD$^3$ algorithm.
 We found that using the linear programming relaxation on the \textsc{scene} dataset is
 often tight, and there was no need to resort to approximate inference. Inference
 on the \textsc{yeast} dataset was more complex, and on the verge of being non-practical.
@@ -447,8 +447,9 @@ longer the inference takes.
 For the remaining tasks, the \textsc{snakes} dataset and image segmentation, exact
 inference is intractable for learning.
 %
-We use two different approximate inference algorithms, fusion moves, a fast
-local search procedure, and the linear programming relaxation provided by AD$^3$
+We use two different approximate inference algorithms, fusion
+moves~\citep{lempitsky2010fusion}, a fast local search procedure, and the
+linear programming relaxation provided by AD$^3$~\citep{martins2011augmented}
 not using branch-and-bound, in contrast to the multi-label setup above.
 
 Evaluation of algorithms where exact inference is not possible is much harder,
