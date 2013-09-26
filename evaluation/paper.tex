@@ -483,7 +483,7 @@ algorithms have an advantage, possibly caused by not stopping too early.
 Still, all algorithms ultimately fail to solve the task.
 
 The situation is very different when using the linear programming relaxation.
-Looking at the four plots at the bottom of \Figref{snakes_results}, we see that all
+Looking at last two rows of \Figref{snakes_results}, we see that all
 algorithms are able to solve the task perfectly. Evaluating on the test-set, all algorithms
 achieve an accuracy of around 99.5\%, confirming the models actually learned the task.
 Surprisingly, SSGD was very successful on this dataset, even faster then the non-caching $n$-slack
@@ -504,16 +504,16 @@ Using branch-and-bound to obtain exact results was not feasible on this dataset.
     \includegraphics[width=\linewidth]{evaluation/images/snakes_ad3_time_loss}
     \end{tabu}
 \caption{%
-    Results on the \textsc{snakes} dataset. The top four plots show results using fusion
-    move inference, the bottom four plots using AD$^3$. Dashed lines indicate the dual objective.
+    Results on the \textsc{snakes} dataset. The first two rows show results using fusion
+    move inference, the two rows below using AD$^3$. Dashed lines indicate the dual objective.
 \figlabel{snakes_results}}
 \end{figure}
 
 The last set of experiments is on the segmentation dataset MSRC-21 and \textsc{Pascal
 VOC}.  Because of the large number of labels and samples, it is only feasible
 to use the fusion move inference algorithm. The results are shown in
-\Figref{msrc_pascal_curves}, with the top four plots showing results on
-MSRC-21, and the bottom four plots showing results on \textsc{Pascal VOC}.
+\Figref{msrc_pascal_curves}, with the plots in the two upper rows showing results on
+MSRC-21, and the tow rows below showing results on \textsc{Pascal VOC}.
 First, we notice that all algorithms achieve low (approximate) duality gaps, and none
 of the algorithms terminates prematurely. Also, all algorithms achieve a
 similar dual objectives and similar training errors after convergence.
@@ -539,8 +539,8 @@ inference too much. We leave a more detailed analysis for Chapter~\ref{ch:exact_
     \includegraphics[width=\linewidth]{evaluation/images/pascal_time_loss}
     \end{tabu}
 \caption{%
-    Objective and traning set loss on the segmentation task. The top four plots
-    show results for the MSRC-21 dataset, the bottom four plots for the \textsc{Pascal
+    Objective and traning set loss on the segmentation task. The first two rows
+    show results for the MSRC-21 dataset, the rows below for the \textsc{Pascal
     VOC} dataset.
 \figlabel{msrc_pascal_curves}}
 \end{figure}
