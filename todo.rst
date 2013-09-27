@@ -5,9 +5,11 @@ update figures for yeast?
 MNIST
 AD3 solver description!!!! and fusion moves!
 ==============================
+gerade in exact learning, sollte lieber zu experimenten?
+implementation details teil in exact learning gerade... gehoert da auch nicht wirklich hin...
 
-VLAD
-=====
+tikz?
+
 
 4.3 neues chapter: unary potentials und pairwise potentials beschreiben
 korrektur lesen neues chapter ueber CRFs!!!!
@@ -48,6 +50,7 @@ definiere ich unary und pairwise terms?
 
 re-check
 ==========
+grep todo and fixme
 future / present tense?!?!?
 s/learning rate/step size/g  Done (check again later)
 1-slack und n-slack consistent (one/1, n, $n$)  (done, check again later)
