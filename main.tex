@@ -353,7 +353,7 @@ direction pursued by \citet{shalev2012proximal}.
 \paragraph{Inference Machines}
 Recently \citet{stoyanov2011empirical} started a new trend in structured
 prediction, which is sometimes called ``inference machines''. The basic
-principle is simple: the process of prediction \emph{using a given inference
+principle is simple: the process of \emph{prediction using a given inference
 procedure} is viewed as a feed-forward method for prediction, and parameters of this
 prediction process are optimized directly using empirical risk minimization. The work of
 \citet{stoyanov2011empirical} used loopy belief propagation as their inference
@@ -379,10 +379,10 @@ had only limited success in the context of CRFs for image
 segmentation~\citep{lucchi2012structured}.
 Two major alternatives for non-linear CRFs were proposed in the literature,
 conditional neural fields~\citep{peng2009conditional} based on neural networks,
-and decision tree fields~\citep{nowozin2011decision}, based on decision trees.
+and decision tree fields~(DTFs)~\citep{nowozin2011decision}, based on decision trees.
 Conditional neural fields have only been applied to sequence classification so far,
 and extending them to our setting of semantic image segmentation would be very
-interesting. Decision tree fields~(DTFs) on the other hand have been applied to loopy
+interesting. DTFs on the other hand have been applied to loopy
 graphs for image processing, but not for higher-level tasks such as semantic
 segmentation. If it is possible to include context in a meaningful way, it
 might be possible to address even object-centric tasks such as object class
@@ -390,19 +390,19 @@ segmentation with DTFs.
 %
 \paragraph{Higher Order Potentials and Latent Variable Models}
 While non-linear potentials would allow for more complex interactions between
-inputs and labelings, introducing higher order potentials or latent variables
-allow the model to express more complex interactions within the output
-variables~\citep{dann2012pottics, kohli2009robust}. Possible examples are
-consistency of larger regions, learning parts or learning of scene classes and
-cooccurences.
+inputs and labelings, introducing higher order
+potentials~\citep{kohli2009robust, ladicky2009associative} or latent
+variables~\citep{dann2012pottics} allow the model to express more complex
+interactions within the output variables. Possible examples are consistency of
+larger regions, learning parts or learning of scene classes and cooccurences.
 In principle, higher order potentials and latent variable models are
 equivalent, in that each energy function expressed in either form can be
 transformed into an energy function of the other kind. In practice, learning of
 higher order potentials for semantic segmentation has received little
-attention, while approaches using latent variables are often limited by
-the non-convexity of learning.  It would be interesting to compare current
-methods using latent variable and higher order approaches, and see how these
-interact with different inference and learning schemes.
+attention, while approaches using latent variables are often limited by the
+non-convexity of learning.  It would be interesting to compare current methods
+using latent variable and higher order approaches, and see how these interact
+with different inference and learning schemes.
 %
 \paragraph{Feature Design}
 This work mostly focused on learning methods, and less on the input---with
