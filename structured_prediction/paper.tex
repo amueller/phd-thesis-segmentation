@@ -479,8 +479,7 @@ convergence.
 \enlargethispage{10mm}
 The detailed procedure as given by \citet{lacoste2012block} is shown in Algorithm~\ref{alg_szljsp}.
 
-
-\section{Conditional Random Fields for Semantic Segmentation}\seclabel{semantic_segmentation}
+\section[Conditional Random Fields for Semantic Segmentation]{Conditional Random Fields\linebreak for Semantic Segmentation}\seclabel{semantic_segmentation}
 %
 \subsection{Fundamentals of Conditional Random Fields}
 Structured models based on factor graphs, as described in \Secref{factor_graphs} are often
@@ -549,6 +548,45 @@ evidence does not suffice.
 % hierarchical\dots has superpixels and pixels?
 
 % submodular/non-submodular? higher order?
+\subsection{Data, Features and Superpixels}
+When evaluating learning algorithms in Chapter~\ref{ch:comparison} and
+Chapter~\ref{ch:exact_learning} we use the well-established \textsc{Pascal} VOC 2010 and
+MSRC-21 datasets, shown in the introduction in \Figref{pascal_msrc}.
+As we focus on the learning algorithms in these chapters, we use features for
+unary potentials from the literature.
+
+For both datasets we use the TextonBoost class probabilities provided by
+\citet{krahenbuhl2012efficient}. For the \textsc{Pascal} VOC dataset, the potentials
+provided by \citet{krahenbuhl2012efficient} also include the responses of
+object detectors~\citet{}, to better capture the complex object classes.
+We average the potentials inside superpixels and use the resulting feature
+as input to our unary potentials.
+For the MSRC-21 dataset, we compute TextonBoost on two different scales, as
+suggested by \citet{mottaghianalyzing}. We additionally extract SIFT and color descriptors and create
+bag-of-word descriptors for each superpixel. Following the approach of
+\citet{lucchi2011spatial} we augment these with a global bag-of-word descriptor
+for each image. We train a linear SVM using an approximation to the additive
+$\chi^2$ kernel~\citet{vedaldi2010efficient} and use the response as an
+additional input to our CRF\@. This \emph{piecewise training} simplifies
+learning and was found to have little effect on
+accuracy~\citet{nowozin2010parameter}. In total, there are $63$ features
+for the MSRC-21 dataset, $21$ for each scale of TextonBoost and an additional
+$21$ for the bag-of-word model using an SVM.
+
+We use the SLIC~\citep{achanta2012slic} algorithm to create superpixel for all
+our experiments.  It has been shown to provide competitive results with a
+minimum of computational complexity.  Algorithmically, SLIC simply computes a
+$k$-means clustering over pixels. Each pixels is represented as 5D point, using
+three color channels and the $x$ and $y$ coordinates in the image.  In a
+post-processing step, small segments are removed. To make clustering of so many
+points feasible, the search for the nearest cluster in $k$-means is restricted
+to a local neighborhood in the image. An example of superpixels computed with
+the SLIC algorithm can be found in \Figref{superpixel_illustration}.
+%
+The features and superpixel algorithm used for the RGB-D dataset NYU used in
+Chapter~\ref{ch:nyu} will be discussed there.
+
+
 \subsection{Previous Work}
 Conditional random fields were first used in the context of semantic
 segmentation by \citet{he2004multiscale}.  Who used contrastive divergence for
@@ -588,40 +626,3 @@ object localization and semantic segmentation.  Their work is based on
 \citet{hazan2010primal}, who integrate learning and inference in a joint
 optimization problem.
 
-\subsection{Data, Features and Superpixels}
-When evaluating learning algorithms in Chapter~\ref{ch:comparison} and
-Chapter~\ref{ch:exact_learning} we use the well-established \textsc{Pascal} VOC 2010 and
-MSRC-21 datasets, shown in the introduction in \Figref{pascal_msrc}.
-As we focus on the learning algorithms in these chapters, we use features for
-unary potentials from the literature.
-
-For both datasets we use the TextonBoost class probabilities provided by
-\citet{krahenbuhl2012efficient}. For the \textsc{Pascal} VOC dataset, the potentials
-provided by \citet{krahenbuhl2012efficient} also include the responses of
-object detectors~\citet{}, to better capture the complex object classes.
-We average the potentials inside superpixels and use the resulting feature
-as input to our unary potentials.
-For the MSRC-21 dataset, we compute TextonBoost on two different scales, as
-suggested by \citet{mottaghianalyzing}. We additionally extract SIFT and color descriptors and create
-bag-of-word descriptors for each superpixel. Following the approach of
-\citet{lucchi2011spatial} we augment these with a global bag-of-word descriptor
-for each image. We train a linear SVM using an approximation to the additive
-$\chi^2$ kernel~\citet{vedaldi2010efficient} and use the response as an
-additional input to our CRF\@. This \emph{piecewise training} simplifies
-learning and was found to have little effect on
-accuracy~\citet{nowozin2010parameter}. In total, there are $63$ features
-for the MSRC-21 dataset, $21$ for each scale of TextonBoost and an additional
-$21$ for the bag-of-word model using an SVM.
-
-We use the SLIC~\citep{achanta2012slic} algorithm to create superpixel for all
-our experiments.  It has been shown to provide competitive results with a
-minimum of computational complexity.  Algorithmically, SLIC simply computes a
-$k$-means clustering over pixels. Each pixels is represented as 5D point, using
-three color channels and the $x$ and $y$ coordinates in the image.  In a
-post-processing step, small segments are removed. To make clustering of so many
-points feasible, the search for the nearest cluster in $k$-means is restricted
-to a local neighborhood in the image. An example of superpixels computed with
-the SLIC algorithm can be found in \Figref{superpixel_illustration}.
-
-The features and superpixel algorithm used for the RGB-D dataset NYU used in
-Chapter~\ref{ch:nyu} will be discussed there.

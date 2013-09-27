@@ -93,30 +93,6 @@ not relate their results back to the original SSVM objective they approximate.
 It is unclear how they compare to standard structured prediction approaches
 on real-world applications.
 
-\begin{algorithm*}[t]
-    \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack_again}}
-    \begin{algorithmic}[1]
-        \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$, inference oracle $\hat{I}$.
-        \Ensure parameters $\theta$, slack $\xi$
-        \State $\W \leftarrow \emptyset$
-        \Repeat
-            \State \label{line_restricted}
-            \vspace{-5mm}
-            \begin{flalign*}
-            \quad\quad    (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi&\\
-            &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:&\\
-            &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi&
-            \end{flalign*}
-            \For {i=1, \dots, k}
-                \State
-            $\hat{y}\hoch{i} \leftarrow \hat{I}(x\hoch{i}, y\hoch{i}, \theta) \approx \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
-            \EndFor
-            \State $\W \leftarrow \W \cup \{ (\hat{y}\hoch{i}, \dots, \hat{y}\hoch{i}) \} $
-        \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] $
-        \Until $\xi' - \xi < \epsilon$ \label{convergence_check}
-    \end{algorithmic}
-\end{algorithm*}
-
 \section{Learning SSVMs with Approximate Inference}
 In this chapter, we use the $1$-slack cutting plane algorithm, as we found this
 algorithm to be most suitable for out approach. Recall the optimization problem
@@ -145,6 +121,29 @@ that possibly $\hat{I}(x^i, y^i, \theta) \notin \mathcal{Y}$.
 %We elaborate on
 %the properties of under-generating and over-generating inference procedures in
 %Section~\ref{bounds}. %TODO Filler sentence? wat?
+\begin{algorithm*}[t]
+    \caption{1-Slack Cutting Plane Training of Structural SVMs \label{alg_one_slack_again}}
+    \begin{algorithmic}[1]
+        \Require training samples $\{ (x\hoch{i}, y\hoch{i}), \dots, (x\hoch{i}, y\hoch{i})\}$, regularization parameter $C$, stopping tolerance $\epsilon$, inference oracle $\hat{I}$.
+        \Ensure parameters $\theta$, slack $\xi$
+        \State $\W \leftarrow \emptyset$
+        \Repeat
+            \State \label{line_restricted}
+            \vspace{-5mm}
+            \begin{flalign*}
+            \quad\quad    (\theta, \xi) \leftarrow \displaystyle &\argmin_{\theta, \xi} \frac{||\theta||}{2}^2 + C \xi&\\
+            &\text{s.t. }\forall \hat{\mathbf{y}}=(\hat{y}\hoch{1}, \dots, \hat{y}\hoch{k}) \in \W:&\\
+            &\theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] \geq \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \xi&
+            \end{flalign*}
+            \For {i=1, \dots, k}
+                \State
+            $\hat{y}\hoch{i} \leftarrow \hat{I}(x\hoch{i}, y\hoch{i}, \theta) \approx \displaystyle \argmax_{\hat{y}\in\mathcal{Y}} \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y})]$ \label{get_cutting_plane_again}
+            \EndFor
+            \State $\W \leftarrow \W \cup \{ (\hat{y}\hoch{i}, \dots, \hat{y}\hoch{i}) \} $
+        \State $ \displaystyle \xi' \leftarrow  \sum_{i=1}^k \delta(y\hoch{i}, \hat{y}\hoch{i}) - \theta^T \sum_{i=1}^k [\Phi(x\hoch{i}, y\hoch{i}) - \Phi(x\hoch{i}, \hat{y}\hoch{i})] $
+        \Until $\xi' - \xi < \epsilon$ \label{convergence_check}
+    \end{algorithmic}
+\end{algorithm*}
 
 \subsection{Bounding the Objective}\seclabel{bounds}
 Even using approximate inference procedures, several statements
@@ -604,7 +603,7 @@ Using other over-generating techniques, such as duality-based message passing
 algorithms, it might be possible to obtain meaningful bounds on the true
 objective, even in the pixel-level domain.
 
-\begin{figure*}
+\begin{figure*}[tb]
 \centering
 \includegraphics[width=\linewidth]{figure}
 \caption{%
