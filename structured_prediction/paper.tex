@@ -23,8 +23,9 @@ language processing and computer vision (see \citet{nowozin2011structured}
 for an introduction and \citet{blake2011markov} for a recent survey).
 %
 In this chapter, we first introduce the concepts and algorithms used in
-structured prediction, in particular in maximum margin methods. We 
-accompany this by a description of our open source implementation of these
+structured prediction, in particular in maximum margin methods. Then, we review
+the use of CRFs in computer vision, and introduce our methods. Finally we give
+a description of our open source implementation of structured learning
 algorithms, \pystruct.
 
 \pagebreak
@@ -38,15 +39,9 @@ $y$~\citep{nowozin2011structured}:
 \begin{equation}
     f(x) = \argmax_{y \in \mathcal{Y}} g(x, y)
 \end{equation}
-Finding $y$ in the above equation is often referred to as inference
-or prediction.
-Most current approaches use linear functions, with some notable exceptions:
-\citet{peng2009conditional} introduced a conditional random field for sequence
-prediction where single-node potentials are computed using neural networks,
-while \citet{nowozin2011decision} proposed a conditional random field for image
-processing, where all potentials are computed using decision trees.
-
-The linear approach leads to
+Finding $y$ in the above equation is often referred to as inference or
+prediction.  We will use the most common approach of using a linear parametrization of $g$,
+which leads to
 \begin{equation}\eqlabel{main_equation}
     f(x) = \argmax_{y \in \mathcal{Y}}\  \theta^T \Phi(x, y).
 \end{equation}
@@ -236,7 +231,7 @@ The most commonly used update has the simple form
 \begin{equation}
     \theta_{t+1} = (1 - \eta_t) \theta_t - \eta_t C \left [\Phi(x\hoch{i}, \hat{y}) - \Phi(x\hoch{i}, y\hoch{i})\right]
 \end{equation}
-Where $\eta_t$ is a sequence of step sizes.
+Here $\eta_t$ is a sequence of step sizes.
 %Theoretical convergence guarantees of \ldots can be given whenever \ldots,
 In practice the choice of $\eta_t$ is often strongly influences the convergence behavior.
 Many practitioners adopt the sequence proposed for binary SVMs in the Pegasos algorithm~\citep{shalev2011pegasos}:
@@ -450,15 +445,15 @@ to make the algorithm more efficient:
 
 Very recently, two groups independently derived a very performant new algorithm.
 \citet{shalev2012proximal} investigated stochastic dual coordinate descent applied
-to structured support vector machines. \citet{lacoste2012block} started from the Frank-Wolfe algorithm %TODO details
-and derived a block-coordinate version, where each block corresponds to the
-constraints associated with a single training example.  Both groups showed that
-closed-form line search is possible, and, surprisingly ended up with the exact
-same algorithm and closely related convergence guarantees.  The algorithm
-processes a single training example at a time, and can be applied while
-remaining completely in the primal domain, making it applicable to very large
-datasets.  We refer to the algorithm as SZLJSP, after the authors of the
-two papers.
+to structured support vector machines. \citet{lacoste2012block} started from
+the Frank-Wolfe algorithm and derived a block-coordinate version, where each
+block corresponds to the constraints associated with a single training example.
+Both groups showed that closed-form line search is possible, and, surprisingly
+ended up with the exact same algorithm and closely related convergence
+guarantees.  The algorithm processes a single training example at a time, and
+can be applied while remaining completely in the primal domain, making it
+applicable to very large datasets.  We refer to the algorithm as SZLJSP, after
+the authors of the two papers.
 %
 The SZLJSP algorithm has the same theoretical convergence rate of $O(\frac{1}{T})$
 as stochastic subgradient decent, but has two distinguishing advantages:
@@ -471,8 +466,11 @@ as stochastic subgradient decent, but has two distinguishing advantages:
     SZLJSP removes the need for any step size parameter, making application
     of the algorithm much simpler.
 \end{description}
+The only disadvantage of SZLJSP compared to SSGD is the larger memory requirement.
+While SSGD only needs to store a single copy of the parameters $\theta$, SZLJSP
+needs to store a separate (though possibly sparse) copy for each training sample.
 
-In practice, the SZLJSP algorithm is usually used with the weighted averaging
+In practice, the SZLJSP algorithm is commonly used with the weighted averaging
 described in \Eqref{averaging}, as this is known to improve performance in the
 closely related stochastic subgradient algorithms, and empirically improves
 convergence.
@@ -541,7 +539,7 @@ evidence does not suffice.
 \end{tabu}
 \caption{%
     Schematic of CRFs over superpixels. From left to right: input image, superpixel segmentation
-    using SLIC into about 100 superpixels, pairwise potential in the CRF, and desired labeling.
+    using SLIC into about 100 superpixels, pairwise potential in the CRF, and desired labeling of superpixels.
 \figlabel{superpixel_illustration}}
 \end{figure}
 

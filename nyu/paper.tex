@@ -175,7 +175,7 @@ We take a super-pixel based approach to semantic segmentation.
 Our superpixel generation is based on the SLIC
 algorithm~\citep{achanta2012slic} described in \Secref{semantic_segmentation}. We
 extend the standard SLIC algorithm, which works on the Lab space, to also
-include depth information. The resulting algorithm is a localized $k$-Means in
+include depth information. The resulting algorithm is a localized $k$-means in
 Lab-D-XY space.
 Our implementation is publicly available through the scikit-image library\footnote{\url{http://scikit-image.org}}.
 Similar to \citet{SilbermanECCV12}, we found little visual improvement over the
@@ -204,7 +204,7 @@ We augment these prediction with another feature, based on the height of a super
 This is a very informative feature, in particular to determine the floor.
 To compute the height of a (super) pixel, we first find the ``up'' direction.
 We use a very simple approach that we found effective: we cluster normal
-directions of all pixels into 10 clusters using $k$-means, and use the one that
+directions of all pixels into $10$ clusters using $k$-means, and use the one that
 is most parallel to the $Y$ direction, which roughly corresponds to height in
 the dataset.
 We then project the 3D point cloud given by the depth along this direction, and
@@ -273,7 +273,7 @@ There are five different features used to build pairwise potentials in our model
 \begin{table*}[t]
 \begin{tabularx}{\linewidth}{@{\extracolsep{\fill}}l@{}cccccc}
 \toprule
-                        & \footnotesize{ground}        &  \footnotesize{structure}    & \footnotesize{furniture}     & \footnotesize{props}         & \footnotesize{class avg.}   & \footnotesize{pixel avg.}\\
+                        & \footnotesize{ground}        &  \footnotesize{structure}    & \footnotesize{furniture}     & \footnotesize{prop}         & \footnotesize{class avg.}   & \footnotesize{pixel avg.}\\
 \cmidrule{1-7}
 
 RF                              &         90.8  &   81.6        & 67.9          & 19.9          &  65.0        &  68.3 \\
@@ -310,7 +310,7 @@ boundaries and hard-to-annotate regions. We follow the
 literature in excluding these pixels completely from the evaluation.
 We optimize our model for \emph{average class accuracy} (the mean of the
 diagonal of the confusion matrix), which puts more emphasis on the harder
-classes of props and furniture, which have smaller area than structure and
+classes of prop and furniture, which have smaller area than structure and
 floor.
 
 Our approach is implemented using our \textsc{PyStruct}
@@ -330,7 +330,7 @@ often found an integer solution, without the need for a branch-and-bound procedu
 that using fusion moves alone produced inferior results.
 
 \Tabref{results} compares different components of our approach with the literature.
-Please note that we \emph{first} designed our final model, using only the
+Note that we \emph{first} designed our final model, using only the
 validation data. We now report accuracies of simpler models for reference,
 however these results were not used for model selection. To separate
 the influence of loss-based training and the spatial reasoning of the CRF,
@@ -359,7 +359,7 @@ results that are very close to the ground truth in several complex scenes.
 
 We found that our approach improves results most for scenes with a clear geometric structure,
 which is not surprising. We see that evidence from the random forest is often very noisy, and biased
-away from the ``props'' class. While the unstructured SVM can correct somewhat
+away from the ``prop'' class. While the unstructured SVM can correct somewhat
 for the class imbalance, it has no way to make larger areas consistent, which
 the CRF can.
 On the other hand, performance of the CRF deteriorates slightly on very crowded
@@ -385,7 +385,7 @@ crowded scenes, the CRF has little chance to recover.
 \Figref{weights} visualizes some learned potential functions.
 Higher values correspond to favored configurations. One can see that the
 vertical alignment potential expresses that the floor is much more likely to be below
-other classes. It also encodes the fact that props
+other classes. It also encodes the fact that prop
 rest on furniture, but not the other way around.
 The potential of the depth feature encodes, for example, that the ground
 is usually behind the other classes, while furniture is in front of structures,

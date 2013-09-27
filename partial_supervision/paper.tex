@@ -69,7 +69,7 @@ us to judge the success of learning on instance level.
 Most work on multi-class segmentation focuses on strong supervision on
 superpixel level. There is still little work on using candidate segments.  The
 method we use for generating candidate segments is Constraint Parametric
-Min-Cuts (CPMC) from \citet{carreira2010constrained}.  This method creates a
+Min-Cuts (CPMC) of \citet{carreira2010constrained}.  This method creates a
 wide variety of overlapping segments. Support vector regression (SVR) is
 trained on these segments to estimate the overlap of segments with ground truth
 object-class labeling from the \textsc{Pascal} VOC dataset~\citep{pascal}. This provides
@@ -171,7 +171,7 @@ recognition than these patch-based or superpixel-based approaches.
 \subsection{Constraint Parametric Min-Cuts (CPMC)}
 % Repetition?
 To generate proposal segments, we use the Constraint Parametric Min-Cuts (CPCM)
-method from \citet{carreira2010constrained}. In CPMC, initial segments are
+method of \citet{carreira2010constrained}. In CPMC, initial segments are
 constructed using graph cuts on the pixel grid. The energy function for these cuts
 uses pixel color and the response of the global probability of boundary (gPb)
 detector~\citep{maire2008using}. As much as ten thousand initial segments are

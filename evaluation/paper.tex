@@ -196,17 +196,17 @@ features, the pairwise potentials have $45 \cdot 4 \cdot 11^2 =21780$ parameters
 \subsection{Superpixel CRFs for Semantic Segmentation}
 Our main attention is devoted to the use of conditional random fields for
 semantic segmentation.  We use the \textsc{Pascal VOC} and MSRC datasets.
-The \textsc{Pascal VOC} has 964 training images, each divided into
-around 100 superpixels. There are 20 object categories, and an additional background class. The % TODO check! refer to other part
-MSRC-21 dataset has 276 training images, also segmented in around 100 superpixels
-each. There are 21 classes in the MSRC-21 dataset.
+The \textsc{Pascal VOC} has $964$ training images, each divided into
+around $100$ superpixels. There are $20$ object categories, and an additional background class. The % TODO check! refer to other part
+MSRC-21 dataset has $276$ training images, also segmented in around $100$ superpixels
+each. There are $21$ semantic classes in the MSRC-21 dataset.
 Each superpixel is represented as an output variable, with the ground truth
 obtained by majority vote over the pixels belonging to the superpixel. We
 removed all superpixels in which the majority of pixels is labeled ``void'', leading to some samples
-having much fewer than 100 variables.
+having much fewer than $100$ variables.
 Pairwise potentials are introduced for each pair of neighboring superpixels.
 We use the unary and pairwise potentials described in \Secref{semantic_segmentation}:
-21 unary features for the \textsc{Pascal VOC} dataset and 63 unary features for the MSRC-21 dataset.
+$21$ unary features for the \textsc{Pascal VOC} dataset and $63$ unary features for the MSRC-21 dataset.
 We use the same three pairwise features for both datasets: a constant feature, a color
 feature and a feature encoding relative vertical position.
 Overall, this results in $21 \cdot  21 + 3 \cdot 21 \cdot 21 = 1764$ parameters
@@ -231,16 +231,16 @@ for the potentials on \textsc{Pascal VOC} and $63 \cdot  21 + 3 \cdot 21 \cdot 2
     \toprule
     Dataset             & {samples} & variables & graph & {dim $\theta$} & {labels}\\
     \cmidrule{1-6}
-    MNIST               & 60000   & 1     & none  & 7840  & 10\\
-    \textsc{OCR-small}  & 704     & 3--14 & chain & 1444  & 26\\
-    \textsc{OCR-large}  & 6173    & 3--14 & chain & 1444  & 26\\
-    \textsc{scene-tree} & 1211    & 6     & tree  & 1244  & 2\\
-    \textsc{scene-full} & 1211    & 6     & loopy & 1284  & 2\\
-    \textsc{yeast-tree} & 1500    & 14    & tree  & 1494  & 2\\
-    \textsc{yeast-full} & 1500    & 14    & loopy & 1806  & 2\\
-    \textsc{snakes}     & 200     &84--168& loopy & 22275 & 11\\
-    MSRC-21             & 276     & 7--113& loopy &  1764 & 21\\
-    \textsc{Pascal VOC} & 964     & 8--112& loopy &  2646 & 21\\
+    MNIST               &$60000$  &$ 1     $ & none  &$7840 $& $10$ \\
+    \textsc{OCR-small}  &$704  $  &$ 3--14 $ & chain &$1444 $& $26$ \\
+    \textsc{OCR-large}  &$6173 $  &$ 3--14 $ & chain &$1444 $& $26$ \\
+    \textsc{scene-tree} &$1211 $  &$ 6     $ & tree  &$1244 $& $ 2$ \\
+    \textsc{scene-full} &$1211 $  &$ 6     $ & loopy &$1284 $& $ 2$ \\
+    \textsc{yeast-tree} &$1500 $  &$ 14    $ & tree  &$1494 $& $ 2$ \\
+    \textsc{yeast-full} &$1500 $  &$ 14    $ & loopy &$1806 $& $ 2$ \\
+    \textsc{snakes}     &$200  $  &$84--168$ & loopy &$22275$& $11$ \\
+    MSRC-21             &$276  $  &$ 7--113$ & loopy &$ 1764$& $21$ \\
+    \textsc{Pascal VOC} &$964  $  &$ 8--112$ & loopy &$ 2646$& $21$ \\
     \bottomrule
     \end{tabu}
     \caption{Summary of datasets used in the evaluation. \tablabel{datasets}}
@@ -256,7 +256,7 @@ We compare the following algorithms on the above models (see \Secref{learning_al
         inference results for each sample (see Chapter~\ref{ch:exact_learning}
         for details)
     \item The $n$-slack cutting plane algorithm, where the QP is solved after each sample
-    \item The $n$-slack cutting plane algorithm, where the QP is solved every 100 samples
+    \item The $n$-slack cutting plane algorithm, where the QP is solved every $100$ samples
     \item The SZLJSP algorithm with weighted averaging
 \end{itemize}
 
@@ -429,7 +429,7 @@ datasets are shown in \Figref{multi-label-results}. The caching $1$-slack
 algorithm is much faster than the non-caching one on both datasets and both
 graph structures.
 While the two variants of the $n$-slack algorithm are equally fast with respect
-to passes over the training data, solving the QP every 100 steps is among the
+to passes over the training data, solving the QP every $100$ steps is among the
 fastest algorithms, while solving the QP at every step is among the slowest.
 We applied this method only to the smaller \textsc{scene} dataset, as applying it on the
 \textsc{yeast} dataset was not practical.
@@ -486,7 +486,7 @@ Still, all algorithms ultimately fail to solve the task.
 The situation is very different when using the linear programming relaxation.
 Looking at last two rows of \Figref{snakes_results}, we see that all
 algorithms are able to solve the task perfectly. Evaluating on the test-set, all algorithms
-achieve an accuracy of around 99.5\%, confirming the models actually learned the task.
+achieve an accuracy of around $99.5\%$, confirming the models actually learned the task.
 Surprisingly, SSGD was very successful on this dataset, even faster then the non-caching $n$-slack
 algorithm. Caching provides nearly an order of magnitude speed-up on the dataset.
 %
@@ -520,7 +520,7 @@ of the algorithms terminates prematurely. Also, all algorithms achieve a
 similar dual objectives and similar training errors after convergence.
 In both datasets, the $1$-slack algorithm is somewhat slow in minimizing the
 training set error, and the $n$-slack and stochastic algorithms are much
-faster. Solving the QP only every 100 steps in the $n$-slack algorithm significantly slows
+faster. Solving the QP only every $100$ steps in the $n$-slack algorithm significantly slows
 down learning on both datasets. This is in contrast to the \textsc{yeast} datasets, where the converse was true,
 even though \textsc{yeast} has a similar number of training examples to \textsc{Pascal VOC}.
 
@@ -555,9 +555,9 @@ However, there are some clear trends:
         preferred over SSGD, apart from settings with strong memory
         constraints.
     \item In nearly all experiments, caching significantly improved performance
-        of the 1-slack cutting plane algorithm.
-    \item Initially SZLJSP and even SSGD converge faster than the 1-slack
-        cutting plane algorithm, while the 1-slack cutting plane algorithm was
+        of the $1$-slack cutting plane algorithm.
+    \item Initially SZLJSP and even SSGD converge faster than the $1$-slack
+        cutting plane algorithm, while the $1$-slack cutting plane algorithm was
         faster in achieving high precision solutions and guaranteeing low
         duality gap.
     \item The $n$-slack cutting plane algorithm was often fastest to converge in

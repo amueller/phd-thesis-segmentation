@@ -77,7 +77,7 @@ Package       & 1-SP & $n$-SP & SSGD & SZLJSP & L-SSVM & Perceptron & ML\\
 \end{tabularx}
     \caption{\label{table:comparision_algorithms}Comparison of learning
         algorithms implemented in popular structured prediction software
-        packages. 1-CP stands for 1-slack Cutting Plane, $n$-CP for $n$-slack
+        packages. 1-CP stands for $1$-slack Cutting Plane, $n$-CP for $n$-slack
         Cutting plane, SSGD for stochastic subgradient decent learning of
         SSVMs, SZLJSP is as described in \secref{dual_coordinate_descent},
         L-SVM stands for latent variable SSVMs, and ML for
@@ -171,7 +171,7 @@ Package        &Multi-Class &  Multi-Label & Chain & Graph & LSVM  &LDCRF \\
 We demonstrate the use of \pystruct on the task of semantic image segmentation,
 the main focus of this work. The example shows how to learn an $n$-slack support
 vector machine on a superpixel-based CRF on the \textsc{Pascal VOC} dataset. Details of the experiment
-can be found in Section~\secref{semantic_segmentation}.
+can be found in \Secref{semantic_segmentation}.
 Each sample (corresponding on one entry of the list \texttt{X}) is represented as a
 tuple consisting of input features and a graph representation.
 \begin{listing}[t]
@@ -197,7 +197,7 @@ are declared to be symmetric with respect to the direction of an edge, the last
 is antisymmetric. We use fusion moves for inference.  Line 5
 creates a \texttt{learner} object that will learn the parameters for the given
 model using the $n$-slack cutting plane method, and line 6 performs the actual
-learning.  Using this simple setup, we achieve an accuracy of 30.3 on the
+learning.  Using this simple setup, we achieve an accuracy (Jaccard index) of 30.3 on the
 validation set following the protocol of \citet{krahenbuhl2012efficient}, who
 report 30.2 using a more complex approach. Training the structured model takes
 approximately 30 minutes using a single i7 core.
@@ -214,9 +214,9 @@ prediction point of view, this problem is well-suited to benchmark the cutting
 plane solvers, as loss-augmented prediction is trivial.
 
 Results are shown in \Figref{timings}. We report learning times and accuracy for
-varying regularization parameter $C$. The MNIST dataset has 60\,000 training
-examples, 784 features and 10 classes.%
-\footnote{Details about the experiment and code for the experiments can be found on the project website.}
+varying regularization parameter $C$. The MNIST dataset has $60\,000$ training
+examples, $784$ features and $10$ classes.%
+The setup of the experiment is the same as in Chapter~\ref{ch:comparison}.
 The figure indicates that \pystruct has competitive performance, while using
 a high-level interface in a dynamic programming language.
 
